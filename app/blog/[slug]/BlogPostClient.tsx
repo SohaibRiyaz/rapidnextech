@@ -20,6 +20,15 @@ function blogImageUrl(url: string | undefined): string {
   return url || "/placeholder.svg"
 }
 
+const IMAGE_MARKER_REGEX = /\[Image:(\d+)(:(left|right))?\]/g
+
+function normalizeImageMarkersInContent(content: string): string {
+  return content.replace(IMAGE_MARKER_REGEX, (_match, index, pos) => {
+    const suffix = pos || ""
+    return `\n\n[Image:${index}${suffix}]\n\n`
+  })
+}
+
 const CommentSection = dynamic(
   () => import("@/components/blog/comment-section").then((m) => m.CommentSection),
   { ssr: false }
@@ -148,6 +157,7 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
     const isDark = mode === "dark" || color === "black"
     const { scrollYProgress } = useScroll()
     const contentRef = useRef<HTMLDivElement>(null)
+    const normalizedContent = useMemo(() => normalizeImageMarkersInContent(post.content || ""), [post.content])
 
     // Enhanced reading statistics (calc once)
     const wordCount = useMemo(
@@ -255,6 +265,7 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                         </motion.figure>
                     )
                 }
+                return null
             }
             return <p>{children}</p>
         },
@@ -423,7 +434,7 @@ export default function BlogPostClient({ post, relatedPosts, fullUrl }: BlogPost
                                 rehypePlugins={[rehypeRaw]}
                                 components={markdownComponents}
                             >
-                                {post.content}
+                                {normalizedContent}
                             </ReactMarkdown>
 
                             <div className="clear-both" />

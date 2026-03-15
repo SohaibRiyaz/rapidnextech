@@ -9,7 +9,11 @@ if (!supabaseUrl || !supabaseAnonKey) {
     )
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+        lockAcquireTimeout: -1,
+    },
+})
 
 // Database types
 export interface Database {

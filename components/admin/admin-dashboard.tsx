@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -44,7 +44,24 @@ import { CATEGORIES, TECHNOLOGIES, BLOG_TAGS } from "@/lib/constants"
 import { getThemeClasses } from "@/lib/theme-utils"
 import { useAdminToast } from "@/hooks/use-admin-toast"
 import { AdminToastContainer } from "@/components/admin/admin-toast"
-import { generateBlogPost } from "@/lib/ai-blog-generator"
+import { generateBlogPost, type AIBlogConfig } from "@/lib/ai-blog-generator"
+
+const AI_QUEUE_KEY = "wr-ai-blog-queue"
+const AI_LOCK_KEY = "wr-ai-blog-queue-lock"
+const AI_LOCK_TTL_MS = 15 * 60 * 1000
+const AI_MAX_RETRIES = 3
+const AI_RETRY_BASE_MS = 30 * 1000
+
+type AIBlogJob = {
+  id: string
+  createdAt: number
+  label: string
+  payload: AIBlogConfig
+  attempts: number
+  nextRunAt?: number
+  lastError?: string
+  failedAt?: number
+}
 
 export default function AdminDashboard() {
   const { mode, color } = useThemeContext()
@@ -87,9 +104,23 @@ export default function AdminDashboard() {
   // AI Blog Generation states
   const [isAIModalOpen, setIsAIModalOpen] = useState(false)
   const [aiTopic, setAiTopic] = useState("")
+  const [aiPrimaryKeyword, setAiPrimaryKeyword] = useState("")
+  const [aiSecondaryKeywords, setAiSecondaryKeywords] = useState("")
+  const [aiServiceUrl, setAiServiceUrl] = useState("")
+  const [aiInternalLinks, setAiInternalLinks] = useState<{ anchor: string; url: string }[]>([
+    { anchor: "", url: "" },
+    { anchor: "", url: "" },
+  ])
+  const [aiQueue, setAiQueue] = useState<AIBlogJob[]>([])
+  const [aiActiveJobLabel, setAiActiveJobLabel] = useState<string | null>(null)
+  const [aiActiveJobId, setAiActiveJobId] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [generationStatus, setGenerationStatus] = useState("")
   const [generatedPrompt, setGeneratedPrompt] = useState<string | null>(null)
+  const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null)
+  const aiProcessingJobIdRef = useRef<string | null>(null)
+  const aiLockIdRef = useRef<string | null>(null)
+  const aiQueueTimerRef = useRef<number | null>(null)
   const [confirmModal, setConfirmModal] = useState<{
     isOpen: boolean
     title: string
@@ -440,52 +471,404 @@ export default function AdminDashboard() {
     setIsBlogFormOpen(true)
   }
 
+  const readAiQueue = useCallback((): AIBlogJob[] => {
+    if (typeof window === "undefined") return []
+    try {
+      const raw = localStorage.getItem(AI_QUEUE_KEY)
+      const parsed = raw ? JSON.parse(raw) : []
+      if (!Array.isArray(parsed)) return []
+      return parsed
+        .map((job: Partial<AIBlogJob>) => {
+          if (!job?.payload) return null
+          const failedAt = Number.isFinite(job.failedAt) ? job.failedAt : undefined
+          return {
+            id: job.id || `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+            createdAt: job.createdAt || Date.now(),
+            label: job.label || "AI Blog Job",
+            payload: job.payload,
+            attempts: Number.isFinite(job.attempts) ? job.attempts : 0,
+            nextRunAt: Number.isFinite(job.nextRunAt)
+              ? job.nextRunAt
+              : failedAt
+                ? undefined
+                : Date.now(),
+            lastError: typeof job.lastError === "string" ? job.lastError : undefined,
+            failedAt,
+          } as AIBlogJob
+        })
+        .filter(Boolean) as AIBlogJob[]
+    } catch (error) {
+      console.warn("Failed to parse AI blog queue", error)
+      return []
+    }
+  }, [])
+
+  const writeAiQueue = useCallback((queue: AIBlogJob[]) => {
+    if (typeof window === "undefined") return
+    localStorage.setItem(AI_QUEUE_KEY, JSON.stringify(queue))
+    setAiQueue(queue)
+  }, [])
+
+  const readAiLock = useCallback((): { id: string; expiresAt: number } | null => {
+    if (typeof window === "undefined") return null
+    try {
+      const raw = localStorage.getItem(AI_LOCK_KEY)
+      if (!raw) return null
+      const parsed = JSON.parse(raw)
+      if (!parsed?.id || !parsed?.expiresAt) return null
+      return parsed
+    } catch (error) {
+      console.warn("Failed to parse AI blog lock", error)
+      return null
+    }
+  }, [])
+
+  const writeAiLock = useCallback((lock: { id: string; expiresAt: number }) => {
+    if (typeof window === "undefined") return
+    localStorage.setItem(AI_LOCK_KEY, JSON.stringify(lock))
+  }, [])
+
+  const acquireAiLock = useCallback(() => {
+    const now = Date.now()
+    const current = readAiLock()
+    if (current && current.expiresAt > now) return null
+    const id = aiLockIdRef.current ||
+      (typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `${now}-${Math.random().toString(16).slice(2)}`)
+    aiLockIdRef.current = id
+    writeAiLock({ id, expiresAt: now + AI_LOCK_TTL_MS })
+    return id
+  }, [readAiLock, writeAiLock])
+
+  const refreshAiLock = useCallback(() => {
+    if (!aiLockIdRef.current) return
+    writeAiLock({ id: aiLockIdRef.current, expiresAt: Date.now() + AI_LOCK_TTL_MS })
+  }, [writeAiLock])
+
+  const releaseAiLock = useCallback(() => {
+    if (typeof window === "undefined") return
+    const current = readAiLock()
+    if (current && current.id === aiLockIdRef.current) {
+      localStorage.removeItem(AI_LOCK_KEY)
+    }
+    aiLockIdRef.current = null
+  }, [readAiLock])
+
+  const enqueueAIBlogJob = useCallback((payload: AIBlogConfig, label: string) => {
+    const job: AIBlogJob = {
+      id: typeof crypto !== "undefined" && "randomUUID" in crypto
+        ? crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      createdAt: Date.now(),
+      label,
+      payload,
+      attempts: 0,
+      nextRunAt: Date.now(),
+    }
+    const queue = readAiQueue()
+    const next = [...queue, job]
+    writeAiQueue(next)
+    toast.success("Added to queue", `Position ${next.length} in the queue.`)
+    return job
+  }, [readAiQueue, writeAiQueue, toast])
+
+  const removeAIBlogJob = useCallback((jobId: string) => {
+    const queue = readAiQueue()
+    const next = queue.filter((job) => job.id !== jobId)
+    writeAiQueue(next)
+    return next
+  }, [readAiQueue, writeAiQueue])
+
+  const updateAIBlogJob = useCallback((jobId: string, updater: (job: AIBlogJob) => AIBlogJob) => {
+    const queue = readAiQueue()
+    const next = queue.map((job) => (job.id === jobId ? updater(job) : job))
+    writeAiQueue(next)
+    return next
+  }, [readAiQueue, writeAiQueue])
+
+  const runAIBlogJob = useCallback(async (job: AIBlogJob) => {
+    setAiActiveJobLabel(job.label)
+    setGenerationStatus("AI is writing your blog post...")
+
+    const generated = await generateBlogPost(job.payload, (status) => {
+      setGenerationStatus(status)
+      refreshAiLock()
+    })
+
+    setGenerationStatus("Saving to database...")
+    refreshAiLock()
+
+    const payload = {
+      title: generated.title,
+      slug: generated.slug,
+      excerpt: generated.excerpt,
+      content: generated.content,
+      tags: generated.tags,
+      author: "RapidNexTech Team",
+      date: new Date().toISOString().split("T")[0],
+      is_published: true,
+      seo_title: generated.seo_title,
+      seo_description: generated.seo_description,
+      images: generated.image_urls.map((url, index) => ({
+        id: index + 1,
+        url,
+        alt: `${generated.primary_keyword || generated.title} image ${index + 1}`,
+        caption: generated.primary_keyword
+          ? `${generated.primary_keyword} — image ${index + 1}`
+          : `${generated.title} — image ${index + 1}`,
+      })),
+      faqs: generated.faqs || [],
+      cta: generated.cta || null,
+    }
+
+    const created = await cms.addBlogPost(payload as any)
+    setBlogPosts((prev) => [created, ...prev])
+
+    setGeneratedPrompt(generated.image_prompts?.[0] || null)
+    setGeneratedImageUrl(generated.image_urls?.[0] || null)
+    setGenerationStatus("")
+    toast.success("AI Blog Created!", `"${generated.title}" has been created.`)
+  }, [cms, refreshAiLock, toast])
+
+  const processAIBlogQueue = useCallback(async () => {
+    if (aiProcessingJobIdRef.current) return
+    if (!acquireAiLock()) return
+
+    const scheduleNext = (delayMs: number) => {
+      if (typeof window === "undefined") return
+      if (aiQueueTimerRef.current) {
+        window.clearTimeout(aiQueueTimerRef.current)
+      }
+      aiQueueTimerRef.current = window.setTimeout(() => {
+        aiQueueTimerRef.current = null
+        processAIBlogQueue()
+      }, Math.max(0, delayMs))
+    }
+
+    const queue = readAiQueue()
+    if (queue.length === 0) {
+      releaseAiLock()
+      return
+    }
+
+    const now = Date.now()
+    const runnableIndex = queue.findIndex(
+      (job) => !job.failedAt && (!job.nextRunAt || job.nextRunAt <= now)
+    )
+
+    if (runnableIndex === -1) {
+      const nextRunAt = queue
+        .filter((job) => !job.failedAt && job.nextRunAt && job.nextRunAt > now)
+        .map((job) => job.nextRunAt as number)
+        .sort((a, b) => a - b)[0]
+      releaseAiLock()
+      if (nextRunAt) scheduleNext(nextRunAt - now)
+      return
+    }
+
+    const job = queue[runnableIndex]
+    aiProcessingJobIdRef.current = job.id
+    setIsGenerating(true)
+    setAiActiveJobLabel(job.label)
+    setAiActiveJobId(job.id)
+    let completed = false
+
+    try {
+      await runAIBlogJob(job)
+      completed = true
+    } catch (error: any) {
+      console.error("AI Generation Error:", error)
+      const message = error?.message || "Something went wrong. Please try again."
+      const classification = classifyAIBlogError(message)
+      const now = Date.now()
+
+      if (classification.type === "credits_depleted") {
+        updateAIBlogJob(job.id, (current) => ({
+          ...current,
+          lastError: message,
+          nextRunAt: undefined,
+          failedAt: now,
+        }))
+        toast.error("Generation Failed", "Inference credits are depleted. Top up to resume.")
+      } else if (classification.type === "rate_limit") {
+        const delayMs = Math.max(classification.retryAfterMs || 5000, 5000)
+        updateAIBlogJob(job.id, (current) => ({
+          ...current,
+          lastError: message,
+          nextRunAt: now + delayMs,
+        }))
+        toast.warning("Rate limit hit", `Retrying in ${Math.round(delayMs / 1000)}s.`)
+      } else {
+        const attempts = (job.attempts || 0) + 1
+        if (attempts <= AI_MAX_RETRIES) {
+          const backoffMs = AI_RETRY_BASE_MS * Math.pow(2, attempts - 1)
+          updateAIBlogJob(job.id, (current) => ({
+            ...current,
+            attempts,
+            nextRunAt: now + backoffMs,
+            lastError: message,
+          }))
+          toast.warning(
+            "Generation Failed",
+            `Attempt ${attempts}/${AI_MAX_RETRIES} failed. Retrying in ${Math.round(backoffMs / 1000)}s.`
+          )
+        } else {
+          updateAIBlogJob(job.id, (current) => ({
+            ...current,
+            attempts,
+            nextRunAt: undefined,
+            lastError: message,
+            failedAt: now,
+          }))
+          toast.error(
+            "Generation Failed",
+            `Failed after ${AI_MAX_RETRIES} attempts. The job remains in the queue for manual retry.`
+          )
+        }
+      }
+    } finally {
+      aiProcessingJobIdRef.current = null
+      setIsGenerating(false)
+      setGenerationStatus("")
+      setAiActiveJobLabel(null)
+      setAiActiveJobId(null)
+      if (completed) {
+        removeAIBlogJob(job.id)
+      }
+      releaseAiLock()
+      const remaining = readAiQueue()
+      if (remaining.length > 0) {
+        const nowTick = Date.now()
+        const hasRunnable = remaining.some(
+          (item) => !item.failedAt && (!item.nextRunAt || item.nextRunAt <= nowTick)
+        )
+        if (hasRunnable) {
+          scheduleNext(150)
+        } else {
+          const nextRunAt = remaining
+            .filter((item) => !item.failedAt && item.nextRunAt && item.nextRunAt > nowTick)
+            .map((item) => item.nextRunAt as number)
+            .sort((a, b) => a - b)[0]
+          if (nextRunAt) scheduleNext(nextRunAt - nowTick)
+        }
+      }
+    }
+  }, [
+    acquireAiLock,
+    readAiQueue,
+    releaseAiLock,
+    removeAIBlogJob,
+    runAIBlogJob,
+    toast,
+    updateAIBlogJob,
+  ])
+
+  const retryFailedAIBlogJobs = useCallback(() => {
+    const queue = readAiQueue()
+    const now = Date.now()
+    const failedCount = queue.filter((job) => job.failedAt).length
+    if (failedCount === 0) return
+    const next = queue.map((job) =>
+      job.failedAt
+        ? { ...job, failedAt: undefined, attempts: 0, nextRunAt: now, lastError: undefined }
+        : job
+    )
+    writeAiQueue(next)
+    toast.success("Retry scheduled", `${failedCount} failed job(s) re-queued.`)
+    processAIBlogQueue()
+  }, [processAIBlogQueue, readAiQueue, toast, writeAiQueue])
+
+  const retrySingleAIBlogJob = useCallback((jobId: string) => {
+    const queue = readAiQueue()
+    const target = queue.find((job) => job.id === jobId)
+    if (!target) return
+    const next = queue.map((job) =>
+      job.id === jobId
+        ? { ...job, failedAt: undefined, attempts: 0, nextRunAt: Date.now(), lastError: undefined }
+        : job
+    )
+    writeAiQueue(next)
+    toast.success("Retry scheduled", `"${target.label}" was re-queued.`)
+    processAIBlogQueue()
+  }, [processAIBlogQueue, readAiQueue, toast, writeAiQueue])
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    setAiQueue(readAiQueue())
+
+    const handleStorage = (event: StorageEvent) => {
+      if (event.key === AI_QUEUE_KEY || event.key === AI_LOCK_KEY) {
+        setAiQueue(readAiQueue())
+        processAIBlogQueue()
+      }
+    }
+
+    window.addEventListener("storage", handleStorage)
+    processAIBlogQueue()
+    return () => {
+      window.removeEventListener("storage", handleStorage)
+      if (aiQueueTimerRef.current) {
+        window.clearTimeout(aiQueueTimerRef.current)
+        aiQueueTimerRef.current = null
+      }
+    }
+  }, [processAIBlogQueue, readAiQueue])
+
   // AI Blog Generation handler
   const handleGenerateAIBlog = async () => {
     try {
-      setIsGenerating(true)
-      setGenerationStatus("🧠 AI is writing your blog post...")
-
-      const generated = await generateBlogPost(aiTopic || undefined, (status) => {
-        setGenerationStatus(status)
-      })
-
-      setGenerationStatus("💾 Saving to database...")
-
-      const payload = {
-        title: generated.title,
-        slug: generated.slug,
-        excerpt: generated.excerpt,
-        content: generated.content,
-        tags: generated.tags,
-        author: "RapidNexTech Team",
-        date: new Date().toISOString().split("T")[0],
-        is_published: true,
-        seo_title: generated.seo_title,
-        seo_description: generated.seo_description,
-        images: [{
-          id: 1,
-          url: generated.image_url,
-          alt: generated.title,
-          caption: "",
-        }],
-        faqs: generated.faqs || [],
-        cta: generated.cta || null,
+      if (!aiPrimaryKeyword.trim() || !aiServiceUrl.trim()) {
+        toast.warning("Missing Information", "Primary keyword and service URL are required.")
+        return
       }
 
-      const created = await cms.addBlogPost(payload as any)
-      setBlogPosts((prev) => [created, ...prev])
-
-      setGeneratedPrompt(generated.image_prompt)
-      setGenerationStatus("")
-      toast.success("AI Blog Created! 🎉", `"${generated.title}" has been created.`)
+      const payload: AIBlogConfig = {
+        topic: aiTopic || undefined,
+        primaryKeyword: aiPrimaryKeyword,
+        secondaryKeywords: aiSecondaryKeywords.split(",").map((k) => k.trim()).filter(Boolean),
+        serviceUrl: aiServiceUrl,
+        internalLinks: aiInternalLinks,
+      }
+      const label = (aiTopic || aiPrimaryKeyword).trim()
+      enqueueAIBlogJob(payload, label)
+      processAIBlogQueue()
+      setAiTopic("")
+      setAiPrimaryKeyword("")
+      setAiSecondaryKeywords("")
+      setAiServiceUrl("")
+      setAiInternalLinks([{ anchor: "", url: "" }, { anchor: "", url: "" }])
     } catch (error: any) {
-      console.error("AI Generation Error:", error)
-      toast.error("Generation Failed", error.message || "Something went wrong. Please try again.")
-      setGenerationStatus("")
-    } finally {
-      setIsGenerating(false)
+      console.error("AI Queue Error:", error)
+      toast.error("Queue Failed", error?.message || "Unable to queue this blog. Please try again.")
     }
+  }
+
+  const classifyAIBlogError = (message: string) => {
+    const lowered = message.toLowerCase()
+    const retryMatch = lowered.match(/try again in\s+([0-9.]+)s/)
+    const retryAfterMs = retryMatch ? Math.ceil(parseFloat(retryMatch[1]) * 1000) : null
+
+    if (lowered.includes("rate limit") || lowered.includes("rate_limit")) {
+      return { type: "rate_limit", retryAfterMs }
+    }
+    if (lowered.includes("depleted your monthly included credits") || lowered.includes("purchase pre-paid credits")) {
+      return { type: "credits_depleted", retryAfterMs: null }
+    }
+    if (lowered.includes("failed to fetch") || lowered.includes("network")) {
+      return { type: "network", retryAfterMs: null }
+    }
+    return { type: "unknown", retryAfterMs: null }
+  }
+
+  const formatQueueDelay = (ms: number) => {
+    if (ms <= 0) return "now"
+    const seconds = Math.ceil(ms / 1000)
+    if (seconds < 60) return `${seconds}s`
+    const minutes = Math.ceil(seconds / 60)
+    if (minutes < 60) return `${minutes}m`
+    const hours = Math.ceil(minutes / 60)
+    return `${hours}h`
   }
 
   const handleResumeBlogDraft = () => {
@@ -947,7 +1330,12 @@ export default function AdminDashboard() {
                 </Button>
                 {activeTab === "blog" && (
                   <Button
-                    onClick={() => setIsAIModalOpen(true)}
+                    onClick={() => {
+                      setGeneratedPrompt(null)
+                      setGeneratedImageUrl(null)
+                      setAiTopic("")
+                      setIsAIModalOpen(true)
+                    }}
                     className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white shadow-lg shadow-violet-500/25"
                   >
                     <Sparkles className="w-4 h-4 mr-2" />
@@ -2055,13 +2443,13 @@ export default function AdminDashboard() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-            onClick={() => !isGenerating && setIsAIModalOpen(false)}
+            onClick={() => setIsAIModalOpen(false)}
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className={`${theme.cardBg} backdrop-blur-md rounded-xl p-8 w-full max-w-lg shadow-2xl border border-violet-500/20`}
+              className={`${theme.cardBg} backdrop-blur-md rounded-xl p-6 md:p-8 w-full max-w-lg md:max-w-2xl lg:max-w-3xl max-h-[85vh] overflow-y-auto shadow-2xl border border-violet-500/20`}
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-6">
@@ -2073,23 +2461,123 @@ export default function AdminDashboard() {
                     Generate AI Blog Post
                   </h2>
                 </div>
-                {!isGenerating && (
-                  <Button variant="ghost" size="icon" onClick={() => setIsAIModalOpen(false)}>
-                    <X className="w-5 h-5" />
-                  </Button>
-                )}
+                <Button variant="ghost" size="icon" onClick={() => setIsAIModalOpen(false)}>
+                  <X className="w-5 h-5" />
+                </Button>
               </div>
+
+              {(aiQueue.length > 0 || isGenerating) && (
+                <div className="mb-4 rounded-lg border border-border/50 bg-secondary/10 px-4 py-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs theme-text">
+                    <span className="font-medium">Queue: {aiQueue.length} total</span>
+                    <span className="opacity-70">
+                      Pending: {Math.max(aiQueue.filter((job) => !job.failedAt).length - (aiActiveJobLabel ? 1 : 0), 0)}
+                    </span>
+                  </div>
+                  {aiActiveJobLabel && (
+                    <p className="mt-2 text-xs theme-text opacity-80">
+                      Processing: <span className="font-medium">{aiActiveJobLabel}</span>
+                    </p>
+                  )}
+                  {aiQueue.some((job) => job.failedAt) && (
+                    <div className="mt-3 flex items-center justify-between gap-2">
+                      <p className="text-[11px] theme-text opacity-70">
+                        Some jobs failed after max retries.
+                      </p>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="text-xs"
+                        onClick={retryFailedAIBlogJobs}
+                      >
+                        Retry Failed Jobs
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {aiQueue.length > 0 && (
+                <div className="mb-6 rounded-lg border border-border/50 bg-secondary/5 p-4">
+                  <div className="flex items-center justify-between text-xs theme-text">
+                    <span className="font-semibold">Queue Details</span>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs"
+                      onClick={processAIBlogQueue}
+                    >
+                      Resume Queue
+                    </Button>
+                  </div>
+                  <div className="mt-3 max-h-48 space-y-2 overflow-y-auto pr-2 text-xs theme-text">
+                    {aiQueue.map((job, idx) => {
+                      const isActive = aiActiveJobId === job.id
+                      const isFailed = Boolean(job.failedAt)
+                      const now = Date.now()
+                      const isScheduled = !isFailed && job.nextRunAt && job.nextRunAt > now
+                      const status = isActive
+                        ? "Processing"
+                        : isFailed
+                          ? "Failed"
+                          : isScheduled
+                            ? `Retry in ${formatQueueDelay(job.nextRunAt! - now)}`
+                            : "Pending"
+                      return (
+                        <div
+                          key={job.id}
+                          className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border/30 bg-background/40 px-3 py-2"
+                        >
+                          <div className="min-w-0">
+                            <p className="truncate font-medium">{idx + 1}. {job.label}</p>
+                            <p className="text-[10px] opacity-60">
+                              {status}{job.attempts ? ` · attempts ${job.attempts}/${AI_MAX_RETRIES}` : ""}
+                              {job.lastError ? ` · ${job.lastError}` : ""}
+                            </p>
+                          </div>
+                          {isFailed && (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              className="text-[10px]"
+                              onClick={() => retrySingleAIBlogJob(job.id)}
+                            >
+                              Retry
+                            </Button>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              )}
 
               {generatedPrompt ? (
                 <div className="space-y-6">
                   <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20 text-center">
                     <p className="text-sm theme-text font-medium text-green-600 dark:text-green-400">Blog Created Successfully! 🎉</p>
-                    <p className="text-xs theme-text opacity-70 mt-1">Below is your AI-generated image prompt.</p>
+                    <p className="text-xs theme-text opacity-70 mt-1">3 images generated and attached automatically.</p>
                   </div>
 
+                  {generatedImageUrl && (
+                    <div className="overflow-hidden rounded-xl border border-border/50 bg-secondary/10">
+                      <div className="relative w-full aspect-video max-h-[55vh]">
+                        <img
+                          src={generatedImageUrl}
+                          alt="AI-generated cover"
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                    </div>
+                  )}
+
                   <div className="space-y-2">
-                    <label className="text-sm font-semibold theme-text border-none">Manual Image Prompt:</label>
-                    <div className="p-4 rounded-lg bg-secondary/20 theme-text text-sm theme-transition relative border border-border/50">
+                    <label className="text-sm font-semibold theme-text border-none">Image Prompt (for reference):</label>
+                    <div className="p-4 rounded-lg bg-secondary/20 theme-text text-sm theme-transition relative border border-border/50 max-h-40 overflow-y-auto">
                       <p className="italic leading-relaxed">"{generatedPrompt}"</p>
                     </div>
                   </div>
@@ -2111,7 +2599,12 @@ export default function AdminDashboard() {
                       onClick={() => {
                         setIsAIModalOpen(false)
                         setGeneratedPrompt(null)
+                        setGeneratedImageUrl(null)
                         setAiTopic("")
+                        setAiPrimaryKeyword("")
+                        setAiSecondaryKeywords("")
+                        setAiServiceUrl("")
+                        setAiInternalLinks([{ anchor: "", url: "" }, { anchor: "", url: "" }])
                       }}
                     >
                       Done
@@ -2119,7 +2612,7 @@ export default function AdminDashboard() {
                   </div>
 
                   <p className="text-[10px] theme-text opacity-50 text-center italic">
-                    Use this prompt on Pollinations.ai or Hugging Face, then upload the result to this blog post.
+                    Images were generated from the prompts and stored in your blog images bucket.
                   </p>
                 </div>
               ) : isGenerating ? (
@@ -2133,7 +2626,7 @@ export default function AdminDashboard() {
                     {generationStatus}
                   </p>
                   <p className="text-xs opacity-50 theme-text text-center">
-                    This usually takes 10-20 seconds. Please don&apos;t close this window.
+                    This can take a minute or two. Keep at least one admin tab open while the queue runs.
                   </p>
                 </div>
               ) : (
@@ -2153,20 +2646,111 @@ export default function AdminDashboard() {
                     </p>
                   </div>
 
+                  <div>
+                    <label className="block text-sm font-medium theme-text mb-2 theme-transition">
+                      Primary Keyword <span className="text-red-500">*</span>
+                    </label>
+                    <Input
+                      value={aiPrimaryKeyword}
+                      onChange={(e) => setAiPrimaryKeyword(e.target.value)}
+                      placeholder="e.g., whatsapp automation for aesthetic clinics uk"
+                      className="theme-text bg-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium theme-text mb-2 theme-transition">
+                      Secondary Keywords <span className="opacity-50">(comma-separated)</span>
+                    </label>
+                    <Input
+                      value={aiSecondaryKeywords}
+                      onChange={(e) => setAiSecondaryKeywords(e.target.value)}
+                      placeholder="e.g., clinic appointment automation, whatsapp booking bot"
+                      className="theme-text bg-transparent"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium theme-text mb-2 theme-transition">
+                      Service URL <span className="text-red-500">*</span>
+                    </label>
+                    <Input
+                      value={aiServiceUrl}
+                      onChange={(e) => setAiServiceUrl(e.target.value)}
+                      placeholder="/solutions/aesthetic-clinics"
+                      className="theme-text bg-transparent"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium theme-text theme-transition">
+                      Internal Links (2–3)
+                    </label>
+                    <div className="space-y-2">
+                      {aiInternalLinks.map((link, index) => (
+                        <div key={index} className="grid grid-cols-1 md:grid-cols-5 gap-2">
+                          <Input
+                            value={link.anchor}
+                            onChange={(e) => {
+                              const updated = [...aiInternalLinks]
+                              updated[index] = { ...updated[index], anchor: e.target.value }
+                              setAiInternalLinks(updated)
+                            }}
+                            placeholder="Anchor text"
+                            className="theme-text bg-transparent md:col-span-3"
+                          />
+                          <Input
+                            value={link.url}
+                            onChange={(e) => {
+                              const updated = [...aiInternalLinks]
+                              updated[index] = { ...updated[index], url: e.target.value }
+                              setAiInternalLinks(updated)
+                            }}
+                            placeholder="/solutions/whatsapp-automation"
+                            className="theme-text bg-transparent md:col-span-2"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="bg-transparent"
+                        onClick={() => setAiInternalLinks((prev) => [...prev, { anchor: "", url: "" }])}
+                        disabled={aiInternalLinks.length >= 3}
+                      >
+                        Add Link
+                      </Button>
+                      {aiInternalLinks.length > 2 && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="text-red-500"
+                          onClick={() => setAiInternalLinks((prev) => prev.slice(0, -1))}
+                        >
+                          Remove
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+
                   <div className="p-3 rounded-lg bg-violet-500/10 border border-violet-500/20">
                     <p className="text-xs theme-text opacity-70">
-                      <strong>What happens:</strong> The AI will write a full blog post with title, SEO metadata,
-                      Markdown content, tags, FAQs, and auto-generate a cover image. The post will be saved and
-                      published immediately.
+                      <strong>What happens:</strong> Each request is added to a queue. The AI writes the post with SEO metadata,
+                      internal links, FAQs, and generates + uploads 3 images. Posts are saved and published in order.
                     </p>
                   </div>
 
                   <Button
                     onClick={handleGenerateAIBlog}
-                    className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white h-12 text-base shadow-lg shadow-violet-500/25"
+                    disabled={!aiPrimaryKeyword || !aiServiceUrl}
+                    className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white h-12 text-base shadow-lg shadow-violet-500/25 disabled:opacity-60 disabled:cursor-not-allowed"
                   >
                     <Sparkles className="w-5 h-5 mr-2" />
-                    Generate & Publish
+                    Add to Queue
                   </Button>
                 </div>
               )}

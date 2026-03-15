@@ -36,6 +36,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Initialize auth state - only once
   useEffect(() => {
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      const reason: any = event.reason
+      const message = typeof reason?.message === "string" ? reason.message : ""
+      const stack = typeof reason?.stack === "string" ? reason.stack : ""
+      const isSupabaseLockError =
+        reason?.isAcquireTimeout === true ||
+        (reason?.name === "AbortError" && (message.toLowerCase().includes("lock") || stack.includes("locks.js")))
+      if (isSupabaseLockError) {
+        event.preventDefault()
+      }
+    }
+    const handleWindowError = (event: ErrorEvent) => {
+      const error: any = event.error
+      const message = typeof error?.message === "string" ? error.message : ""
+      const stack = typeof error?.stack === "string" ? error.stack : ""
+      const isSupabaseLockError =
+        error?.isAcquireTimeout === true ||
+        (error?.name === "AbortError" && (message.toLowerCase().includes("lock") || stack.includes("locks.js")))
+      if (isSupabaseLockError) {
+        event.preventDefault()
+      }
+    }
+    window.addEventListener("unhandledrejection", handleUnhandledRejection)
+    window.addEventListener("error", handleWindowError)
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session }, error }) => {
       setAuthState(prev => ({
@@ -82,6 +107,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     return () => {
       subscription.unsubscribe()
+      window.removeEventListener("unhandledrejection", handleUnhandledRejection)
+      window.removeEventListener("error", handleWindowError)
     }
   }, []) // Empty dependency array - only run once
 
