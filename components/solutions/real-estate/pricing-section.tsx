@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { ArrowRight, Check, Sparkles, Clock, Zap, Star, Info } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { usePricingCurrency } from "@/hooks/use-pricing-currency"
 
 /* ------------------------------------------------------------------ */
 /*  Feature type: plain text OR text + hover tooltip                  */
@@ -54,129 +55,131 @@ function FeatureItem({
 /* ------------------------------------------------------------------ */
 /*  Tier data                                                          */
 /* ------------------------------------------------------------------ */
-const tiers: {
-  name: string
-  tagline: string
-  setupFee: string
-  discountedSetupFee: string
-  monthlyFee: string
-  highlight: boolean
-  badge?: string
-  features: Feature[]
-  cta: string
-}[] = [
-  {
-    name: "Starter",
-    tagline: "For single-office agencies ready to stop losing property leads",
-    setupFee: "599",
-    discountedSetupFee: "299",
-    monthlyFee: "149",
-    highlight: false,
-    features: [
-      {
-        text: "Property inquiry qualification flow",
-        tooltip:
-          "Budget, location, property type, timeline, and financing status to filter serious buyers.",
-      },
-      {
-        text: "Portal and website inquiries redirected to WhatsApp",
-        tooltip:
-          "When possible, we route portal inquiries into WhatsApp for a fully automated, compliant flow.",
-      },
-      { text: "Instant inquiry response (24/7) via WhatsApp" },
-      { text: "Property FAQ answers and listing details" },
-      { text: "Viewing booking link redirect" },
-      { text: "Viewing confirmation reminders" },
-      {
-        text: "Follow-up for unbooked inquiries",
-        tooltip:
-          "Automated next-day follow-up for buyers who did not schedule a viewing.",
-      },
-      {
-        text: "Up to 300 messages/mo",
-        tooltip:
-          "Covers outbound template messages (confirmations, reminders, follow-ups). Extra messages billed at $0.10 each.",
-      },
-      { text: "Email support" },
-    ],
-    cta: "Get Started",
-  },
-  {
-    name: "Growth",
-    tagline: "For agencies scaling lead conversion and site visits",
-    setupFee: "1,399",
-    discountedSetupFee: "699",
-    monthlyFee: "349",
-    highlight: true,
-    badge: "Most Popular",
-    features: [
-      { text: "Everything in Starter, plus:" },
-      {
-        text: "Agent routing by area or listing",
-        tooltip:
-          "Leads are routed to the right agent based on location, property type, or listing ID.",
-      },
-      {
-        text: "Lead scoring & prioritisation",
-        tooltip:
-          "AI ranks incoming inquiries by intent signals so agents focus on the hottest prospects first.",
-      },
-      {
-        text: "Viewing no-show sequences",
-        tooltip:
-          "If a viewing is missed, the system prompts rescheduling and keeps the lead warm.",
-      },
-      {
-        text: "Buyer nurture sequences",
-        tooltip:
-          "Automated follow-ups with similar listings or availability windows.",
-      },
-      {
-        text: "Pre-viewing data capture",
-        tooltip:
-          "Collects buyer details before the viewing so agents arrive prepared.",
-      },
-      {
-        text: "Up to 1,500 messages/mo",
-        tooltip:
-          "Covers outbound template messages (confirmations, reminders, campaigns). Extra messages billed at $0.05 each.",
-      },
-      {
-        text: "Conversion analytics dashboard",
-        tooltip:
-          "Track inquiries to viewings and see which channels and listings convert best.",
-      },
-      { text: "Priority WhatsApp & email support" },
-    ],
-    cta: "Scale Your Agency",
-  },
-  {
-    name: "Pro",
-    tagline: "For multi-branch agencies and property groups",
-    setupFee: "2,799",
-    discountedSetupFee: "1,399",
-    monthlyFee: "699",
-    highlight: false,
-    features: [
-      { text: "Everything in Growth, plus:" },
-      { text: "Multi-branch management" },
-      { text: "Advanced AI qualification flows" },
-      { text: "Facebook Messenger + website chat" },
-      { text: "Listing broadcast system" },
-      {
-        text: "Unlimited messages",
-        tooltip:
-          "No caps on outbound template messages or service replies, ideal for high-volume agencies.",
-      },
-      { text: "Custom integrations (CRM, portal feeds)" },
-      { text: "Dedicated account manager" },
-      { text: "Monthly performance reviews" },
-    ],
-    cta: "Talk to Us",
-  },
-]
-
 export function PricingSection() {
+  const { format } = usePricingCurrency()
+  const overageStandard = format(0.1)
+  const overageHigh = format(0.05)
+  const tiers: {
+    name: string
+    tagline: string
+    setupFee: number
+    discountedSetupFee: number
+    monthlyFee: number
+    highlight: boolean
+    badge?: string
+    features: Feature[]
+    cta: string
+  }[] = [
+    {
+      name: "Starter",
+      tagline: "For single-office agencies ready to stop losing property leads",
+      setupFee: 599,
+      discountedSetupFee: 299,
+      monthlyFee: 149,
+      highlight: false,
+      features: [
+        {
+          text: "Property inquiry qualification flow",
+          tooltip:
+            "Budget, location, property type, timeline, and financing status to filter serious buyers.",
+        },
+        {
+          text: "Portal and website inquiries redirected to WhatsApp",
+          tooltip:
+            "When possible, we route portal inquiries into WhatsApp for a fully automated, compliant flow.",
+        },
+        { text: "Instant inquiry response (24/7) via WhatsApp" },
+        { text: "Property FAQ answers and listing details" },
+        { text: "Viewing booking link redirect" },
+        { text: "Viewing confirmation reminders" },
+        {
+          text: "Follow-up for unbooked inquiries",
+          tooltip:
+            "Automated next-day follow-up for buyers who did not schedule a viewing.",
+        },
+        {
+          text: "Up to 300 messages/mo",
+          tooltip:
+            `Covers outbound template messages (confirmations, reminders, follow-ups). Extra messages billed at ${overageStandard} each.`,
+        },
+        { text: "Email support" },
+      ],
+      cta: "Get Started",
+    },
+    {
+      name: "Growth",
+      tagline: "For agencies scaling lead conversion and site visits",
+      setupFee: 1399,
+      discountedSetupFee: 699,
+      monthlyFee: 349,
+      highlight: true,
+      badge: "Most Popular",
+      features: [
+        { text: "Everything in Starter, plus:" },
+        {
+          text: "Agent routing by area or listing",
+          tooltip:
+            "Leads are routed to the right agent based on location, property type, or listing ID.",
+        },
+        {
+          text: "Lead scoring & prioritisation",
+          tooltip:
+            "AI ranks incoming inquiries by intent signals so agents focus on the hottest prospects first.",
+        },
+        {
+          text: "Viewing no-show sequences",
+          tooltip:
+            "If a viewing is missed, the system prompts rescheduling and keeps the lead warm.",
+        },
+        {
+          text: "Buyer nurture sequences",
+          tooltip:
+            "Automated follow-ups with similar listings or availability windows.",
+        },
+        {
+          text: "Pre-viewing data capture",
+          tooltip:
+            "Collects buyer details before the viewing so agents arrive prepared.",
+        },
+        {
+          text: "Up to 1,500 messages/mo",
+          tooltip:
+            `Covers outbound template messages (confirmations, reminders, campaigns). Extra messages billed at ${overageHigh} each.`,
+        },
+        {
+          text: "Conversion analytics dashboard",
+          tooltip:
+            "Track inquiries to viewings and see which channels and listings convert best.",
+        },
+        { text: "Priority WhatsApp & email support" },
+      ],
+      cta: "Scale Your Agency",
+    },
+    {
+      name: "Pro",
+      tagline: "For multi-branch agencies and property groups",
+      setupFee: 2799,
+      discountedSetupFee: 1399,
+      monthlyFee: 699,
+      highlight: false,
+      features: [
+        { text: "Everything in Growth, plus:" },
+        { text: "Multi-branch management" },
+        { text: "Advanced AI qualification flows" },
+        { text: "Facebook Messenger + website chat" },
+        { text: "Listing broadcast system" },
+        {
+          text: "Unlimited messages",
+          tooltip:
+            "No caps on outbound template messages or service replies, ideal for high-volume agencies.",
+        },
+        { text: "Custom integrations (CRM, portal feeds)" },
+        { text: "Dedicated account manager" },
+        { text: "Monthly performance reviews" },
+      ],
+      cta: "Talk to Us",
+    },
+  ]
   return (
     <section className="py-20 md:py-28 theme-transition">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -258,8 +261,12 @@ export function PricingSection() {
                     Setup (one-time)
                   </span>
                   <div className="flex items-baseline gap-2 mt-1 flex-wrap">
-                    <span className="text-lg font-medium text-muted-foreground line-through">${tier.setupFee}</span>
-                    <span className="text-2xl font-bold text-emerald-500">${tier.discountedSetupFee}</span>
+                    <span className="text-lg font-medium text-muted-foreground line-through">
+                      {format(tier.setupFee)}
+                    </span>
+                    <span className="text-2xl font-bold text-emerald-500">
+                      {format(tier.discountedSetupFee)}
+                    </span>
                     <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 px-1.5 py-0.5 rounded-md">50% off</span>
                   </div>
                 </div>
@@ -269,7 +276,7 @@ export function PricingSection() {
                   </span>
                   <div className="flex items-baseline gap-1 mt-1">
                     <span className="text-3xl font-black text-foreground">
-                      ${tier.monthlyFee}
+                      {format(tier.monthlyFee)}
                     </span>
                     <span className="text-sm text-muted-foreground">/mo</span>
                   </div>

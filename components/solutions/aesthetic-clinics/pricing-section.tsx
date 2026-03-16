@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { ArrowRight, Check, Sparkles, Clock, Zap, Star, Info } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { usePricingCurrency } from "@/hooks/use-pricing-currency"
 
 /* ------------------------------------------------------------------ */
 /*  Feature type: plain text OR text + hover tooltip                  */
@@ -54,129 +55,131 @@ function FeatureItem({
 /* ------------------------------------------------------------------ */
 /*  Tier data                                                          */
 /* ------------------------------------------------------------------ */
-const tiers: {
-  name: string
-  tagline: string
-  setupFee: string
-  discountedSetupFee: string
-  monthlyFee: string
-  highlight: boolean
-  badge?: string
-  features: Feature[]
-  cta: string
-}[] = [
-  {
-    name: "Starter",
-    tagline: "For single-practitioner clinics ready to stop losing DM leads",
-    setupFee: "599",
-    discountedSetupFee: "299",
-    monthlyFee: "149",
-    highlight: false,
-    features: [
-      {
-        text: "7 core WhatsApp patient conversation flows",
-        tooltip:
-          "Price inquiry, treatment recommendation, first-time qualification, availability, clinic info, after-hours, and follow-up for unconverted leads.",
-      },
-      {
-        text: "Instagram inquiries redirected to WhatsApp",
-        tooltip:
-          "Instagram API has limited automation. We redirect DM inquiries into WhatsApp where full 24/7 automation runs seamlessly.",
-      },
-      { text: "Instant inquiry response (24/7) via WhatsApp" },
-      { text: "Treatment-specific FAQ answers" },
-      { text: "Booking link redirect to your platform" },
-      { text: "Appointment confirmation reminders" },
-      {
-        text: "Follow-up for unconverted leads",
-        tooltip:
-          "Patient asked about a treatment but didn\u2019t book? Automation sends a next-day reminder with booking link.",
-      },
-      {
-        text: "Up to 300 messages/mo",
-        tooltip:
-          "Covers up to 300 outbound template messages (confirmations, reminders, follow-ups). Service replies within the 24-hr customer window are free. Extra messages billed at $0.10 each.",
-      },
-      { text: "Email support" },
-    ],
-    cta: "Get Started",
-  },
-  {
-    name: "Growth",
-    tagline: "For established clinics scaling patient conversion & retention",
-    setupFee: "1,399",
-    discountedSetupFee: "699",
-    monthlyFee: "349",
-    highlight: true,
-    badge: "Most Popular",
-    features: [
-      { text: "Everything in Starter, plus:" },
-      {
-        text: "Multi-practitioner conversation routing",
-        tooltip:
-          "Patient inquiries are automatically routed to the right practitioner flow based on treatment type.",
-      },
-      {
-        text: "Smart lead scoring & prioritisation",
-        tooltip:
-          "AI ranks incoming leads by intent signals so your team focuses on the hottest prospects first.",
-      },
-      {
-        text: "No-show follow-up sequences",
-        tooltip:
-          "Different from Starter\u2019s lead follow-up. This targets already-booked patients who miss appointments \u2014 sends reminder to reschedule.",
-      },
-      {
-        text: "Treatment-cycle rebooking automation",
-        tooltip:
-          "Automated reminders for recurring sessions (e.g., Botox at 3 months, laser packages at 4\u20136 weeks). Links directly to your booking platform.",
-      },
-      {
-        text: "Pre-consultation data collection",
-        tooltip:
-          "Collects patient information before their appointment so staff are fully prepared for the consultation.",
-      },
-      {
-        text: "Up to 1,500 messages/mo",
-        tooltip:
-          "Covers up to 1,500 outbound template messages (confirmations, reminders, campaigns). Service replies within the 24-hr customer window are free. Extra messages billed at $0.05 each.",
-      },
-      {
-        text: "Conversion analytics dashboard",
-        tooltip:
-          "Track inquiries \u2192 bookings \u2192 revenue. See which channels and flows convert best.",
-      },
-      { text: "Priority WhatsApp & email support" },
-    ],
-    cta: "Scale Your Clinic",
-  },
-  {
-    name: "Pro",
-    tagline: "For multi-location clinics and aesthetic chains",
-    setupFee: "2,799",
-    discountedSetupFee: "1,399",
-    monthlyFee: "699",
-    highlight: false,
-    features: [
-      { text: "Everything in Growth, plus:" },
-      { text: "Multi-branch management" },
-      { text: "Advanced AI conversation flows" },
-      { text: "Facebook Messenger + website chat" },
-      { text: "Campaign broadcast system" },
-      {
-        text: "Unlimited messages",
-        tooltip:
-          "No caps on outbound template messages or service replies \u2014 ideal for high-volume, multi-branch operations.",
-      },
-      { text: "Custom integrations (EMR, POS)" },
-      { text: "Dedicated account manager" },
-      { text: "Monthly performance reviews" },
-    ],
-    cta: "Talk to Us",
-  },
-]
-
 export function PricingSection() {
+  const { format } = usePricingCurrency()
+  const overageStandard = format(0.1)
+  const overageHigh = format(0.05)
+  const tiers: {
+    name: string
+    tagline: string
+    setupFee: number
+    discountedSetupFee: number
+    monthlyFee: number
+    highlight: boolean
+    badge?: string
+    features: Feature[]
+    cta: string
+  }[] = [
+    {
+      name: "Starter",
+      tagline: "For single-practitioner clinics ready to stop losing DM leads",
+      setupFee: 599,
+      discountedSetupFee: 299,
+      monthlyFee: 149,
+      highlight: false,
+      features: [
+        {
+          text: "7 core WhatsApp patient conversation flows",
+          tooltip:
+            "Price inquiry, treatment recommendation, first-time qualification, availability, clinic info, after-hours, and follow-up for unconverted leads.",
+        },
+        {
+          text: "Instagram inquiries redirected to WhatsApp",
+          tooltip:
+            "Instagram API has limited automation. We redirect DM inquiries into WhatsApp where full 24/7 automation runs seamlessly.",
+        },
+        { text: "Instant inquiry response (24/7) via WhatsApp" },
+        { text: "Treatment-specific FAQ answers" },
+        { text: "Booking link redirect to your platform" },
+        { text: "Appointment confirmation reminders" },
+        {
+          text: "Follow-up for unconverted leads",
+          tooltip:
+            "Patient asked about a treatment but didn\u2019t book? Automation sends a next-day reminder with booking link.",
+        },
+        {
+          text: "Up to 300 messages/mo",
+          tooltip:
+            `Covers up to 300 outbound template messages (confirmations, reminders, follow-ups). Service replies within the 24-hr customer window are free. Extra messages billed at ${overageStandard} each.`,
+        },
+        { text: "Email support" },
+      ],
+      cta: "Get Started",
+    },
+    {
+      name: "Growth",
+      tagline: "For established clinics scaling patient conversion & retention",
+      setupFee: 1399,
+      discountedSetupFee: 699,
+      monthlyFee: 349,
+      highlight: true,
+      badge: "Most Popular",
+      features: [
+        { text: "Everything in Starter, plus:" },
+        {
+          text: "Multi-practitioner conversation routing",
+          tooltip:
+            "Patient inquiries are automatically routed to the right practitioner flow based on treatment type.",
+        },
+        {
+          text: "Smart lead scoring & prioritisation",
+          tooltip:
+            "AI ranks incoming leads by intent signals so your team focuses on the hottest prospects first.",
+        },
+        {
+          text: "No-show follow-up sequences",
+          tooltip:
+            "Different from Starter\u2019s lead follow-up. This targets already-booked patients who miss appointments \u2014 sends reminder to reschedule.",
+        },
+        {
+          text: "Treatment-cycle rebooking automation",
+          tooltip:
+            "Automated reminders for recurring sessions (e.g., Botox at 3 months, laser packages at 4\u20136 weeks). Links directly to your booking platform.",
+        },
+        {
+          text: "Pre-consultation data collection",
+          tooltip:
+            "Collects patient information before their appointment so staff are fully prepared for the consultation.",
+        },
+        {
+          text: "Up to 1,500 messages/mo",
+          tooltip:
+            `Covers up to 1,500 outbound template messages (confirmations, reminders, campaigns). Service replies within the 24-hr customer window are free. Extra messages billed at ${overageHigh} each.`,
+        },
+        {
+          text: "Conversion analytics dashboard",
+          tooltip:
+            "Track inquiries \u2192 bookings \u2192 revenue. See which channels and flows convert best.",
+        },
+        { text: "Priority WhatsApp & email support" },
+      ],
+      cta: "Scale Your Clinic",
+    },
+    {
+      name: "Pro",
+      tagline: "For multi-location clinics and aesthetic chains",
+      setupFee: 2799,
+      discountedSetupFee: 1399,
+      monthlyFee: 699,
+      highlight: false,
+      features: [
+        { text: "Everything in Growth, plus:" },
+        { text: "Multi-branch management" },
+        { text: "Advanced AI conversation flows" },
+        { text: "Facebook Messenger + website chat" },
+        { text: "Campaign broadcast system" },
+        {
+          text: "Unlimited messages",
+          tooltip:
+            "No caps on outbound template messages or service replies \u2014 ideal for high-volume, multi-branch operations.",
+        },
+        { text: "Custom integrations (EMR, POS)" },
+        { text: "Dedicated account manager" },
+        { text: "Monthly performance reviews" },
+      ],
+      cta: "Talk to Us",
+    },
+  ]
   return (
     <section className="py-20 md:py-28 theme-transition">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -258,8 +261,12 @@ export function PricingSection() {
                     Setup (one-time)
                   </span>
                   <div className="flex items-baseline gap-2 mt-1 flex-wrap">
-                    <span className="text-lg font-medium text-muted-foreground line-through">${tier.setupFee}</span>
-                    <span className="text-2xl font-bold text-emerald-500">${tier.discountedSetupFee}</span>
+                    <span className="text-lg font-medium text-muted-foreground line-through">
+                      {format(tier.setupFee)}
+                    </span>
+                    <span className="text-2xl font-bold text-emerald-500">
+                      {format(tier.discountedSetupFee)}
+                    </span>
                     <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 px-1.5 py-0.5 rounded-md">50% off</span>
                   </div>
                 </div>
@@ -269,7 +276,7 @@ export function PricingSection() {
                   </span>
                   <div className="flex items-baseline gap-1 mt-1">
                     <span className="text-3xl font-black text-foreground">
-                      ${tier.monthlyFee}
+                      {format(tier.monthlyFee)}
                     </span>
                     <span className="text-sm text-muted-foreground">/mo</span>
                   </div>
