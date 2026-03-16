@@ -5,7 +5,7 @@ import Script from "next/script"
 export const metadata: Metadata = {
     title: "Contact Us — Start Your Project",
     description:
-        "Get in touch with RapidNexTech for custom software, SaaS, or AI automation projects. We respond within 24 hours. Email, WhatsApp, or visit us in Sheikhupura.",
+        "Get in touch with RapidNexTech for custom software, SaaS, or AI automation projects. We respond within 24 hours. Email, WhatsApp, or visit us in the UK.",
     alternates: { canonical: "https://rapidnextech.com/contact" },
     openGraph: {
         title: "Contact RapidNexTech — Let's Build Together",
@@ -34,14 +34,13 @@ export default function ContactPage() {
         mainEntity: {
             "@type": "Organization",
             name: "RapidNexTech",
-            telephone: "+92 325 4848 523",
+            telephone: "+44 7311 133668",
             email: "contact@rapidnextech.com",
             address: {
                 "@type": "PostalAddress",
-                streetAddress: "9C-C Y Block Main Market, Housing Colony",
-                addressLocality: "Sheikhupura",
-                addressRegion: "Punjab",
-                addressCountry: "PK",
+                streetAddress: "38 Scotia Road",
+                postalCode: "ST6 4EP",
+                addressCountry: "GB",
             },
         },
     }
@@ -58,3 +57,4 @@ export default function ContactPage() {
         </>
     )
 }
+

@@ -229,12 +229,12 @@ export default function ContactClient() {
                   <div>
                     <h3 className="font-semibold theme-text mb-1">WhatsApp</h3>
                     <a
-                      href="https://wa.me/923254848523"
+                      href="https://wa.me/923314664279"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-primary hover:underline transition-all"
                     >
-                      +92 325 4848 523
+                      +44 7311 133668
                     </a>
                   </div>
                 </div>
@@ -247,9 +247,9 @@ export default function ContactClient() {
                   <div>
                     <h3 className="font-semibold theme-text mb-1">Address</h3>
                     <p className="theme-text opacity-80 text-sm leading-relaxed">
-                      9C-C Y Block Main Market<br />
-                      Housing Colony Sheikhupura<br />
-                      Punjab, Pakistan
+                      38 Scotia Road<br />
+                      ST6 4EP<br />
+                      UK
                     </p>
                   </div>
                 </div>
@@ -263,7 +263,7 @@ export default function ContactClient() {
                     <h3 className="font-semibold theme-text mb-1">Response Time</h3>
                     <p className="theme-text opacity-80 text-sm">
                       We respond within 24 hours<br />
-                      Mon–Fri, 9am–6pm PKT
+                      Mon-Fri, 9am-6pm UK
                     </p>
                   </div>
                 </div>
@@ -282,3 +282,4 @@ export default function ContactClient() {
     </div>
   )
 }
+

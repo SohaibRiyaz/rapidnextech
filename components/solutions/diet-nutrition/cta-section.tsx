@@ -9,7 +9,6 @@ export function CTASection() {
     <section className="py-20 md:py-28 theme-transition">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="relative rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.06] via-primary/[0.03] to-primary/[0.06] p-10 md:p-16 text-center overflow-hidden">
-          {/* Decorative background */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--primary)/0.08),transparent_60%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,hsl(var(--primary)/0.06),transparent_60%)]" />
 
@@ -20,20 +19,23 @@ export function CTASection() {
             </div>
 
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight mb-6">
-              Find Out How Many Inquiries<br className="hidden md:block" /> Your Clinic Is Losing
+              See How Many Diet Inquiries{" "}
+              <br className="hidden md:block" /> You Are Losing
             </h2>
 
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-4">
-              We&apos;ll analyse your Instagram, WhatsApp, and website inquiry flow &mdash;
-              and show you exactly where potential patients are dropping off before they book.
+              We will review your WhatsApp, website, and Instagram inquiry flow
+              and show you where prospects drop off before booking a consultation
+              or purchasing a plan.
             </p>
 
             <p className="text-sm text-muted-foreground max-w-xl mx-auto mb-4">
-              No obligation. No cost. Just a clear picture of what you&apos;re leaving on the table.
+              No obligation. No cost. Just clarity on your biggest conversion leaks.
             </p>
 
             <p className="text-sm font-medium text-primary max-w-lg mx-auto mb-10">
-              Or try a live WhatsApp flow with your own booking link &mdash; see how it converts leads in real-time.
+              Or try a live WhatsApp flow with your own booking or checkout link and
+              see how it converts in real time.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
@@ -69,7 +71,7 @@ export function CTASection() {
               </span>
               <span className="flex items-center gap-1.5">
                 <Shield className="w-3.5 h-3.5 text-primary" />
-                Works with your existing booking system
+                Works with your calendar or booking page
               </span>
               <span className="flex items-center gap-1.5">
                 <Shield className="w-3.5 h-3.5 text-primary" />

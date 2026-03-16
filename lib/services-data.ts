@@ -387,4 +387,14 @@ export const industrySolutions = [
         href: "/solutions/aesthetic-clinics",
         description: "AI-powered appointment conversion & automation for aesthetic clinics.",
     },
+    {
+        title: "Real Estate Agencies",
+        href: "/solutions/real-estate",
+        description: "Automated property inquiry qualification and viewing bookings.",
+    },
+    {
+        title: "Diet & Nutrition",
+        href: "/solutions/diet-nutrition",
+        description: "Automate diet inquiries, consultations, and plan signups.",
+    },
 ]

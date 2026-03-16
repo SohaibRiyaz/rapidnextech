@@ -182,11 +182,13 @@ export default function RootLayout({
               foundingDate: "2020",
               address: {
                 "@type": "PostalAddress",
-                addressCountry: "US",
+                streetAddress: "38 Scotia Road",
+                postalCode: "ST6 4EP",
+                addressCountry: "GB",
               },
               contactPoint: {
                 "@type": "ContactPoint",
-                telephone: "+1-234-567-8900",
+                telephone: "+44 7311 133668",
                 contactType: "customer service",
                 availableLanguage: ["English"],
                 areaServed: "Worldwide",

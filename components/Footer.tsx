@@ -90,6 +90,16 @@ export function Footer() {
                   Aesthetic Clinics
                 </Link>
               </li>
+              <li>
+                <Link href="/solutions/real-estate" className="theme-text opacity-70 hover:opacity-100 hover:text-primary transition-colors text-sm">
+                  Real Estate Agencies
+                </Link>
+              </li>
+              <li>
+                <Link href="/solutions/diet-nutrition" className="theme-text opacity-70 hover:opacity-100 hover:text-primary transition-colors text-sm">
+                  Diet &amp; Nutrition
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -126,6 +136,17 @@ export function Footer() {
                   contact@rapidnextech.com
                 </a>
               </li>
+              <li>
+                <a
+                  href="tel:+447311133668"
+                  className="theme-text opacity-70 hover:opacity-100 hover:text-primary transition-colors text-sm flex items-center gap-2 whitespace-nowrap"
+                >
+                  +44 7311 133668
+                </a>
+              </li>
+              <li className="theme-text opacity-70 text-sm leading-relaxed">
+                38 Scotia Road, ST6 4EP, UK
+              </li>
             </ul>
           </div>
         </div>
@@ -135,10 +156,10 @@ export function Footer() {
             © {currentYear} RapidNexTech. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="theme-text opacity-50 hover:opacity-100 text-sm transition-colors">
+            <Link href="/privacy-policy" className="theme-text opacity-50 hover:opacity-100 text-sm transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="theme-text opacity-50 hover:opacity-100 text-sm transition-colors">
+            <Link href="/terms-of-service" className="theme-text opacity-50 hover:opacity-100 text-sm transition-colors">
               Terms of Service
             </Link>
           </div>
