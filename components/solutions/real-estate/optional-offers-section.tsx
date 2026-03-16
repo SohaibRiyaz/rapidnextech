@@ -1,4 +1,4 @@
-import { Globe, Phone, ArrowRight } from "lucide-react"
+ï»¿import { Globe, Phone, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 
@@ -10,12 +10,12 @@ const offers = [
     description:
       "If you do not use a formal booking platform, we can build a lightweight viewing booking page on your website. It connects to your calendar and works seamlessly with the WhatsApp automation.",
     benefits: [
-      "Hosted on your domain — you own it",
+      "Hosted on your domain - you own it",
       "Buyer qualification baked in",
       "Connects to agent calendars",
       "Instant WhatsApp confirmation",
     ],
-    pricing: "One-time fee — pricing depends on complexity",
+    pricing: "One-time fee - pricing depends on complexity",
     accent: "from-blue-500 to-cyan-500",
   },
   {
@@ -25,7 +25,7 @@ const offers = [
     description:
       "Handle inbound phone calls with an AI receptionist that answers 24/7. Captures buyer intent, routes to the right agent, and sends a WhatsApp viewing link automatically.",
     benefits: [
-      "24/7 phone answering — no missed calls",
+      "24/7 phone answering - no missed calls",
       "Natural-sounding AI voice agent",
       "Captures budget, location, and timeline",
       "Sends viewing link after the call",

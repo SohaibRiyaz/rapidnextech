@@ -1,4 +1,4 @@
-"use client"
+ï»¿"use client"
 
 import {
   Accordion,
@@ -36,7 +36,7 @@ const faqs = [
   {
     question: "How long does setup take?",
     answer:
-      "Most agencies go live in 7–14 business days. We connect channels, configure qualification flows, set up booking links, and train your team.",
+      "Most agencies go live in 7-14 business days. We connect channels, configure qualification flows, set up booking links, and train your team.",
   },
   {
     question: "Is this GDPR compliant?",
