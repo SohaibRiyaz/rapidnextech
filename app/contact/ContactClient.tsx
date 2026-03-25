@@ -6,7 +6,7 @@ import { motion } from "framer-motion"
 import { Button } from "../../components/ui/button"
 import { Input } from "../../components/ui/input"
 import { Textarea } from "../../components/ui/textarea"
-import { Loader2, Mail, Phone, MapPin, Clock } from "lucide-react"
+import { Loader2, Mail, Phone, MapPin, Clock, MessageCircle } from "lucide-react"
 import { useThemeContext } from "@/context/theme-context"
 import Link from "next/link"
 
@@ -224,7 +224,7 @@ export default function ContactClient() {
                 {/* WhatsApp */}
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-6 h-6 text-primary" />
+                    <MessageCircle className="w-6 h-6 text-primary" />
                   </div>
                   <div>
                     <h3 className="font-semibold theme-text mb-1">WhatsApp</h3>
@@ -232,6 +232,22 @@ export default function ContactClient() {
                       href="https://wa.me/923314664279"
                       target="_blank"
                       rel="noopener noreferrer"
+                      className="text-primary hover:underline transition-all"
+                    >
+                      +92 331 4664 279
+                    </a>
+                  </div>
+                </div>
+
+                {/* Phone (Calls) */}
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Phone className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold theme-text mb-1">Phone (Calls)</h3>
+                    <a
+                      href="tel:+447311133668"
                       className="text-primary hover:underline transition-all"
                     >
                       +44 7311 133668

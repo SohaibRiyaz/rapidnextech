@@ -1,10 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
 import { ArrowRight, Check, Sparkles, Clock, Zap, Star, Info } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { usePricingCurrency } from "@/hooks/use-pricing-currency"
+import { formatUSD } from "@/lib/currency"
+import { sendStripeIntent } from "@/lib/stripe-intent"
 
 interface Feature {
   text: string
@@ -50,9 +50,9 @@ function FeatureItem({
 }
 
 export function PricingSection() {
-  const { format } = usePricingCurrency()
-  const overageStandard = format(0.1)
-  const overageHigh = format(0.05)
+  const overageStandard = formatUSD(0.1)
+  const overageHigh = formatUSD(0.05)
+  const pageLabel = "Diet & Nutrition"
   const tiers: {
     name: string
     tagline: string
@@ -63,6 +63,7 @@ export function PricingSection() {
     badge?: string
     features: Feature[]
     cta: string
+    ctaHref: string
   }[] = [
     {
       name: "Starter",
@@ -71,11 +72,12 @@ export function PricingSection() {
       discountedSetupFee: 299,
       monthlyFee: 149,
       highlight: false,
+      ctaHref: "https://buy.stripe.com/dRmaEQ7DXexE1O82NK1VK09",
       features: [
         {
-          text: "7 core WhatsApp nutrition conversation flows",
+          text: "AI-powered WhatsApp conversation engine (handles natural messages + structured flows)",
           tooltip:
-            "Price inquiry, plan recommendation, first-time qualification, availability, business info, after-hours, and follow-up for unconverted leads.",
+            "Combines structured automations with natural replies for pricing, plan recommendations, qualification, availability, after-hours, and follow-up.",
         },
         {
           text: "Instagram inquiries redirected to WhatsApp",
@@ -83,7 +85,7 @@ export function PricingSection() {
             "Instagram automation is limited. We redirect DMs into WhatsApp where full 24/7 automation runs seamlessly.",
         },
         { text: "Instant inquiry response (24/7) via WhatsApp" },
-        { text: "Diet plan FAQs and pricing answers" },
+        { text: "Understands client inquiries (diet goals, pricing, plans, questions)" },
         { text: "Consultation or plan booking link redirect" },
         { text: "Consultation confirmation reminders" },
         {
@@ -92,7 +94,7 @@ export function PricingSection() {
             "Prospect asked about a plan but did not book? Automation sends a next-day reminder with a booking or checkout link.",
         },
         {
-          text: "Up to 300 messages/mo",
+          text: "Up to 300 messages/month",
           tooltip:
             `Covers outbound template messages (confirmations, reminders, follow-ups). Service replies within the 24-hr customer window are free. Extra messages billed at ${overageStandard} each.`,
         },
@@ -108,6 +110,7 @@ export function PricingSection() {
       monthlyFee: 349,
       highlight: true,
       badge: "Most Popular",
+      ctaHref: "https://buy.stripe.com/00w7sE7DX89gcsM2NK1VK0a",
       features: [
         { text: "Everything in Starter, plus:" },
         {
@@ -136,7 +139,7 @@ export function PricingSection() {
             "Collects goals, dietary restrictions, and health context before the consult.",
         },
         {
-          text: "Up to 1,500 messages/mo",
+          text: "Up to 1,500 messages/month",
           tooltip:
             `Covers outbound template messages (confirmations, reminders, campaigns). Service replies within the 24-hr customer window are free. Extra messages billed at ${overageHigh} each.`,
         },
@@ -156,11 +159,12 @@ export function PricingSection() {
       discountedSetupFee: 1399,
       monthlyFee: 699,
       highlight: false,
+      ctaHref: "https://buy.stripe.com/28E5kwe2lahoeAUcok1VK0b",
       features: [
         { text: "Everything in Growth, plus:" },
         { text: "Multi-coach management" },
-        { text: "Advanced AI nutrition flows" },
-        { text: "Facebook Messenger + website chat" },
+        { text: "Advanced AI conversation handling (complex queries)" },
+        { text: "Optional multi-channel expansion (WhatsApp-first system)" },
         { text: "Campaign broadcast system" },
         {
           text: "Unlimited messages",
@@ -171,7 +175,7 @@ export function PricingSection() {
         { text: "Dedicated account manager" },
         { text: "Monthly performance reviews" },
       ],
-      cta: "Talk to Us",
+      cta: "Start Pro Plan",
     },
   ]
   return (
@@ -250,10 +254,10 @@ export function PricingSection() {
                   </span>
                   <div className="flex items-baseline gap-2 mt-1 flex-wrap">
                     <span className="text-lg font-medium text-muted-foreground line-through">
-                      {format(tier.setupFee)}
+                      {formatUSD(tier.setupFee)}
                     </span>
                     <span className="text-2xl font-bold text-emerald-500">
-                      {format(tier.discountedSetupFee)}
+                      {formatUSD(tier.discountedSetupFee)}
                     </span>
                     <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-600 px-1.5 py-0.5 rounded-md">50% off</span>
                   </div>
@@ -264,7 +268,7 @@ export function PricingSection() {
                   </span>
                   <div className="flex items-baseline gap-1 mt-1">
                     <span className="text-3xl font-black text-foreground">
-                      {format(tier.monthlyFee)}
+                      {formatUSD(tier.monthlyFee)}
                     </span>
                     <span className="text-sm text-muted-foreground">/mo</span>
                   </div>
@@ -285,10 +289,21 @@ export function PricingSection() {
                     : "bg-foreground text-background hover:bg-foreground/90"
                 }`}
               >
-                <Link href="/contact">
+                <a
+                  href={tier.ctaHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() =>
+                    sendStripeIntent({
+                      planName: tier.name,
+                      stripeUrl: tier.ctaHref,
+                      pageLabel,
+                    })
+                  }
+                >
                   {tier.cta}
                   <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+                </a>
               </Button>
             </div>
           ))}
@@ -299,9 +314,9 @@ export function PricingSection() {
             All plans include WhatsApp Business API setup, staff training, and an
             onboarding period. Works with Calendly, Google Calendar, Stripe/Shopify
             checkout, and custom booking pages.{" "}
-            <Link href="/contact" className="text-primary font-medium hover:underline">
+            <a href="/contact" className="text-primary font-medium hover:underline">
               Need a custom plan?
-            </Link>
+            </a>
           </p>
         </div>
       </div>
