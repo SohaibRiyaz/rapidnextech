@@ -8,7 +8,7 @@
   "scripts": {
     "build": "next build && npm run copy-htaccess",
     "build:only": "next build",
-    "copy-htaccess": "node -e \"const fs = require('fs'); if (fs.existsSync('.htaccess')) { fs.copyFileSync('.htaccess', 'out/.htaccess'); console.log('✓ .htaccess copied to out/'); } else { console.log('⚠ .htaccess not found'); }\"",
+    "copy-htaccess": "node -e \"const fs = require('fs'); if (fs.existsSync('.htaccess') && fs.existsSync('out')) { fs.copyFileSync('.htaccess', 'out/.htaccess'); console.log('.htaccess copied to out/'); } else { console.log('htaccess not copied (missing .htaccess or out/)'); }\"",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start"
