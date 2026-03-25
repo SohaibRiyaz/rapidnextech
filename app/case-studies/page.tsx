@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import PortfolioClient from "./PortfolioClient"
 import Script from "next/script"
 import { PortfolioCMS } from "@/lib/supabase-cms"
+import { slugify } from "@/lib/utils"
 
 export const metadata: Metadata = {
   title: "Case Studies — Real Projects, Real Results",
@@ -41,7 +42,7 @@ export default async function Portfolio() {
       item: {
         "@type": "CreativeWork",
         name: project.title,
-        url: `https://rapidnextech.com/case-studies/${project.slug}`,
+        url: `https://rapidnextech.com/case-studies/${slugify(project.slug || project.title)}`,
         image: project.images[0]?.url,
         description: project.description,
         about: project.category

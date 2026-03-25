@@ -67,8 +67,12 @@ export class PortfolioCMS {
     if (allError) throw allError
     if (!allProjects || allProjects.length === 0) return null
 
-    // Find project where generated slug matches
-    const project = allProjects.find(project => slugify(project.title) === slug)
+    // Find project where generated slug matches title or slug field
+    const project = allProjects.find(project => {
+      const titleSlug = slugify(project.title)
+      const savedSlug = project.slug ? slugify(project.slug) : ""
+      return titleSlug === slug || savedSlug === slug
+    })
     return project || null
   }
 

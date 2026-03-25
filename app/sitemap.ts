@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next"
 import { BlogCMS, PortfolioCMS } from "@/lib/supabase-cms"
 import { servicesData } from "@/lib/services-data"
+import { slugify } from "@/lib/utils"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://rapidnextech.com"
@@ -71,7 +72,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const projects = await PortfolioCMS.getPublishedProjects()
     portfolioPages = projects.map((project: any) => ({
-      url: `${baseUrl}/case-studies/${project.slug}`,
+      url: `${baseUrl}/case-studies/${slugify(project.slug || project.title || "")}`,
       lastModified: project.updated_at || currentDate,
       changeFrequency: "monthly" as const,
       priority: 0.7,

@@ -7,6 +7,7 @@ import { useSupabaseCMS } from "@/lib/supabase-cms"
 import type { ProjectDetail } from "@/lib/supabase"
 import { ArrowRight, ChevronRight, Briefcase, ExternalLink } from "lucide-react"
 import Image from "next/image"
+import { slugify } from "@/lib/utils"
 
 export function FeaturedWorkSection() {
   const cms = useSupabaseCMS()
@@ -101,6 +102,7 @@ function DesktopRow({ project, index }: { project: ProjectDetail; index: number 
   const reverse = index % 2 === 1
   const image = project.images?.[0]?.url || "/placeholder.svg"
   const description = project.description || project.long_description || ""
+  const projectSlug = slugify(project.slug || project.title)
 
   return (
     <motion.div
@@ -112,7 +114,7 @@ function DesktopRow({ project, index }: { project: ProjectDetail; index: number 
     >
       <div className="grid grid-cols-12 gap-10 lg:gap-14 items-center">
         <div className={`col-span-7 ${reverse ? "order-2" : "order-1"}`}>
-          <Link href={`/case-studies/${project.slug ?? ""}`} className="group block">
+          <Link href={`/case-studies/${projectSlug}`} className="group block">
             <div className="relative w-full aspect-[16/10] rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl bg-muted/10">
               <Image
                 src={image}
@@ -161,7 +163,7 @@ function DesktopRow({ project, index }: { project: ProjectDetail; index: number 
 
             <div className="flex items-center gap-4 pt-4">
               <Link
-                href={`/case-studies/${project.slug ?? ""}`}
+                href={`/case-studies/${projectSlug}`}
                 className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-primary text-white font-black text-xs uppercase tracking-widest shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-shadow"
               >
                 View Case Study <ArrowRight className="w-4 h-4" />
@@ -189,6 +191,7 @@ function Card({ project, index, total }: { project: ProjectDetail, index: number
   const containerRef = useRef<HTMLDivElement>(null)
   const [topOffset, setTopOffset] = useState(280)
   const [isDesktop, setIsDesktop] = useState(false)
+  const projectSlug = slugify(project.slug || project.title)
 
   useEffect(() => {
     const handleResize = () => {
@@ -222,7 +225,7 @@ function Card({ project, index, total }: { project: ProjectDetail, index: number
         scale: isDesktop ? undefined : mobileScale,
       }}
     >
-      <Link href={`/case-studies/${project.slug ?? ''}`} className="block group max-w-6xl mx-auto">
+      <Link href={`/case-studies/${projectSlug}`} className="block group max-w-6xl mx-auto">
         <div className="relative w-full aspect-[4/5] md:aspect-[2.4/1] bg-muted/10 rounded-[2.5rem] overflow-hidden border border-white/10 shadow-2xl backdrop-blur-sm md:transition-shadow md:duration-500 hover:shadow-primary/20">
 
           {/* Background Image */}

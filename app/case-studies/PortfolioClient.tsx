@@ -18,6 +18,8 @@ interface PortfolioClientProps {
   initialProjects?: ProjectDetail[]
 }
 
+const getProjectSlug = (project: ProjectDetail) => slugify(project.slug || project.title)
+
 export default function PortfolioClient({ initialProjects = [] }: PortfolioClientProps) {
   const { mode, getGradient } = useThemeContext()
   const [projects, setProjects] = useState<ProjectDetail[]>(initialProjects)
@@ -108,7 +110,7 @@ export default function PortfolioClient({ initialProjects = [] }: PortfolioClien
         {/* ─── Featured Hero Spotlight ─── */}
         {heroProject && selectedCategory === "All" && !searchTerm && (
           <section className="pb-16">
-            <Link href={`/case-studies/${heroProject.slug || slugify(heroProject.title)}`} className="group block">
+            <Link href={`/case-studies/${getProjectSlug(heroProject)}`} className="group block">
               <div className="relative rounded-2xl lg:rounded-3xl overflow-hidden border border-border/30 bg-muted/5">
                 <div className="grid grid-cols-1 lg:grid-cols-2">
                   {/* Image */}
@@ -317,7 +319,7 @@ function ProjectCard({ project, index, onQuickView }: {
       className="group flex flex-col"
     >
       {/* Image */}
-      <Link href={`/case-studies/${project.slug || slugify(project.title)}`} className="block mb-4">
+      <Link href={`/case-studies/${getProjectSlug(project)}`} className="block mb-4">
         <div className="relative aspect-[16/10] overflow-hidden rounded-xl border border-border/30 bg-muted/5 group-hover:shadow-xl transition-all duration-500">
           <Image
             src={project.images[0]?.url || "/placeholder.svg"}
@@ -348,7 +350,7 @@ function ProjectCard({ project, index, onQuickView }: {
       {/* Content */}
       <div className="flex flex-col flex-grow">
         <h3 className="text-lg font-bold tracking-tight leading-snug mb-2 group-hover:text-primary transition-colors">
-          <Link href={`/case-studies/${project.slug || slugify(project.title)}`}>
+          <Link href={`/case-studies/${getProjectSlug(project)}`}>
             {project.title}
           </Link>
         </h3>
@@ -375,7 +377,7 @@ function ProjectCard({ project, index, onQuickView }: {
         <div className="flex items-center justify-between pt-3 border-t border-border/10">
           <span className="text-xs text-muted-foreground">{project.duration}</span>
           <Link
-            href={`/case-studies/${project.slug || slugify(project.title)}`}
+            href={`/case-studies/${getProjectSlug(project)}`}
             className="text-xs font-semibold text-foreground/50 group-hover:text-primary transition-colors flex items-center gap-1"
           >
             View study <ArrowUpRight className="w-3.5 h-3.5" />
@@ -478,7 +480,7 @@ function QuickViewDrawer({ project, onClose, getGradient }: { project: ProjectDe
           </div>
 
           <div className="pt-8 flex flex-col sm:flex-row gap-3">
-            <Link href={`/case-studies/${project.slug || slugify(project.title)}`} className="flex-grow">
+            <Link href={`/case-studies/${getProjectSlug(project)}`} className="flex-grow">
               <Button className="w-full h-12 rounded-xl bg-primary text-white font-bold">Read Full Case Study</Button>
             </Link>
             <Link href="/contact" className="flex-grow">
