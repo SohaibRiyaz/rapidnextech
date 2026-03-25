@@ -10,12 +10,21 @@ import { ThemeSwitcher } from "./theme-switcher"
 import { Menu, X, Code2 } from "lucide-react"
 import { useThemeContext } from "@/context/theme-context"
 import { HeaderNav } from "./header-nav"
+import { industrySolutions } from "@/lib/services-data"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
-const navigation = [
+const primaryNavigation = [
   { name: "About", href: "/about" },
   { name: "What We Do", href: "/services" },
   { name: "Case Studies", href: "/case-studies" },
-  { name: "Solutions", href: "/solutions/aesthetic-clinics" },
+]
+
+const secondaryNavigation = [
   { name: "Blog", href: "/blog" },
   { name: "Careers", href: "/careers" },
   { name: "Contact", href: "/contact" },
@@ -116,8 +125,8 @@ export default function Header() {
             className={`md:hidden absolute top-20 left-0 right-0 ${isDark ? "bg-gray-950" : "bg-white"
               } border-t border-white/10 overflow-hidden`}
           >
-            <div className="container mx-auto px-6 py-8 flex flex-col gap-6 h-full">
-              {navigation.map((item) => (
+            <div className="container mx-auto px-6 py-8 flex flex-col gap-6 h-full overflow-y-auto">
+              {primaryNavigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
@@ -129,6 +138,46 @@ export default function Header() {
                 </Link>
               ))}
 
+              {industrySolutions.length > 0 && (
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="solutions" className="border-none">
+                    <AccordionTrigger className="text-2xl font-bold text-foreground hover:text-primary py-0 [&[data-state=open]>svg]:rotate-180">
+                      Solutions
+                    </AccordionTrigger>
+                    <AccordionContent className="pt-4">
+                      <div className="flex flex-col gap-3">
+                        {industrySolutions.map((solution) => (
+                          <Link
+                            key={solution.href}
+                            href={solution.href}
+                            className="rounded-xl border border-border/60 px-4 py-3 hover:border-primary/30 hover:bg-primary/5 transition-all"
+                            onClick={() => setIsOpen(false)}
+                          >
+                            <div className="text-base font-semibold text-foreground">
+                              {solution.title}
+                            </div>
+                            <div className="text-sm text-muted-foreground mt-1">
+                              {solution.description}
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              )}
+
+              {secondaryNavigation.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`text-2xl font-bold ${pathname === item.href ? "text-primary" : "text-foreground"
+                    }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ))}
             </div>
           </motion.div>
         )}

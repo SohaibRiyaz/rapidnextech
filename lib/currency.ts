@@ -24,3 +24,16 @@ export function formatCurrency(amount: number, currency: SupportedCurrency) {
     maximumFractionDigits: fractionDigits,
   }).format(amount)
 }
+
+export function formatUSD(amount: number) {
+  const isWhole = Number.isInteger(amount)
+  const fractionDigits = amount < 1 ? 2 : isWhole ? 0 : 2
+
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    currencyDisplay: "symbol",
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  }).format(amount)
+}

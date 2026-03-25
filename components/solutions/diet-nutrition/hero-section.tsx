@@ -45,8 +45,12 @@ export function DietNutritionHero() {
             </Link>
           </Button>
           <Button asChild variant="outline" size="lg" className="h-12 px-8 text-base font-semibold rounded-xl border-border hover:bg-muted/50 transition-all duration-200">
-            <Link href="/contact?demo=live-flow">
-              Try a Live WhatsApp Flow
+            <Link
+              href="https://www.notion.so/How-Nutrition-Clients-Interact-on-WhatsApp-Demo-Flow-2d0bcba1badb8075a1a8fffb7d97a449?source=copy_link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View WhatsApp Demo Flow
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>

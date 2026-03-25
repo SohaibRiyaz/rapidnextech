@@ -68,36 +68,58 @@ export function HeaderNav() {
                                 ))}
                             </div>
 
-                            {/* Solutions Strip */}
-                            {industrySolutions.length > 0 && (
-                                <div className="mt-4 pt-4 border-t border-border/50">
-                                    <div className="flex items-center justify-between gap-4">
-                                        <div className="flex items-center gap-4">
-                                            <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground whitespace-nowrap">Solutions</span>
-                                            {industrySolutions.map((solution) => (
-                                                <Link key={solution.href} href={solution.href} legacyBehavior passHref>
-                                                    <NavigationMenuLink asChild>
-                                                        <a className="group flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/5 hover:bg-primary/10 border border-primary/10 hover:border-primary/20 transition-all">
-                                                            <span className="text-[13px] font-medium text-foreground group-hover:text-primary transition-colors">{solution.title}</span>
-                                                            <ArrowRight className="w-3 h-3 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
-                                                        </a>
-                                                    </NavigationMenuLink>
-                                                </Link>
-                                            ))}
-                                        </div>
-                                        <Link href="/services" legacyBehavior passHref>
-                                            <NavigationMenuLink asChild>
-                                                <a className="text-[11px] text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
-                                                    All services <ArrowRight className="w-3 h-3" />
-                                                </a>
-                                            </NavigationMenuLink>
-                                        </Link>
-                                    </div>
-                                </div>
-                            )}
+                            <div className="mt-4 pt-4 border-t border-border/50">
+                                <Link href="/services" legacyBehavior passHref>
+                                    <NavigationMenuLink asChild>
+                                        <a className="text-[11px] text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
+                                            All services <ArrowRight className="w-3 h-3" />
+                                        </a>
+                                    </NavigationMenuLink>
+                                </Link>
+                            </div>
                         </div>
                     </NavigationMenuContent>
                 </NavigationMenuItem>
+
+                {/* Solutions Dropdown */}
+                {industrySolutions.length > 0 && (
+                    <NavigationMenuItem>
+                        <NavigationMenuTrigger className="bg-transparent text-foreground hover:bg-primary/10 hover:text-primary data-[active]:text-primary data-[state=open]:text-primary">
+                            Solutions
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent>
+                            <div className="w-[420px] p-6 bg-background/95 backdrop-blur-xl rounded-2xl border border-border shadow-2xl">
+                                <div className="mb-4">
+                                    <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                                        Industry Solutions
+                                    </p>
+                                    <p className="text-sm text-muted-foreground mt-1">
+                                        Purpose-built automation systems tailored to your vertical.
+                                    </p>
+                                </div>
+                                <div className="space-y-3">
+                                    {industrySolutions.map((solution) => (
+                                        <Link key={solution.href} href={solution.href} legacyBehavior passHref>
+                                            <NavigationMenuLink asChild>
+                                                <a className="group block rounded-xl border border-border/60 px-4 py-3 bg-gradient-to-br from-primary/5 via-transparent to-transparent hover:border-primary/30 hover:bg-primary/10 transition-all">
+                                                    <div className="flex items-center justify-between gap-2">
+                                                        <span className="text-[14px] font-semibold text-foreground group-hover:text-primary transition-colors">
+                                                            {solution.title}
+                                                        </span>
+                                                        <ArrowRight className="w-3.5 h-3.5 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                                                    </div>
+                                                    <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+                                                        {solution.description}
+                                                    </p>
+                                                </a>
+                                            </NavigationMenuLink>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        </NavigationMenuContent>
+                    </NavigationMenuItem>
+                )}
 
                 {/* Case Studies */}
                 <NavigationMenuItem>

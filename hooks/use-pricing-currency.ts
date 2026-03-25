@@ -1,15 +1,17 @@
-import { useEffect, useMemo, useState } from "react"
-import { formatCurrency, getPreferredCurrency, SupportedCurrency } from "@/lib/currency"
+import { useEffect, useState } from "react"
+import { formatCurrency, formatUSD, getPreferredCurrency, SupportedCurrency } from "@/lib/currency"
 
 type Rates = Partial<Record<SupportedCurrency, number>>
 
 export function usePricingCurrency() {
   const [currency, setCurrency] = useState<SupportedCurrency>("USD")
   const [rates, setRates] = useState<Rates>({})
+  const [isHydrated, setIsHydrated] = useState(false)
 
   useEffect(() => {
     if (typeof navigator === "undefined") return
     setCurrency(getPreferredCurrency(navigator.language))
+    setIsHydrated(true)
   }, [])
 
   useEffect(() => {
@@ -42,25 +44,26 @@ export function usePricingCurrency() {
     }
   }, [])
 
-  const activeCurrency = useMemo(() => {
-    if (currency === "USD") return "USD"
-    const rate = rates[currency]
-    if (!rate || !Number.isFinite(rate) || rate <= 0) return "USD"
-    return currency
-  }, [currency, rates])
+  const rate = currency === "USD" ? 1 : rates[currency]
+  const canConvert = currency === "USD" || (rate && Number.isFinite(rate) && rate > 0)
 
   const convert = (amountUSD: number) => {
-    if (activeCurrency === "USD") return amountUSD
-    const rate = rates[activeCurrency] ?? 1
-    return amountUSD * rate
+    if (!canConvert || currency === "USD") return amountUSD
+    return amountUSD * (rate ?? 1)
   }
 
   const format = (amountUSD: number) => {
-    return formatCurrency(convert(amountUSD), activeCurrency)
+    if (!isHydrated || !canConvert) {
+      return formatUSD(amountUSD)
+    }
+    if (currency === "USD") {
+      return formatUSD(amountUSD)
+    }
+    return formatCurrency(convert(amountUSD), currency)
   }
 
   return {
-    currency: activeCurrency,
+    currency: canConvert ? currency : "USD",
     convert,
     format,
   }
