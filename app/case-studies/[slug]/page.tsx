@@ -11,7 +11,7 @@ export const dynamicParams = true
 export async function generateStaticParams() {
   const projects = await PortfolioCMS.getPublishedProjects()
   return projects.map((project) => ({
-    slug: project.slug || slugify(project.title),
+    slug: slugify(project.slug || project.title),
   }))
 }
 

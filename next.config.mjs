@@ -16,9 +16,8 @@ const nextConfig = {
     missingSuspenseWithCSRBailout: false,
   },
 
-  // Only use static export for production builds.
-  // In dev mode, we need dynamic routing to support new AI-generated blog slugs.
-  ...(process.env.NODE_ENV === "production" ? { output: "export" } : {}),
+  // Use static export only when explicitly requested via NEXT_OUTPUT=export
+  ...(process.env.NEXT_OUTPUT === "export" ? { output: "export" } : {}),
 }
 
 export default nextConfig
