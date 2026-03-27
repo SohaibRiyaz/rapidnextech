@@ -5,29 +5,29 @@ const segments = [
     title: "Botox & Injectables Clinics",
     badge: "Best Fit",
     description:
-      "Anti-wrinkle and filler treatments repeat every 3\u20134 months. With average appointment values of \u00a3200\u2013\u00a3350, automated rebooking reminders alone can recover thousands in annual revenue per patient.",
-    economics: "\u00a3800\u2013\u00a31,200 avg. yearly patient value",
+      "Treatments repeat every 3\u20134 months. Average appointment value AED 1,500\u20133,000. Automated rebooking reminders alone recover thousands in annual revenue per patient.",
+    economics: "AED 1,500\u20133,000 per appointment",
   },
   {
     title: "Laser Hair Removal Clinics",
     badge: null,
     description:
-      "Multi-session packages (\u00a3600\u2013\u00a31,200 per course) require patients to return 4\u20136 times. Missed sessions destroy results. Automated session reminders keep patients on track and protect your revenue.",
-    economics: "4\u20136 sessions per treatment course",
+      "Multi-session packages (AED 3,000\u20138,000 per course) require 4\u20136 visits. Automated reminders protect completion rates and revenue.",
+    economics: "AED 3,000\u20138,000 per course",
   },
   {
     title: "Premium Skin Clinics",
     badge: null,
     description:
-      "Hydrafacials, microneedling, chemical peels, and skin rejuvenation. High Instagram inquiry volume, high ticket prices (\u00a3120\u2013\u00a3450+), and complex treatment suitability questions that automation handles perfectly.",
-    economics: "\u00a3120\u2013\u00a3450+ per treatment session",
+      "High Instagram inquiry volume + high-ticket treatments (AED 800\u20134,500+ per session). AI handles complex suitability questions perfectly.",
+    economics: "AED 800\u20134,500+ per session",
   },
   {
     title: "Multi-Treatment Aesthetic Centres",
     badge: null,
     description:
-      "Clinics offering a range of injectables, laser, and skin treatments across multiple practitioners. The system routes each inquiry to the right treatment flow and manages the full patient conversation lifecycle.",
-    economics: "Multiple treatment lines = compounding rebooking value",
+      "Clinics offering injectables, laser, and skin treatments across multiple practitioners. Full patient lifecycle automation = compounding revenue.",
+    economics: "Multi-practitioner clinics across GCC",
   },
 ]
 
@@ -42,7 +42,7 @@ export function WhoItsForSection() {
               Who This Is For
             </p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight mb-6">
-              Built for Clinics Where{" "}
+              Built for GCC Aesthetic Clinics Where{" "}
               <span className="theme-gradient-text bg-clip-text text-transparent">
                 Treatments Repeat
               </span>
@@ -53,8 +53,7 @@ export function WhoItsForSection() {
               otherwise lost.
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Already using Treatwell, Zenoti, Pabau, or Fresha? Perfect. We
-              handle the conversation layer around your existing calendar.
+              We sit on top of your existing booking system and calendar. No process change required.
             </p>
           </div>
 

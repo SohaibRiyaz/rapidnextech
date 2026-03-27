@@ -39,14 +39,18 @@ export function CompanyCarousel() {
     }
   }, [])
 
-  // Always ensure enough items to animate smoothly
-  const marqueeList = useMemo(() => {
+  // Always ensure enough items to animate smoothly, then duplicate for seamless loop
+  const baseList = useMemo(() => {
     if (companies.length === 0) return []
     const minItems = 12
-    const times = Math.max(2, Math.ceil(minItems / companies.length))
-    return Array.from({ length: times })
-      .flatMap(() => companies)
+    const times = Math.max(1, Math.ceil(minItems / companies.length))
+    return Array.from({ length: times }).flatMap(() => companies)
   }, [companies])
+
+  const marqueeList = useMemo(() => {
+    if (baseList.length === 0) return []
+    return [...baseList, ...baseList]
+  }, [baseList])
 
   return (
     <section className="py-20 theme-bg theme-transition relative overflow-hidden">
@@ -66,11 +70,7 @@ export function CompanyCarousel() {
 
         {/* Continuous marquee */}
         <div className="relative overflow-hidden">
-          <motion.div
-            className="flex items-center gap-10 md:gap-16 min-w-max"
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-          >
+          <div className="flex items-center gap-10 md:gap-16 min-w-max w-max animate-marquee will-change-transform">
             {marqueeList.map((c, i) => (
               <div
                 key={`${c.name}-${i}`}
@@ -86,7 +86,7 @@ export function CompanyCarousel() {
                 />
               </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

@@ -17,16 +17,16 @@ const steps = [
   {
     number: "02",
     icon: BrainCircuit,
-    title: "AI responds and qualifies",
+    title: "AI Sales Rep responds and qualifies with predictive scoring",
     description:
-      "Within seconds, the AI responds with helpful, on-brand answers \u2014 pricing, treatment info, pre-care guidance. It asks qualifying questions to understand what the patient needs.",
+      "Within seconds, your AI Sales Rep gives on-brand answers and uses predictive lead scoring (trained on your past successful bookings) to identify hot leads and route them straight to your booking page.",
   },
   {
     number: "03",
     icon: CalendarCheck,
     title: "Patient is guided to your booking page",
     description:
-      "Once qualified, the AI sends a direct link to book through your existing platform \u2014 Treatwell, Zenoti, Pabau, Fresha, or your own booking page. We never manage your calendar.",
+      "Once qualified, the AI sends a direct link to book through your existing booking system or calendar. We never manage your schedule.",
   },
   {
     number: "04",

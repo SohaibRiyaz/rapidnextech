@@ -17,17 +17,17 @@ const features = [
   },
   {
     icon: Brain,
-    title: "7 Core Conversation Flows",
+    title: "AI Conversation Engine",
     description:
-      "Pre-built automation for the most common patient interactions: price inquiries, treatment recommendations, first-time patient qualification, availability checks, clinic location and hours, after-hours auto-response, and follow-up lead recovery.",
+      "AI-led conversations for the most common patient interactions: price inquiries, treatment suitability, first-time qualification, availability, after-hours responses, and lead recovery.",
     tags: ["Price Inquiry", "Qualification", "After-Hours", "Lead Recovery"],
   },
   {
     icon: Link2,
     title: "Booking Platform Integration",
     description:
-      "Works alongside your existing calendar and booking software like Treatwell, Zenoti, Pabau, or Fresha. We send patients directly to your booking page \u2014 no migration, no disruption.",
-    tags: ["Treatwell", "Zenoti", "Pabau", "Fresha"],
+      "Works alongside your existing calendar and booking system. We send patients directly to your booking page \u2014 no migration, no disruption.",
+    tags: ["Calendar Sync", "Booking Links", "No Migration"],
   },
   {
     icon: LayoutDashboard,
@@ -41,14 +41,18 @@ const features = [
     title: "Campaign Broadcast System",
     description:
       "Send targeted broadcast campaigns to segmented patient lists. Promote seasonal offers, new treatments, or rebooking reminders at scale with compliance built in.",
-    tags: ["Segmentation", "Automated Sends", "GDPR Compliance"],
+    tags: ["Segmentation", "Automated Sends", "Consent Controls"],
   },
   {
     icon: BarChart3,
     title: "Conversion Analytics",
     description:
       "End-to-end visibility from inquiry to appointment. Track response times, conversion rates, channel performance, and revenue impact with clear, actionable reporting.",
-    tags: ["Funnel Metrics", "Channel Breakdown", "Revenue Tracking"],
+    tags: [
+      "Funnel Metrics",
+      "Channel Breakdown",
+      "Revenue Tracking + Predictive Lead Scoring (see exactly which inquiries turned into real AED revenue and which leads are most likely to book).",
+    ],
   },
 ]
 

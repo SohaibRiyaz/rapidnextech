@@ -9,7 +9,7 @@ import {
 
 const faqs = [
   {
-    question: "Does this replace my booking system (Treatwell, Zenoti, Pabau, Fresha)?",
+    question: "Does this replace my booking system or calendar?",
     answer:
       "No \u2014 and it\u2019s designed not to. We sit on top of your existing booking platform as a conversion and engagement layer. When a potential patient is ready to book, we redirect them straight to your booking page or calendar. Your scheduling, payments, and patient records stay exactly where they are.",
   },
@@ -24,9 +24,9 @@ const faqs = [
       "We set up WhatsApp Business API alongside your current number (or migrate it, depending on your preference). This enables automated responses, appointment confirmations, rebooking reminders, and broadcast campaigns \u2014 features that standard WhatsApp Business can\u2019t do. Your staff can still send personal messages as needed.",
   },
   {
-    question: "Is this GDPR compliant?",
+    question: "Is patient data secure and compliant for GCC clinics?",
     answer:
-      "Yes. All patient data is processed and stored in compliance with UK GDPR and the Data Protection Act 2018. We use end-to-end encryption for conversations, store data on EU-based servers, and never share patient information with third parties. Consent is collected before any automated messaging begins.",
+      "Yes. We apply strict access controls and encryption for conversations, and we never share patient information with third parties. Consent is collected before any automated messaging begins, and data handling can be aligned to your clinic\u2019s internal policies.",
   },
   {
     question: "How does the rebooking automation know when to message patients?",

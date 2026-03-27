@@ -35,7 +35,7 @@ const problems = [
     icon: CalendarX,
     title: "Missed Rebooking",
     description:
-      "Post-treatment rebooking is left to memory or manual effort, leaving predictable revenue on the table.",
+      "Post-treatment rebooking is left to memory or manual effort, leaving the highest-LTV part of your business (repeat treatments) on the table.",
   },
 ]
 
@@ -57,10 +57,10 @@ export function ProblemSection() {
               of Inquiries
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Aesthetic clinics invest heavily in advertising and social media
-              presence. But when potential patients reach out, manual processes
-              and fragmented workflows cause high-intent inquiries to go
-              unanswered or unresolved.
+              Aesthetic clinics in Dubai, Doha and the GCC invest heavily in Instagram ads and social media.
+              Yet 30-40% of high-intent inquiries still go unanswered or unresolved because of manual replies
+              and slow follow-ups. Every lost lead costs you AED 1,500–3,000+ in missed revenue — and your
+              competitors who respond faster are taking those bookings.
             </p>
           </div>
 

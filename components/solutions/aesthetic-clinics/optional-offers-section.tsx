@@ -8,7 +8,7 @@ const offers = [
     title: "Lightweight Booking Page",
     tag: "Optional Add-On",
     description:
-      "Don\u2019t want to keep paying Treatwell or Zenoti commissions? We can build a lightweight, mobile-optimised booking page directly on your own website \u2014 fully integrated with our automation system.",
+      "Don\u2019t want to keep paying booking platform commissions? We can build a lightweight, mobile-optimised booking page directly on your own website \u2014 fully integrated with our automation system.",
     benefits: [
       "Hosted on your domain \u2014 you own it",
       "Mobile-first, fast-loading design",

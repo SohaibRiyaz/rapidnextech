@@ -17,32 +17,32 @@ const solutions = [
     icon: Globe,
     title: "Multi-Channel Inquiry Automation",
     description:
-      "Respond instantly to patient inquiries from Instagram DMs, WhatsApp, Facebook Messenger, and your website \u2014 all from one system. No new tools for your team to learn.",
-    outcome: "Every inquiry gets a response in under 60 seconds, on any channel.",
+      "Respond instantly to inquiries from Instagram, WhatsApp, or your website \u2014 from one system. No missed messages, no manual routing.",
+    outcome: "Every inquiry on Instagram, WhatsApp, or website gets an instant response in under 60 seconds.",
     accent: "from-blue-500 to-cyan-500",
   },
   {
     icon: MessageCircle,
     title: "WhatsApp Conversation Engine",
     description:
-      "Automated WhatsApp conversations that qualify leads, answer treatment questions, and guide patients to your existing booking page \u2014 without manual intervention.",
-    outcome: "Instant, 24/7 response to every inquiry. No front desk bottleneck.",
+      "AI-led WhatsApp conversations that qualify leads, answer treatment questions, and guide patients to your booking page \u2014 with zero manual work.",
+    outcome: "AI qualifies leads, answers treatment questions, and guides patients straight to your booking page \u2014 zero manual work.",
     accent: "from-emerald-500 to-green-500",
   },
   {
     icon: Bot,
     title: "AI Receptionist Layer",
     description:
-      "An intelligent conversational layer that handles the 7 most common patient flows: price inquiries, treatment recommendations, first-time qualification, availability, location, after-hours messages, and lead recovery.",
-    outcome: "Reduce front-desk load while maintaining premium service quality.",
+      "Your AI Sales Rep that mirrors your clinic tone and handles pricing, suitability, availability, and lead recovery \u2014 24/7.",
+    outcome: "Your intelligent AI Sales Rep that handles price inquiries, treatment suitability, availability, and lead recovery using your exact clinic tone and branding.",
     accent: "from-violet-500 to-purple-500",
   },
   {
     icon: Bell,
     title: "Reminder & Rebooking System",
     description:
-      "Automated appointment confirmations, no-show follow-ups, and treatment-cycle rebooking reminders that keep patients returning at the right interval.",
-    outcome: "Fewer no-shows. More repeat visits. Higher lifetime patient value.",
+      "Automated confirmations, no-show follow-ups, and treatment-cycle reminders that keep patients returning on schedule.",
+    outcome: "Automated confirmations + treatment-cycle rebooking reminders that protect your recurring revenue and cut no-shows.",
     accent: "from-orange-500 to-amber-500",
   },
 ]
@@ -56,16 +56,15 @@ export function SolutionSection() {
             The Solution
           </p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight mb-4">
-            AI Patient Inquiry{" "}
-            <span className="theme-gradient-text bg-clip-text text-transparent">Conversion</span>
-            <br className="hidden md:block" /> &amp; Retention System
+            Zero-Lead-Loss AI Closer{" "}
+            <span className="theme-gradient-text bg-clip-text text-transparent">for Aesthetic Clinics</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-3">
-            Four integrated systems working together to capture, convert, and
-            retain every patient &mdash; automatically.
+            Your 24/7 AI Sales Rep and revenue engine that recovers every lost inquiry &mdash; automatically.
+            We never replace your booking system. We sit on top and turn inquiries into revenue.
           </p>
           <p className="text-sm text-muted-foreground max-w-xl mx-auto">
-            We don&apos;t replace your booking system. We sit on top of it.
+            This is the unfair advantage over basic bots like Wati, Wazzy, or HalaFlow.
           </p>
         </div>
 

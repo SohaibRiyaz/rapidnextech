@@ -22,10 +22,10 @@ const outcomes = [
   },
   {
     icon: BellOff,
-    metric: "40%+ reduction",
-    title: "Fewer No-Shows",
+    metric: "40%+ reduction in lost revenue",
+    title: "Lost Revenue",
     description:
-      "Multi-touch automated reminders via WhatsApp ensure patients are confirmed, reducing no-shows and the associated revenue loss from empty appointment slots.",
+      "Fewer no-shows and recovered inquiries = direct impact on your bottom line.",
   },
   {
     icon: Repeat,

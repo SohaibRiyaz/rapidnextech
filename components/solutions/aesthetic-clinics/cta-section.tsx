@@ -24,8 +24,8 @@ export function CTASection() {
             </h2>
 
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-4">
-              We&apos;ll analyse your Instagram, WhatsApp, and website inquiry flow &mdash;
-              and show you exactly where potential patients are dropping off before they book.
+              Find Out Exactly How Many Inquiries Your Clinic in Dubai or Doha Is Losing on WhatsApp &amp; Instagram
+              — and how much revenue you’re leaving on the table with our Zero-Lead-Loss AI Closer.
             </p>
 
             <p className="text-sm text-muted-foreground max-w-xl mx-auto mb-4">
@@ -73,7 +73,7 @@ export function CTASection() {
               </span>
               <span className="flex items-center gap-1.5">
                 <Shield className="w-3.5 h-3.5 text-primary" />
-                GDPR compliant
+                Data-secure conversations
               </span>
             </div>
           </div>

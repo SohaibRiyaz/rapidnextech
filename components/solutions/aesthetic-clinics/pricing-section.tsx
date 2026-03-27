@@ -110,7 +110,7 @@ export function PricingSection() {
     },
     {
       name: "Growth",
-      tagline: "For established clinics scaling patient conversion & retention",
+      tagline: "For established GCC clinics scaling patient conversion & retention",
       setupFee: 1399,
       discountedSetupFee: 699,
       monthlyFee: 349,
@@ -327,7 +327,7 @@ export function PricingSection() {
         <div className="mt-12 text-center">
           <p className="text-sm text-muted-foreground max-w-xl mx-auto">
             All plans include WhatsApp Business API setup, staff training, and an
-            onboarding period. Works with Treatwell, Zenoti, Pabau, Fresha, and
+            onboarding period. Works with your existing booking system and
             custom booking pages.{" "}
             <a href="/contact" className="text-primary font-medium hover:underline">
               Need a custom plan?

@@ -22,33 +22,24 @@ export function AestheticHero() {
         {/* Tag */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-border bg-muted/50 text-sm text-muted-foreground mb-5">
           <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-          For UK Aesthetic &amp; Skin Clinics
+          For Aesthetic &amp; Skin Clinics in Dubai (UAE), Doha &amp; the GCC
         </div>
 
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.1] mb-4">
-          Turn Instagram &amp; WhatsApp Inquiries into{" "}
+          Zero-Lead-Loss AI Closer &mdash; Turn Instagram &amp; WhatsApp Inquiries into{" "}
           <span className="theme-gradient-text bg-clip-text text-transparent">
-            Booked Appointments
+            Booked, High-Ticket Treatments
           </span>{" "}
           Automatically
         </h1>
 
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-4 leading-relaxed">
-          Respond instantly, answer patient questions, and guide every inquiry
-          to your existing booking system &mdash; without increasing front desk
-          workload.
+          Your 24/7 AI Sales Rep that qualifies, nurtures, and books patients while you sleep.
+          Sits on top of your existing booking system. No more losing 30-40% of inquiries to slow or manual replies.
         </p>
 
         <p className="text-sm text-muted-foreground mb-6">
-          Works with your current platform:{" "}
-          <span className="font-semibold text-foreground">Treatwell</span>
-          {" \u00b7 "}
-          <span className="font-semibold text-foreground">Zenoti</span>
-          {" \u00b7 "}
-          <span className="font-semibold text-foreground">Pabau</span>
-          {" \u00b7 "}
-          <span className="font-semibold text-foreground">Fresha</span>
-          {" & more"}
+          We sit on top of your existing booking system and calendar.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
