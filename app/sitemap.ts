@@ -1,5 +1,4 @@
 import type { MetadataRoute } from "next"
-import { BlogCMS, PortfolioCMS } from "@/lib/supabase-cms"
 import { industrySolutions, servicesData } from "@/lib/services-data"
 import { slugify } from "@/lib/utils"
 import { unstable_noStore } from "next/cache"
@@ -60,6 +59,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let portfolioPages: MetadataRoute.Sitemap = []
 
   try {
+    const { BlogCMS } = await import("@/lib/supabase-cms")
     const posts = await BlogCMS.getPublishedBlogPostsFresh()
     blogPages = posts.map((post) => ({
       url: `${baseUrl}/blog/${post.slug}`,
@@ -72,6 +72,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   try {
+    const { PortfolioCMS } = await import("@/lib/supabase-cms")
     const projects = await PortfolioCMS.getPublishedProjectsFresh()
     portfolioPages = projects.map((project: any) => ({
       url: `${baseUrl}/case-studies/${slugify(project.slug || project.title || "")}`,

@@ -23,9 +23,22 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     ? `${project.title}: ${project.business_outcome} | RapidNexTech`
     : `${project.title} Case Study | RapidNexTech`
 
-  const seoDescription = project.client_description
+  const baseDescription = project.client_description
     ? `${project.client_description.substring(0, 160)}`
-    : project.long_description || project.description || "Software case study by RapidNexTech"
+    : project.long_description || project.description || ""
+  const buildMetaDescription = (description: string, title: string) => {
+    let value = description.replace(/\s+/g, " ").trim()
+    if (!value) {
+      value = `${title} case study - Results and delivery highlights from RapidNexTech.`
+    } else if (!value.toLowerCase().includes(title.toLowerCase()) && value.length < 140) {
+      value = `${value} - ${title}`
+    }
+    if (value.length > 160) {
+      value = `${value.slice(0, 157).trimEnd()}...`
+    }
+    return value
+  }
+  const seoDescription = buildMetaDescription(baseDescription, project.title)
 
   const url = `https://rapidnextech.com/case-studies/${params.slug}`
   const image = project.images?.[0]?.url || "https://rapidnextech.com/og-image.jpg"
@@ -60,10 +73,10 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
     name: `${data.title} Case Study`,
     description: data.long_description || data.description,
     url,
-    author: { "@type": "Organization", name: "RapidXTech" },
+    author: { "@type": "Organization", name: "RapidNexTech" },
     publisher: {
       "@type": "Organization",
-      name: "RapidXTech",
+      name: "RapidNexTech",
       logo: { "@type": "ImageObject", url: "https://rapidnextech.com/logo.png" },
     },
   }

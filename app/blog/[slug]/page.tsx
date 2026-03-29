@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!post) {
     return {
-      title: "Post Not Found | RapidXTech",
+      title: "Post Not Found | RapidNexTech",
     }
   }
 
@@ -36,15 +36,28 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const fullUrl = `${baseUrl}/blog/${params.slug}`
 
   const seoTitle = post.seo_title || post.title
-  const seoDescription = post.seo_description || post.excerpt
+  const baseDescription = (post.seo_description || post.excerpt || "").replace(/\s+/g, " ").trim()
+  const buildMetaDescription = (description: string, title: string) => {
+    let value = description
+    if (!value) {
+      value = `${title} - Practical insights on automation, software, and growth from RapidNexTech.`
+    } else if (!value.toLowerCase().includes(title.toLowerCase()) && value.length < 140) {
+      value = `${value} - ${title}`
+    }
+    if (value.length > 160) {
+      value = `${value.slice(0, 157).trimEnd()}...`
+    }
+    return value
+  }
+  const seoDescription = buildMetaDescription(baseDescription, post.title)
 
   return {
-    title: post.seo_title ? post.seo_title : `${post.title} | RapidXTech Blog`,
+    title: post.seo_title ? post.seo_title : `${post.title} | RapidNexTech Blog`,
     description: seoDescription,
     keywords: post.tags?.join(', '),
     authors: [{ name: post.author }],
     creator: post.author,
-    publisher: 'RapidXTech',
+    publisher: 'RapidNexTech',
     robots: {
       index: post.is_published,
       follow: post.is_published,
@@ -60,7 +73,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: seoTitle,
       description: seoDescription,
       url: fullUrl,
-      siteName: 'RapidXTech Blog',
+      siteName: 'RapidNexTech Blog',
       type: "article",
       publishedTime: post.date,
       modifiedTime: post.updated_at,
@@ -80,8 +93,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      site: '@RapidXTech',
-      creator: '@RapidXTech',
+      site: '@RapidNexTech',
+      creator: '@RapidNexTech',
       title: seoTitle,
       description: seoDescription,
       images: post.images?.[0]?.url ? [
@@ -149,7 +162,7 @@ export default async function BlogPostPage({ params }: Props) {
             },
             publisher: {
               "@type": "Organization",
-              name: "RapidXTech",
+              name: "RapidNexTech",
               logo: {
                 "@type": "ImageObject",
                 url: `${baseUrl}/logo.png`
