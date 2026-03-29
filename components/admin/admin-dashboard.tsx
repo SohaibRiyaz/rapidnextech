@@ -554,7 +554,21 @@ export default function AdminDashboard() {
     aiLockIdRef.current = null
   }, [readAiLock])
 
+  const buildAIBlogSignature = useCallback((payload: AIBlogConfig) => {
+    const topic = (payload.topic || "").trim().toLowerCase()
+    const primary = payload.primaryKeyword.trim().toLowerCase()
+    const service = payload.serviceUrl.trim().toLowerCase()
+    return `${topic}|${primary}|${service}`
+  }, [])
+
   const enqueueAIBlogJob = useCallback((payload: AIBlogConfig, label: string) => {
+    const queue = readAiQueue()
+    const signature = buildAIBlogSignature(payload)
+    const existing = queue.find((job) => job.payload && buildAIBlogSignature(job.payload) === signature)
+    if (existing) {
+      toast.warning("Already queued", `"${label}" is already in the queue.`)
+      return existing
+    }
     const job: AIBlogJob = {
       id: typeof crypto !== "undefined" && "randomUUID" in crypto
         ? crypto.randomUUID()
@@ -565,12 +579,11 @@ export default function AdminDashboard() {
       attempts: 0,
       nextRunAt: Date.now(),
     }
-    const queue = readAiQueue()
     const next = [...queue, job]
     writeAiQueue(next)
     toast.success("Added to queue", `Position ${next.length} in the queue.`)
     return job
-  }, [readAiQueue, writeAiQueue, toast])
+  }, [buildAIBlogSignature, readAiQueue, writeAiQueue, toast])
 
   const removeAIBlogJob = useCallback((jobId: string) => {
     const queue = readAiQueue()

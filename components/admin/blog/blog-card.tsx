@@ -2,7 +2,7 @@
 
 import { memo, useMemo } from "react"
 import { Button } from "@/components/ui/button"
-import { AlertCircle, Edit, Eye, EyeOff, Trash2 } from "lucide-react"
+import { AlertCircle, Copy, Edit, Eye, EyeOff, Trash2 } from "lucide-react"
 import { motion } from "framer-motion"
 import type { BlogPost } from "@/lib/supabase"
 
@@ -22,6 +22,7 @@ function BlogCardImpl({ post, onEdit, onTogglePublish, onDelete, cardBgClass, in
     if (prompts.length === 0) return "No image prompt saved yet."
     return prompts.map((prompt, i) => `${i + 1}. ${prompt}`).join("\n\n")
   }, [post.image_prompts])
+  const primaryPrompt = post.image_prompts?.[0] || ""
   return (
     <motion.div
       className={`${cardBgClass} backdrop-blur-md rounded-lg shadow-lg overflow-hidden theme-transition flex flex-col`}
@@ -65,6 +66,19 @@ function BlogCardImpl({ post, onEdit, onTogglePublish, onDelete, cardBgClass, in
               className="inline-flex items-center justify-center h-6 w-6 rounded-full border border-border/50 bg-secondary/20 text-xs theme-text hover:bg-secondary/30 transition-colors"
             >
               <AlertCircle className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              aria-label="Copy image prompt"
+              disabled={!primaryPrompt}
+              onClick={() => {
+                if (!primaryPrompt) return
+                navigator.clipboard.writeText(primaryPrompt)
+              }}
+              className="inline-flex items-center justify-center h-6 w-6 rounded-full border border-border/50 bg-secondary/20 text-xs theme-text hover:bg-secondary/30 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              title={primaryPrompt ? "Copy image prompt" : "No prompt to copy"}
+            >
+              <Copy className="w-3.5 h-3.5" />
             </button>
             <span className="text-xs theme-text opacity-50 theme-transition">
               {post.date ? new Date(post.date).toLocaleDateString() : ""}

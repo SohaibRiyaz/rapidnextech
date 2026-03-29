@@ -23,6 +23,17 @@ export class PortfolioCMS {
     return data || []
   }
 
+  /** Fresh list (no cache) for sitemap and search engine feeds */
+  static async getPublishedProjectsFresh(): Promise<ProjectDetail[]> {
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*")
+      .eq("is_published", true)
+      .order("updated_at", { ascending: false })
+    if (error) throw error
+    return data || []
+  }
+
   static async getFeaturedProjects(): Promise<ProjectDetail[]> {
     const { data, error } = await supabase
       .from("projects")
@@ -154,6 +165,17 @@ export class BlogCMS {
     if (error) throw error
     return (data || []) as BlogPost[]
   })
+
+  /** Fresh list (no cache) for sitemap and search engine feeds */
+  static async getPublishedBlogPostsFresh(): Promise<BlogPost[]> {
+    const { data, error } = await supabase
+      .from("blog_posts")
+      .select("id, title, slug, excerpt, images, image_prompts, author, date, tags, is_published, created_at, updated_at, seo_title, seo_description, faqs, cta")
+      .eq("is_published", true)
+      .order("date", { ascending: false })
+    if (error) throw error
+    return (data || []) as BlogPost[]
+  }
 
   static getBlogPostById = cache(async (id: number): Promise<BlogPost | null> => {
     const { data, error } = await supabase

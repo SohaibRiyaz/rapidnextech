@@ -36,6 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Initialize auth state - only once
   useEffect(() => {
+    let timeoutId: number | undefined
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
       const reason: any = event.reason
       const message = typeof reason?.message === "string" ? reason.message : ""
@@ -62,7 +63,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     window.addEventListener("error", handleWindowError)
 
     // Get initial session
+    timeoutId = window.setTimeout(() => {
+      setAuthState(prev => ({ ...prev, isLoading: false }))
+    }, 6000)
+
     supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (timeoutId) window.clearTimeout(timeoutId)
       setAuthState(prev => ({
         ...prev,
         user: session?.user ?? null,
@@ -70,6 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading: false,
       }))
     }).catch(err => {
+      if (timeoutId) window.clearTimeout(timeoutId)
       console.error('Error getting initial session:', err)
       setAuthState(prev => ({ ...prev, isLoading: false }))
     })
@@ -109,6 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       subscription.unsubscribe()
       window.removeEventListener("unhandledrejection", handleUnhandledRejection)
       window.removeEventListener("error", handleWindowError)
+      if (timeoutId) window.clearTimeout(timeoutId)
     }
   }, []) // Empty dependency array - only run once
 
