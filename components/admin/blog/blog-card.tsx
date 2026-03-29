@@ -2,7 +2,6 @@
 
 import { memo, useMemo } from "react"
 import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { AlertCircle, Edit, Eye, EyeOff, Trash2 } from "lucide-react"
 import { motion } from "framer-motion"
 import type { BlogPost } from "@/lib/supabase"
@@ -59,22 +58,14 @@ function BlogCardImpl({ post, onEdit, onTogglePublish, onDelete, cardBgClass, in
             ))}
           </div>
           <div className="flex items-center gap-2">
-            <TooltipProvider delayDuration={100}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    aria-label="View image prompt"
-                    className="inline-flex items-center justify-center h-6 w-6 rounded-full border border-border/50 bg-secondary/20 text-xs theme-text hover:bg-secondary/30 transition-colors"
-                  >
-                    <AlertCircle className="w-3.5 h-3.5" />
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent className="max-w-xs whitespace-pre-wrap text-xs">
-                  {promptText}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <button
+              type="button"
+              aria-label="View image prompt"
+              title={promptText}
+              className="inline-flex items-center justify-center h-6 w-6 rounded-full border border-border/50 bg-secondary/20 text-xs theme-text hover:bg-secondary/30 transition-colors"
+            >
+              <AlertCircle className="w-3.5 h-3.5" />
+            </button>
             <span className="text-xs theme-text opacity-50 theme-transition">
               {post.date ? new Date(post.date).toLocaleDateString() : ""}
             </span>
