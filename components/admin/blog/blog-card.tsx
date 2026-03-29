@@ -2,7 +2,8 @@
 
 import { memo, useMemo } from "react"
 import { Button } from "@/components/ui/button"
-import { Edit, Eye, EyeOff, Trash2 } from "lucide-react"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { AlertCircle, Edit, Eye, EyeOff, Trash2 } from "lucide-react"
 import { motion } from "framer-motion"
 import type { BlogPost } from "@/lib/supabase"
 
@@ -17,6 +18,11 @@ type Props = {
 
 function BlogCardImpl({ post, onEdit, onTogglePublish, onDelete, cardBgClass, index }: Props) {
   const delay = useMemo(() => index * 0.1, [index])
+  const promptText = useMemo(() => {
+    const prompts = post.image_prompts || []
+    if (prompts.length === 0) return "No image prompt saved yet."
+    return prompts.map((prompt, i) => `${i + 1}. ${prompt}`).join("\n\n")
+  }, [post.image_prompts])
   return (
     <motion.div
       className={`${cardBgClass} backdrop-blur-md rounded-lg shadow-lg overflow-hidden theme-transition flex flex-col`}
@@ -52,9 +58,27 @@ function BlogCardImpl({ post, onEdit, onTogglePublish, onDelete, cardBgClass, in
               </span>
             ))}
           </div>
-          <span className="text-xs theme-text opacity-50 theme-transition">
-            {post.date ? new Date(post.date).toLocaleDateString() : ""}
-          </span>
+          <div className="flex items-center gap-2">
+            <TooltipProvider delayDuration={100}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    aria-label="View image prompt"
+                    className="inline-flex items-center justify-center h-6 w-6 rounded-full border border-border/50 bg-secondary/20 text-xs theme-text hover:bg-secondary/30 transition-colors"
+                  >
+                    <AlertCircle className="w-3.5 h-3.5" />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs whitespace-pre-wrap text-xs">
+                  {promptText}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <span className="text-xs theme-text opacity-50 theme-transition">
+              {post.date ? new Date(post.date).toLocaleDateString() : ""}
+            </span>
+          </div>
         </div>
 
         <h3 className="text-lg font-semibold theme-text mb-2 theme-transition line-clamp-2">{post.title}</h3>

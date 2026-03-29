@@ -110,6 +110,7 @@ export interface Database {
                     excerpt: string
                     content: string
                     images: ProjectImage[]
+                    image_prompts: string[] | null
                     tags: string[]
                     author: string
                     date: string
@@ -127,6 +128,7 @@ export interface Database {
                     excerpt: string
                     content: string
                     images?: ProjectImage[]
+                    image_prompts?: string[] | null
                     tags?: string[]
                     author?: string
                     date?: string
@@ -142,6 +144,7 @@ export interface Database {
                     excerpt?: string
                     content?: string
                     images?: ProjectImage[]
+                    image_prompts?: string[] | null
                     tags?: string[]
                     author?: string
                     date?: string

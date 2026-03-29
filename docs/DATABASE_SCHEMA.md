@@ -121,6 +121,7 @@ The `blog_posts` table now uses the same image management approach as projects:
 | Field | Type | Description |
 |-------|------|-------------|
 | images | **jsonb** | **Array of image objects (same format as projects)** |
+| image_prompts | **jsonb** | **Array of AI image prompt strings (for manual image generation)** |
 
 ### Blog Images Format
 

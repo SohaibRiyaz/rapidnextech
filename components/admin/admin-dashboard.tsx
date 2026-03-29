@@ -116,8 +116,7 @@ export default function AdminDashboard() {
   const [aiActiveJobId, setAiActiveJobId] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [generationStatus, setGenerationStatus] = useState("")
-  const [generatedPrompt, setGeneratedPrompt] = useState<string | null>(null)
-  const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null)
+  const [generatedPrompts, setGeneratedPrompts] = useState<string[]>([])
   const aiProcessingJobIdRef = useRef<string | null>(null)
   const aiLockIdRef = useRef<string | null>(null)
   const aiQueueTimerRef = useRef<number | null>(null)
@@ -610,14 +609,8 @@ export default function AdminDashboard() {
       is_published: true,
       seo_title: generated.seo_title,
       seo_description: generated.seo_description,
-      images: generated.image_urls.map((url, index) => ({
-        id: index + 1,
-        url,
-        alt: `${generated.primary_keyword || generated.title} image ${index + 1}`,
-        caption: generated.primary_keyword
-          ? `${generated.primary_keyword} — image ${index + 1}`
-          : `${generated.title} — image ${index + 1}`,
-      })),
+      images: [],
+      image_prompts: generated.image_prompts,
       faqs: generated.faqs || [],
       cta: generated.cta || null,
     }
@@ -625,8 +618,7 @@ export default function AdminDashboard() {
     const created = await cms.addBlogPost(payload as any)
     setBlogPosts((prev) => [created, ...prev])
 
-    setGeneratedPrompt(generated.image_prompts?.[0] || null)
-    setGeneratedImageUrl(generated.image_urls?.[0] || null)
+    setGeneratedPrompts(generated.image_prompts || [])
     setGenerationStatus("")
     toast.success("AI Blog Created!", `"${generated.title}" has been created.`)
   }, [cms, refreshAiLock, toast])
@@ -1331,8 +1323,7 @@ export default function AdminDashboard() {
                 {activeTab === "blog" && (
                   <Button
                     onClick={() => {
-                      setGeneratedPrompt(null)
-                      setGeneratedImageUrl(null)
+                      setGeneratedPrompts([])
                       setAiTopic("")
                       setIsAIModalOpen(true)
                     }}
@@ -2555,30 +2546,17 @@ export default function AdminDashboard() {
                 </div>
               )}
 
-              {generatedPrompt ? (
+              {generatedPrompts.length > 0 ? (
                 <div className="space-y-6">
                   <div className="p-4 rounded-lg bg-green-500/10 border border-green-500/20 text-center">
                     <p className="text-sm theme-text font-medium text-green-600 dark:text-green-400">Blog Created Successfully! 🎉</p>
-                    <p className="text-xs theme-text opacity-70 mt-1">3 images generated and attached automatically.</p>
+                    <p className="text-xs theme-text opacity-70 mt-1">Image prompt saved for later.</p>
                   </div>
-
-                  {generatedImageUrl && (
-                    <div className="overflow-hidden rounded-xl border border-border/50 bg-secondary/10">
-                      <div className="relative w-full aspect-video max-h-[55vh]">
-                        <img
-                          src={generatedImageUrl}
-                          alt="AI-generated cover"
-                          className="w-full h-full object-cover"
-                          loading="lazy"
-                        />
-                      </div>
-                    </div>
-                  )}
 
                   <div className="space-y-2">
                     <label className="text-sm font-semibold theme-text border-none">Image Prompt (for reference):</label>
                     <div className="p-4 rounded-lg bg-secondary/20 theme-text text-sm theme-transition relative border border-border/50 max-h-40 overflow-y-auto">
-                      <p className="italic leading-relaxed">"{generatedPrompt}"</p>
+                      <p className="italic leading-relaxed">"{generatedPrompts[0]}"</p>
                     </div>
                   </div>
 
@@ -2586,7 +2564,7 @@ export default function AdminDashboard() {
                     <Button
                       className="flex-1 bg-violet-600 hover:bg-violet-700 text-white"
                       onClick={() => {
-                        navigator.clipboard.writeText(generatedPrompt || "")
+                        navigator.clipboard.writeText(generatedPrompts[0] || "")
                         toast.success("Copied!", "Prompt copied to clipboard.")
                       }}
                     >
@@ -2598,8 +2576,7 @@ export default function AdminDashboard() {
                       className="flex-1 theme-text"
                       onClick={() => {
                         setIsAIModalOpen(false)
-                        setGeneratedPrompt(null)
-                        setGeneratedImageUrl(null)
+                        setGeneratedPrompts([])
                         setAiTopic("")
                         setAiPrimaryKeyword("")
                         setAiSecondaryKeywords("")
@@ -2611,9 +2588,6 @@ export default function AdminDashboard() {
                     </Button>
                   </div>
 
-                  <p className="text-[10px] theme-text opacity-50 text-center italic">
-                    Images were generated from the prompts and stored in your blog images bucket.
-                  </p>
                 </div>
               ) : isGenerating ? (
                 <div className="flex flex-col items-center justify-center py-8 space-y-4">
@@ -2740,7 +2714,7 @@ export default function AdminDashboard() {
                   <div className="p-3 rounded-lg bg-violet-500/10 border border-violet-500/20">
                     <p className="text-xs theme-text opacity-70">
                       <strong>What happens:</strong> Each request is added to a queue. The AI writes the post with SEO metadata,
-                      internal links, FAQs, and generates + uploads 3 images. Posts are saved and published in order.
+                      internal links, FAQs, and generates a single image prompt. Posts are saved and published in order.
                     </p>
                   </div>
 
@@ -2818,3 +2792,11 @@ export default function AdminDashboard() {
     </div>
   )
 }
+
+
+
+
+
+
+
+

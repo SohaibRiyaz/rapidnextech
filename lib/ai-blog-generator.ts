@@ -3,41 +3,7 @@ import { slugify } from "./utils"
 const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 const WORD_COUNT_MIN = 1500
 const WORD_COUNT_MAX = 1800
-const IMAGE_COUNT = 3
-
-async function generateAndUploadBlogImage(
-  prompt: string,
-  slug: string,
-  index: number,
-  total: number,
-  onStatusUpdate?: (status: string) => void
-): Promise<{ url: string }> {
-  onStatusUpdate?.(`Generating image ${index + 1}/${total}...`)
-
-  const response = await fetch("/api/ai-blog-image", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt, slug }),
-  })
-
-  if (!response.ok) {
-    let message = `Image generation failed (${response.status})`
-    try {
-      const err = await response.json()
-      message = err?.error || message
-    } catch {
-      // ignore json parse errors
-    }
-    throw new Error(message)
-  }
-
-  const data = await response.json()
-  if (!data?.url) {
-    throw new Error("Image generation failed: missing URL from server.")
-  }
-
-  return { url: data.url }
-}
+const IMAGE_COUNT = 1
 
 interface GeneratedBlog {
   title: string
@@ -47,7 +13,6 @@ interface GeneratedBlog {
   tags: string[]
   seo_title: string
   seo_description: string
-  image_urls: string[]
   image_prompts: string[]
   primary_keyword: string
   secondary_keywords: string[]
@@ -76,8 +41,8 @@ FORMATTING RULES:
 - Include 3+ real industry statistics (response time, conversion rates, no-show rates, or messaging trends).
 - Add 2-3 short featured-snippet answers (40-60 words) under relevant headings.
 - Add a "Key Takeaways" or "TL;DR" bullet list near the end.
-- Insert image markers in the content: [Image:0] after the intro, [Image:1] mid-article, [Image:2:right] later in the article.
-- Image prompts must depict a realistic workplace/setting that matches the topic (e.g., clinic reception, real estate office).
+- Insert image markers in the content: [Image:0] after the intro.
+- The single image prompt must depict a realistic workplace/setting that matches the topic (e.g., clinic reception, real estate office).
 - Naturally mention RapidNexTech once or twice as an authority but do NOT make it a sales pitch.
 - End with a compelling conclusion paragraph that encourages readers to take action.
 
@@ -100,9 +65,7 @@ Return ONLY a valid JSON object (no markdown fences, no extra text) with these e
   "seo_title": "SEO-optimized title | RapidNexTech (max 60 chars)",
   "seo_description": "SEO meta description (max 160 chars)",
   "image_prompts": [
-    "Prompt for image 0 (40-60 words). No readable text, no letters, no UI copy, no watermark, no signature. Logos allowed only as simple icon marks without words. If any screens appear, keep them blank or abstract.",
-    "Prompt for image 1 (40-60 words). No readable text, no letters, no UI copy, no watermark, no signature. Logos allowed only as simple icon marks without words. If any screens appear, keep them blank or abstract.",
-    "Prompt for image 2 (40-60 words). No readable text, no letters, no UI copy, no watermark, no signature. Logos allowed only as simple icon marks without words. If any screens appear, keep them blank or abstract."
+    "Prompt for image 0 (40-60 words). No readable text, no letters, no UI copy, no watermark, no signature. Logos allowed only as simple icon marks without words. If any screens appear, keep them blank or abstract."
   ],
   "primary_keyword": "Primary keyword used for SEO",
   "secondary_keywords": ["secondary 1", "secondary 2", "secondary 3"],
@@ -234,12 +197,6 @@ Primary service URL to mention in CTA and in-body link: ${serviceUrl}
   const imagePrompts = Array.isArray(parsed.image_prompts) ? parsed.image_prompts : []
   const normalizedPrompts = buildImagePrompts(parsed.title || primaryKeyword, imagePrompts)
 
-  const imageUrls: string[] = []
-  for (let i = 0; i < IMAGE_COUNT; i += 1) {
-    const result = await generateAndUploadBlogImage(normalizedPrompts[i], slug, i, IMAGE_COUNT, onStatusUpdate)
-    imageUrls.push(result.url)
-  }
-
   return {
     title: parsed.title,
     slug,
@@ -248,7 +205,6 @@ Primary service URL to mention in CTA and in-body link: ${serviceUrl}
     tags: Array.isArray(parsed.tags) ? parsed.tags : [],
     seo_title: parsed.seo_title || parsed.title,
     seo_description: parsed.seo_description || parsed.excerpt,
-    image_urls: imageUrls,
     image_prompts: normalizedPrompts,
     primary_keyword: parsed.primary_keyword || primaryKeyword,
     secondary_keywords: Array.isArray(parsed.secondary_keywords) ? parsed.secondary_keywords : secondaryKeywords,
@@ -277,35 +233,16 @@ function buildImagePrompts(titleOrKeyword: string, prompts: string[]): string[] 
 }
 
 function ensureImageMarkers(content: string): string {
-  const hasAllMarkers = /\[Image:0\]/.test(content) && /\[Image:1\]/.test(content) && /\[Image:2:right\]/.test(content)
-  if (hasAllMarkers) return content
+  if (/\[Image:0\]/.test(content)) return content
 
   const sections = content.split(/\n##\s+/)
   const intro = sections.shift() || content
   let rebuilt = intro.trim()
 
-  if (!/\[Image:0\]/.test(rebuilt)) {
-    rebuilt += "\n\n[Image:0]\n"
-  }
+  rebuilt += "\n\n[Image:0]\n"
 
   if (sections.length > 0) {
-    const firstSection = `## ${sections[0].trim()}`
-    rebuilt += `\n\n${firstSection}`
-  }
-
-  if (!/\[Image:1\]/.test(content)) {
-    const remaining = sections.slice(1)
-    if (remaining.length >= 1) {
-      const secondSection = `## ${remaining[0].trim()}`
-      rebuilt += `\n\n${secondSection}\n\n[Image:1]\n`
-      rebuilt += remaining.slice(1).map((section) => `\n\n## ${section.trim()}`).join("")
-    }
-  } else {
-    rebuilt += sections.slice(1).map((section) => `\n\n## ${section.trim()}`).join("")
-  }
-
-  if (!/\[Image:2:right\]/.test(rebuilt)) {
-    rebuilt += "\n\n[Image:2:right]\n"
+    rebuilt += sections.map((section) => `\n\n## ${section.trim()}`).join("")
   }
 
   return rebuilt.trim()

@@ -138,7 +138,7 @@ export class BlogCMS {
   static getAllBlogPosts = cache(async (): Promise<BlogPost[]> => {
     const { data, error } = await supabase
       .from("blog_posts")
-      .select("id, title, slug, excerpt, images, author, date, tags, is_published, created_at, updated_at, seo_title, seo_description, faqs, cta")
+      .select("id, title, slug, excerpt, images, image_prompts, author, date, tags, is_published, created_at, updated_at, seo_title, seo_description, faqs, cta")
       .order("date", { ascending: false })
     if (error) throw error
     return (data || []) as BlogPost[]
@@ -148,7 +148,7 @@ export class BlogCMS {
   static getPublishedBlogPosts = cache(async (): Promise<BlogPost[]> => {
     const { data, error } = await supabase
       .from("blog_posts")
-      .select("id, title, slug, excerpt, images, author, date, tags, is_published, created_at, updated_at, seo_title, seo_description, faqs, cta")
+      .select("id, title, slug, excerpt, images, image_prompts, author, date, tags, is_published, created_at, updated_at, seo_title, seo_description, faqs, cta")
       .eq("is_published", true)
       .order("date", { ascending: false })
     if (error) throw error
