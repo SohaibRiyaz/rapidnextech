@@ -98,8 +98,8 @@ export function HowItWorksSection() {
         <div className="mt-12 rounded-xl border border-border bg-muted/30 p-5 text-center">
           <p className="text-sm text-muted-foreground">
             <span className="font-semibold text-foreground">Important:</span>{" "}
-            We never manage your appointment calendar or compete with your booking software.
-            Patients book directly through your existing platform.
+            Patients book directly on your existing platform. We only send them the link — we never manage, override,
+            or compete with your current booking/HR system.
           </p>
         </div>
 
