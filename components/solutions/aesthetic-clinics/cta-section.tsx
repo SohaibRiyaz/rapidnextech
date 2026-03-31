@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 
 export function CTASection() {
   return (
-    <section className="py-20 md:py-28 theme-transition">
+    <section id="free-audit" className="py-20 md:py-28 theme-transition">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <div className="relative rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.06] via-primary/[0.03] to-primary/[0.06] p-10 md:p-16 text-center overflow-hidden">
           {/* Decorative background */}

@@ -62,7 +62,7 @@ const faqs = [
 
 export function FAQSection() {
   return (
-    <section className="py-20 md:py-28 theme-transition">
+    <section id="faqs" className="py-20 md:py-28 theme-transition">
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="text-center mb-12">

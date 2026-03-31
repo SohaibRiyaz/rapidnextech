@@ -33,7 +33,7 @@ const segments = [
 
 export function WhoItsForSection() {
   return (
-    <section className="py-20 md:py-28 theme-transition">
+    <section id="who-its-for" className="py-20 md:py-28 theme-transition">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left column */}
