@@ -91,7 +91,7 @@ export function PricingSection() {
             "Instagram API has limited automation. We redirect DM inquiries into WhatsApp where full 24/7 automation runs seamlessly.",
         },
         { text: "Instant inquiry response (24/7) via WhatsApp" },
-        { text: "Treatment-specific FAQ answers" },
+        { text: "AI-powered natural conversation handling (patient-like responses)" },
         { text: "Booking link redirect to your platform" },
         { text: "Appointment confirmation reminders" },
         {
@@ -129,6 +129,7 @@ export function PricingSection() {
           tooltip:
             "AI ranks incoming leads by intent signals so your team focuses on the hottest prospects first.",
         },
+        { text: "Advanced AI qualification & patient intent detection" },
         {
           text: "No-show follow-up sequences",
           tooltip:
@@ -169,7 +170,7 @@ export function PricingSection() {
       features: [
         { text: "Everything in Growth, plus:" },
         { text: "Multi-branch management" },
-        { text: "Advanced AI conversation flows" },
+        { text: "Advanced AI conversation flows (deep customization + strong guard-rails)" },
         { text: "Facebook Messenger + website chat" },
         { text: "Campaign broadcast system" },
         {
