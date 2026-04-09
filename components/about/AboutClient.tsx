@@ -193,7 +193,7 @@ export default function AboutClient() {
             {[
               { name: "Muhammad Sohaib Riaz", role: "Founder & CEO", bio: "Visionary leader focused on scalable architecture and business impact.", image: "/muhammad-sohaib-riaz.jpg" },
               { name: "Sohail Riaz", role: "Chief Technology Advisor", bio: "Expert in distributed systems and enterprise-grade security.", image: "/sohail-riaz.jpeg" },
-              { name: "Bilal Ahmad", role: "Chief Marketing Officer", bio: "Leads growth strategy, demand generation, and brand positioning to drive long-term revenue.", image: "/bilal_ahmad_sales_guy.jpeg" },
+              { name: "Bilal Ahmad", role: "Chief Marketing Officer", bio: "Leads growth strategy, demand generation, and brand positioning to drive long-term revenue.", image: "/bilal-ahmad.jpg" },
               { name: "Jehanzaib Javed", role: "Lead Full Stack Engineer", bio: "Master of efficient, clean code and high-performance UI.", image: "/jehanzaib-javed.JPG" },
               { name: "Muhammad Abdul Rehman", role: "Business Development Manager", bio: "Strategist focused on growth, partnerships, and global client relations.", image: "/muhammad-abdul-rehman.jpeg" }
             ].map((member) => (
