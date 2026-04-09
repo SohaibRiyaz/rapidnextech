@@ -193,15 +193,17 @@ export default function AboutClient() {
             {[
               { name: "Muhammad Sohaib Riaz", role: "Founder & CEO", bio: "Visionary leader focused on scalable architecture and business impact.", image: "/muhammad-sohaib-riaz.jpg" },
               { name: "Sohail Riaz", role: "Chief Technology Advisor", bio: "Expert in distributed systems and enterprise-grade security.", image: "/sohail-riaz.jpeg" },
+              { name: "Bilal Ahmad", role: "Chief Marketing Officer", bio: "Leads growth strategy, demand generation, and brand positioning to drive long-term revenue.", image: "/bilal_ahmad_sales_guy.jpeg" },
               { name: "Jehanzaib Javed", role: "Lead Full Stack Engineer", bio: "Master of efficient, clean code and high-performance UI.", image: "/jehanzaib-javed.JPG" },
-              { name: "Muhammad Abdul Rehman", role: "Business Development Manager", bio: "Strategist focused on growth, partnerships, and global client relations.", image: "/muhammad-abdul-rehman.jpeg" },
-              { name: "Bilal Ahmad", role: "Chief Marketing Officer", bio: "Leads growth strategy, demand generation, and brand positioning to drive long-term revenue.", image: "/bilal_ahmad_sales_guy.jpeg" }
-            ].map((member, i, arr) => (
+              { name: "Muhammad Abdul Rehman", role: "Business Development Manager", bio: "Strategist focused on growth, partnerships, and global client relations.", image: "/muhammad-abdul-rehman.jpeg" }
+            ].map((member) => (
               <motion.div
                 key={member.name}
                 whileHover={{ y: -5 }}
                 className={`group rounded-2xl overflow-hidden ${surface} shadow-lg flex items-start p-4 md:p-5 gap-6 ${
-                  i === arr.length - 1 ? "md:col-span-2 md:max-w-[520px] md:mx-auto" : ""
+                  member.name === "Bilal Ahmad"
+                    ? "md:col-span-2 md:w-[calc((100%-1.5rem)/2)] md:mx-auto"
+                    : ""
                 }`}
               >
                 <div className="relative h-28 w-28 md:h-36 md:w-36 flex-shrink-0 rounded-xl overflow-hidden border border-white/10 shadow-inner">
