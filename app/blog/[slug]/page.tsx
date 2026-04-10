@@ -7,6 +7,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { slugify } from "@/lib/utils"
+import { absoluteSiteUrl } from "@/lib/site-url"
 
 type Props = {
   params: { slug: string }
@@ -32,8 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://rapidnextech.com'
-  const fullUrl = `${baseUrl}/blog/${params.slug}`
+  const fullUrl = absoluteSiteUrl(`/blog/${params.slug}`)
 
   const seoTitle = post.seo_title || post.title
   const baseDescription = (post.seo_description || post.excerpt || "").replace(/\s+/g, " ").trim()
@@ -135,8 +135,7 @@ export default async function BlogPostPage({ params }: Props) {
     )
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://rapidnextech.com'
-  const fullUrl = `${baseUrl}/blog/${params.slug}`
+  const fullUrl = absoluteSiteUrl(`/blog/${params.slug}`)
 
   // Fetch related posts (optimized to fetch only metadata)
   const relatedPosts = await BlogCMS.getRelatedBlogPosts(post.id, 3)
@@ -152,20 +151,20 @@ export default async function BlogPostPage({ params }: Props) {
             "@type": "BlogPosting",
             headline: post.seo_title || post.title,
             description: post.seo_description || post.excerpt,
-            image: post.images?.[0]?.url || `${baseUrl}/og-image.jpg`,
+            image: post.images?.[0]?.url || absoluteSiteUrl("/og-image.jpg"),
             datePublished: post.date,
             dateModified: post.updated_at,
             author: {
               "@type": "Person",
               name: post.author,
-              url: `${baseUrl}/about`
+              url: absoluteSiteUrl("/about")
             },
             publisher: {
               "@type": "Organization",
               name: "RapidNexTech",
               logo: {
                 "@type": "ImageObject",
-                url: `${baseUrl}/logo.png`
+                url: absoluteSiteUrl("/logo.png")
               }
             },
             url: fullUrl,
