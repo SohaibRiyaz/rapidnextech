@@ -402,4 +402,9 @@ export const industrySolutions = [
         href: "/solutions/never-miss-a-medspa-call",
         description: "24/7 call answering and consultation booking for US med spas.",
     },
+    {
+        title: "AI Call Answering (HVAC & Plumbing)",
+        href: "/solutions/never-miss-a-call",
+        description: "24/7 AI dispatcher for HVAC, plumbing, and electrical contractors.",
+    },
 ]

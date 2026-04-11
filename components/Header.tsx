@@ -50,7 +50,7 @@ export default function Header() {
   }, [pathname])
 
   const isDark = mode === "dark" || color === "black"
-  const isMedspaVoiceLP = pathname === "/solutions/never-miss-a-medspa-call"
+  const isMedspaVoiceLP = pathname === "/solutions/never-miss-a-medspa-call" || pathname === "/solutions/never-miss-a-call"
   const effectiveDark = isDark || isMedspaVoiceLP
 
   const headerBgClass = isMedspaVoiceLP

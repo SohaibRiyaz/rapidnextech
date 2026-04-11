@@ -7,23 +7,23 @@ import { motion } from "framer-motion"
 import { Pause, Play } from "lucide-react"
 
 const MARQUEE_TEXT =
-  "BOTOX INQUIRIES ✦ FILLER CONSULTATIONS ✦ LASER QUESTIONS ✦ AFTER-HOURS CALLS ✦ WEEKEND BOOKINGS ✦ PRICING QUESTIONS ✦ AVAILABILITY CHECKS ✦ FOLLOW-UP REMINDERS ✦ "
+  "AC REPAIR CALLS ✦ EMERGENCY PLUMBING ✦ ELECTRICAL FAULTS ✦ AFTER-HOURS JOBS ✦ WEEKEND EMERGENCIES ✦ PRICING QUESTIONS ✦ BOOKING REQUESTS ✦ DISPATCH COORDINATION ✦ NEW CUSTOMER CALLS ✦ QUOTE REQUESTS ✦ "
 
 const TAGS: { label: string; size: "sm" | "md" | "lg" }[] = [
-  { label: "Botox pricing", size: "lg" },
-  { label: "Filler availability", size: "lg" },
-  { label: "Lip filler questions", size: "md" },
-  { label: "Laser hair removal packages", size: "md" },
-  { label: "After-hours inquiries", size: "md" },
-  { label: "Weekend bookings", size: "lg" },
-  { label: "New patient onboarding", size: "sm" },
-  { label: "Treatment suitability", size: "md" },
-  { label: "Consultation scheduling", size: "lg" },
-  { label: "Follow-up calls", size: "sm" },
-  { label: "CoolSculpting info", size: "sm" },
-  { label: "HydraFacial booking", size: "md" },
-  { label: "Membership questions", size: "sm" },
-  { label: "Cancellation handling", size: "md" },
+  { label: "AC repair", size: "lg" },
+  { label: "Furnace replacement", size: "lg" },
+  { label: "Emergency plumbing", size: "lg" },
+  { label: "Drain cleaning", size: "md" },
+  { label: "Electrical panel issues", size: "md" },
+  { label: "Outlet installation", size: "sm" },
+  { label: "Water heater replacement", size: "md" },
+  { label: "After-hours emergency", size: "lg" },
+  { label: "Weekend availability", size: "md" },
+  { label: "New customer intake", size: "md" },
+  { label: "Repeat customer recognition", size: "sm" },
+  { label: "Quote requests", size: "sm" },
+  { label: "Service area confirmation", size: "md" },
+  { label: "Dispatch routing", size: "sm" },
 ]
 
 const WAVEFORM_HEIGHTS = [12, 28, 18, 36, 22, 40, 16, 32, 20, 38, 14, 30, 24, 34, 18, 26]
@@ -123,7 +123,7 @@ function AudioDemoPlayer() {
   return (
     <div className="mx-auto max-w-lg rounded-2xl border border-[var(--medspa-accent-gold)] bg-[var(--medspa-bg-card)] p-8 md:p-10 medspa-card-trace">
       <p className="medspa-syne mb-8 text-center text-[11px] font-medium uppercase tracking-[0.2em] text-[var(--medspa-text-secondary)]">
-        Sample call — Botox pricing inquiry — 11:43 PM
+        Sample call — AC repair emergency — 10:47 PM
       </p>
       <div className="flex flex-col items-center">
         <button
@@ -149,16 +149,23 @@ function AudioDemoPlayer() {
         <p className="medspa-syne mb-6 text-sm tabular-nums text-[var(--medspa-text-primary)]">
           {fmt(seconds)} / {fmt(total)}
         </p>
-        <p className="medspa-cormorant text-center text-base italic leading-relaxed text-[var(--medspa-text-secondary)] md:text-lg">
-          AI: Thank you for calling Glow Med Spa. I&apos;m your virtual receptionist, available 24/7. Are you calling about a
-          treatment or to book a consultation?
-        </p>
+        <div className="text-left space-y-4">
+          <p className="medspa-cormorant text-base italic leading-relaxed text-[var(--medspa-text-secondary)] md:text-lg">
+            <span className="text-[var(--medspa-accent-gold)] not-italic font-semibold">AI:</span> &ldquo;Thank you for calling [Company Name] — I&apos;m your 24/7 virtual dispatcher. Are you calling about a repair or to schedule a service?&rdquo;
+          </p>
+          <p className="medspa-cormorant text-base italic leading-relaxed text-[var(--medspa-text-secondary)] md:text-lg">
+            <span className="text-[var(--medspa-text-primary)] not-italic font-semibold">Customer:</span> &ldquo;Yeah my AC just stopped working, it&apos;s like 95 degrees in here.&rdquo;
+          </p>
+          <p className="medspa-cormorant text-base italic leading-relaxed text-[var(--medspa-text-secondary)] md:text-lg">
+            <span className="text-[var(--medspa-accent-gold)] not-italic font-semibold">AI:</span> &ldquo;I&apos;m sorry to hear that — let&apos;s get someone out to you as soon as possible. Can I get your address and the best number to reach you?&rdquo;
+          </p>
+        </div>
       </div>
     </div>
   )
 }
 
-export function MedSpaVoiceLanding() {
+export function HomeServiceVoiceLanding() {
   const mathRef = useRef<HTMLDivElement | null>(null)
   const [mathTriggered, setMathTriggered] = useState(false)
   useEffect(() => {
@@ -198,7 +205,7 @@ export function MedSpaVoiceLanding() {
         style={{ backgroundColor: "var(--medspa-bg-primary)" }}
       >
         <div className="pointer-events-none absolute inset-0 medspa-noise" />
-        {/* Watermarks: sized to stay inside the fold; never clip “24/7” off-screen */}
+        {/* Watermarks: sized to stay inside the fold; never clip "24/7" off-screen */}
         <div
           className="pointer-events-none absolute right-3 top-[max(5.5rem,env(safe-area-inset-top,0px)+4rem)] z-0 hidden select-none medspa-bebas text-[clamp(2.75rem,min(10vw,12svh),5.5rem)] leading-none text-[var(--medspa-text-muted)]/[0.1] md:block"
           aria-hidden
@@ -220,7 +227,7 @@ export function MedSpaVoiceLanding() {
             className="mb-5 max-w-xl shrink-0 leading-tight md:mb-7 lg:mb-9"
           >
             <p className="medspa-syne text-[9px] font-semibold uppercase tracking-[0.26em] text-[var(--medspa-text-secondary)] md:text-[10px]">
-              AI Receptionist for Med Spas — US Market
+              AI Dispatcher & Call Answering for Home Service Contractors — US Market
             </p>
             <p className="medspa-syne mt-1 text-[9px] font-medium uppercase tracking-[0.2em] text-[var(--medspa-text-muted)] md:mt-1.5 md:text-[10px]">
               Texas · Florida · California · Georgia · Arizona
@@ -251,7 +258,7 @@ export function MedSpaVoiceLanding() {
                 transition={{ delay: 0.65, duration: 0.55 }}
                 className="medspa-cormorant mx-auto mt-12 max-w-2xl text-base italic leading-snug text-[var(--medspa-text-secondary)] md:mt-14 md:text-[17px] md:leading-relaxed lg:mt-16"
               >
-                Every Botox inquiry. Every filler question. Every after-hours call. Answered, qualified, booked.
+                We answer every call. We book every job. You run the crew.
               </motion.p>
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
@@ -260,7 +267,7 @@ export function MedSpaVoiceLanding() {
                 className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row md:mt-12 md:gap-4 lg:mt-14"
               >
                 <Link
-                  href="/contact?topic=medspa-voice-demo"
+                  href="/contact?topic=hvac-voice-demo"
                   className="medspa-cta-shimmer medspa-syne inline-flex min-h-[44px] min-w-[200px] items-center justify-center rounded-sm bg-[var(--medspa-cta-bg)] px-6 py-2.5 text-xs font-semibold uppercase tracking-wider text-[var(--medspa-cta-text)] transition-transform hover:scale-[1.02] md:min-w-[220px] md:px-8 md:py-3 md:text-sm"
                 >
                   Hear It Answer a Call →
@@ -302,7 +309,7 @@ export function MedSpaVoiceLanding() {
                 {n40}%
               </p>
               <p className="medspa-syne mt-4 text-[14px] font-semibold uppercase tracking-[0.2em] text-[var(--medspa-text-secondary)]">
-                Of med spa calls go unanswered
+                Of service calls go unanswered
               </p>
             </div>
             <div className="text-center md:text-left">
@@ -318,7 +325,7 @@ export function MedSpaVoiceLanding() {
                 ${formatMoney(n1200)}
               </p>
               <p className="medspa-syne mt-4 text-[14px] font-semibold uppercase tracking-[0.2em] text-[var(--medspa-text-secondary)]">
-                Average value of a missed consultation
+                Average value of a missed job
               </p>
             </div>
           </div>
@@ -357,27 +364,27 @@ export function MedSpaVoiceLanding() {
                 {
                   n: "01",
                   t: "Call comes in",
-                  d: "Patient calls your med spa. Any time. Any day.",
+                  d: "Customer calls your company. Any time. Any day.",
                 },
                 {
                   n: "02",
                   t: "Answered in 2 rings",
-                  d: "Your AI Receptionist greets them with your clinic name and tone.",
+                  d: "Your AI answers with your company name and a friendly, professional tone.",
                 },
                 {
                   n: "03",
-                  t: "Question handled",
-                  d: "Pricing, availability, treatment info — answered naturally, no scripts.",
+                  t: "Job details captured",
+                  d: "Service needed, address, urgency level, and customer contact — all collected automatically.",
                 },
                 {
                   n: "04",
-                  t: "Consultation booked",
-                  d: "Directly into your calendar or SMS booking link sent instantly.",
+                  t: "Job booked or routed",
+                  d: "Either scheduled directly or an SMS with job details sent to your dispatcher instantly.",
                 },
                 {
                   n: "05",
                   t: "You get notified",
-                  d: "Full call summary and contact details hit your inbox in real time.",
+                  d: "Full call summary with customer name, address, job type, and urgency hits your phone in real time.",
                 },
               ].map((step, i, arr) => (
                 <div key={step.n} className="flex min-w-0 flex-1 items-start">
@@ -404,11 +411,11 @@ export function MedSpaVoiceLanding() {
           </div>
           <div className="mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 md:hidden">
             {[
-              ["01", "Call comes in", "Patient calls your med spa. Any time. Any day."],
-              ["02", "Answered in 2 rings", "Your AI Receptionist greets them with your clinic name and tone."],
-              ["03", "Question handled", "Pricing, availability, treatment info — answered naturally, no scripts."],
-              ["04", "Consultation booked", "Directly into your calendar or SMS booking link sent instantly."],
-              ["05", "You get notified", "Full call summary and contact details hit your inbox in real time."],
+              ["01", "Call comes in", "Customer calls your company. Any time. Any day."],
+              ["02", "Answered in 2 rings", "Your AI answers with your company name and a friendly, professional tone."],
+              ["03", "Job details captured", "Service needed, address, urgency level, and customer contact — all collected automatically."],
+              ["04", "Job booked or routed", "Either scheduled directly or an SMS with job details sent to your dispatcher instantly."],
+              ["05", "You get notified", "Full call summary with customer name, address, job type, and urgency hits your phone in real time."],
             ].map(([n, t, d]) => (
               <div
                 key={n}
@@ -432,11 +439,10 @@ export function MedSpaVoiceLanding() {
               <br />
               your
               <br />
-              clinic.
+              trade.
             </h2>
             <p className="medspa-syne mt-8 max-w-md text-base leading-relaxed text-[var(--medspa-text-secondary)]">
-              Before going live, we train the AI on your specific treatments, pricing, and protocols. It speaks your
-              clinic&apos;s language from day one.
+              Before going live, we train the AI on your service area, job types, pricing ranges, and availability. It speaks your company&apos;s language from day one.
             </p>
           </div>
           <div className="flex flex-wrap content-start gap-3 lg:col-span-3">
@@ -467,20 +473,20 @@ export function MedSpaVoiceLanding() {
             Hear it handle a real call.
           </h2>
           <p className="medspa-cormorant mx-auto mt-4 max-w-xl text-lg italic text-[var(--medspa-text-secondary)] md:text-xl">
-            A patient calls asking about Botox pricing after hours. Listen to how your AI Receptionist handles it.
+            A customer calls about an AC breakdown at 10:47 PM on a Tuesday in July. Listen to how your AI dispatcher handles it.
           </p>
           <div className="mt-12">
             <AudioDemoPlayer />
           </div>
           <p className="medspa-syne mt-10 text-[14px] text-[var(--medspa-text-secondary)]">
             Sounds natural <span className="mx-2 text-[var(--medspa-accent-gold)]">✦</span> Handles objections{" "}
-            <span className="mx-2 text-[var(--medspa-accent-gold)]">✦</span> Books the appointment
+            <span className="mx-2 text-[var(--medspa-accent-gold)]">✦</span> Books the job
           </p>
           <Link
-            href="/contact?topic=medspa-voice-demo"
+            href="/contact?topic=hvac-voice-demo"
             className="medspa-syne mt-8 inline-flex items-center justify-center rounded-sm border border-[var(--medspa-accent-gold)] px-8 py-3 text-sm font-semibold uppercase tracking-wider text-[var(--medspa-accent-gold)] transition-colors hover:bg-[var(--medspa-accent-gold)] hover:text-[var(--medspa-cta-text)]"
           >
-            Get a Demo Built for Your Clinic →
+            Get a Demo Built for Your Company →
           </Link>
         </RevealSection>
       </section>
@@ -505,9 +511,9 @@ export function MedSpaVoiceLanding() {
                 sub: "Single location · Up to 300 calls/mo",
                 feats: [
                   "24/7 call answering",
+                  "Captures job type, address & customer details",
+                  "SMS job summary to your dispatcher instantly",
                   "Handles your top 10 FAQs",
-                  "SMS booking link after every call",
-                  "Call summaries to your email",
                   "1-week setup",
                 ],
                 popular: false,
@@ -518,10 +524,10 @@ export function MedSpaVoiceLanding() {
                 sub: "Single location · Up to 800 calls/mo",
                 feats: [
                   "Everything in Starter, plus:",
-                  "Direct calendar integration",
+                  "Direct calendar/scheduling integration",
                   "Custom voice and tone matching",
                   "CRM lead capture",
-                  "After-hours routing rules",
+                  "After-hours emergency routing rules",
                   "Priority support",
                 ],
                 popular: true,
@@ -532,8 +538,8 @@ export function MedSpaVoiceLanding() {
                 sub: "Multi-location · Unlimited calls",
                 feats: [
                   "Everything in Growth, plus:",
-                  "Multi-location management",
-                  "Outbound follow-up calls to missed leads",
+                  "Multi-location / multi-crew management",
+                  "Outbound callback to missed calls",
                   "Full custom conversation design",
                   "Dedicated account manager",
                   "Monthly performance review",
@@ -571,7 +577,7 @@ export function MedSpaVoiceLanding() {
         </RevealSection>
         <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mt-12 w-screen">
           <div className="medspa-bebas bg-[var(--medspa-accent-gold)] py-5 text-center text-lg uppercase tracking-wide text-[var(--medspa-cta-text)] md:text-xl">
-            Free first month — limited to next 10 med spas to sign up
+            Free first month — limited to next 10 contractors to sign up
           </div>
         </div>
       </section>
@@ -588,24 +594,28 @@ export function MedSpaVoiceLanding() {
           <div className="mt-14 flex flex-col gap-0">
             {[
               {
-                q: "Will patients know it's AI?",
-                a: "Some will, most won't. More importantly — they get answered instantly instead of hitting voicemail. That's what they care about.",
+                q: "Will customers know they're talking to AI?",
+                a: "Some will, most won't. More importantly — they get answered immediately instead of hitting voicemail and calling your competitor. That's what wins the job.",
               },
               {
-                q: "What if it says something wrong?",
-                a: "It only answers what you've approved. Anything outside its knowledge gets routed to your team immediately.",
+                q: "What if the AI can't answer a complex question?",
+                a: "It only handles what you've approved. Anything outside its knowledge — it takes the customer's details and tells them your team will call back within minutes. No lost leads.",
               },
               {
-                q: "We already have a receptionist.",
-                a: "So do most of our clients. This handles overflow, after-hours, and weekends — your receptionist focuses on patients in the room.",
+                q: "We already have an office person who answers calls.",
+                a: "Most of our clients do too. This handles overflow when they're busy, after-hours calls, weekend emergencies, and lunch breaks. Your office person focuses on running operations — not stuck on hold.",
               },
               {
-                q: "How long to set up?",
+                q: "How long does setup take?",
                 a: "One week from contract to live. We do all the work. You approve the call flow before anything goes live.",
               },
               {
                 q: "What if we don't like it?",
                 a: "You hear it answer a test call before you pay a single dollar. If it's not right, you owe us nothing.",
+              },
+              {
+                q: "How does it handle emergency calls?",
+                a: "You define what counts as an emergency in setup. Those calls get flagged immediately — SMS alert to your phone with full details so you can call back within minutes. No emergency ever sits in a voicemail.",
               },
             ].map((row, i) => (
               <div
@@ -636,8 +646,7 @@ export function MedSpaVoiceLanding() {
             No commitment.
           </h2>
           <p className="medspa-syne mx-auto mt-8 max-w-xl text-base leading-relaxed text-[var(--medspa-cta-text)]/90">
-            We&apos;ll build a custom demo for your med spa. You hear it handle a real Botox inquiry. You approve it. Then we
-            talk price.
+            We&apos;ll build a custom demo for your company. You hear it handle a real AC repair emergency call. You approve it. Then we talk price.
           </p>
           <Link
             href="/contact?topic=medspa-voice-demo"
@@ -655,8 +664,8 @@ export function MedSpaVoiceLanding() {
 }
 
 function RoiSection() {
-  const [missed, setMissed] = useState(15)
-  const [value, setValue] = useState(800)
+  const [missed, setMissed] = useState(12)
+  const [value, setValue] = useState(450)
   const monthly = Math.round(missed * 4.3 * value)
   const { ref, visible } = useReveal<HTMLElement>()
 
@@ -683,7 +692,7 @@ function RoiSection() {
           </div>
           <div>
             <label className="mb-3 block text-xs font-semibold uppercase tracking-wider text-[var(--medspa-text-secondary)]">
-              Average consultation value ($)
+              Average job value ($)
             </label>
             <input
               type="number"

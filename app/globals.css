@@ -932,6 +932,7 @@
 }
 .medspa-voice-fonts .medspa-syne {
   font-family: var(--font-medspa-syne), ui-sans-serif, system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
 }
 
 @keyframes medspa-hero-line-in {
@@ -953,29 +954,61 @@
   }
 }
 
-/* Hero fits first screen: headline scales with viewport height */
+/* Hero fits first screen: headline scales with viewport height + width */
+.medspa-hero-fold .medspa-hero-line-text {
+  font-size: clamp(2.1rem, min(8.5vw, 7.5svh), 5.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+}
+@media (min-height: 700px) {
+  .medspa-hero-fold .medspa-hero-line-text {
+    font-size: clamp(2.4rem, min(9.5vw, 8.5svh), 6.5rem);
+  }
+}
+@media (min-height: 820px) {
+  .medspa-hero-fold .medspa-hero-line-text {
+    font-size: clamp(2.65rem, min(10vw, 9.5svh), 7.15rem);
+  }
+}
+@media (min-height: 940px) {
+  .medspa-hero-fold .medspa-hero-line-text {
+    font-size: clamp(2.95rem, min(11vw, 10.5svh), 7.85rem);
+  }
+}
+@media (min-height: 1080px) {
+  .medspa-hero-fold .medspa-hero-line-text {
+    font-size: clamp(3.2rem, min(11.5vw, 11svh), 8.5rem);
+  }
+}
 .medspa-hero-fold .medspa-hero-word {
-  font-size: clamp(1.45rem, min(5.5vw, 4.2svh), 3.35rem);
-  line-height: 1.06;
+  font-size: clamp(1.65rem, min(6.25vw, 5svh), 3.85rem);
+  line-height: 1.12;
+  /* Bebas is already wide; slight negative tracking keeps the block from feeling stretched */
+  letter-spacing: -0.02em;
 }
 @media (min-height: 700px) {
   .medspa-hero-fold .medspa-hero-word {
-    font-size: clamp(1.65rem, min(6.2vw, 5.2svh), 3.85rem);
+    font-size: clamp(1.9rem, min(7vw, 6.25svh), 4.5rem);
   }
 }
 @media (min-height: 820px) {
   .medspa-hero-fold .medspa-hero-word {
-    font-size: clamp(1.85rem, min(6.8vw, 6svh), 4.35rem);
+    font-size: clamp(2.1rem, min(8vw, 7.25svh), 5.35rem);
   }
 }
 @media (min-height: 940px) {
   .medspa-hero-fold .medspa-hero-word {
-    font-size: clamp(2rem, min(7.5vw, 7svh), 5rem);
+    font-size: clamp(2.35rem, min(9vw, 8.5svh), 6.25rem);
+  }
+}
+@media (min-height: 1080px) {
+  .medspa-hero-fold .medspa-hero-word {
+    font-size: clamp(2.5rem, min(9.5vw, 9svh), 7rem);
   }
 }
 
 .medspa-voice-landing {
-  text-rendering: geometricPrecision;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   --medspa-bg-primary: #0a0a0a;
   --medspa-bg-secondary: #111111;
