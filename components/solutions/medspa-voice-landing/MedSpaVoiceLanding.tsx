@@ -3,7 +3,7 @@
 import Link from "next/link"
 import type { ReactNode } from "react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion } from "framer-motion"
 import { Pause, Play } from "lucide-react"
 
 const MARQUEE_TEXT =
@@ -159,26 +159,27 @@ function AudioDemoPlayer() {
 }
 
 export function MedSpaVoiceLanding() {
-  const heroRef = useRef<HTMLDivElement | null>(null)
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  })
-  const parallaxY = useTransform(scrollYProgress, [0, 1], [0, 120])
-
   const mathRef = useRef<HTMLDivElement | null>(null)
-  const [mathVisible, setMathVisible] = useState(false)
+  const [mathTriggered, setMathTriggered] = useState(false)
   useEffect(() => {
     const el = mathRef.current
     if (!el) return
-    const io = new IntersectionObserver(([e]) => setMathVisible(e.isIntersecting), { threshold: 0.25 })
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setMathTriggered(true)
+          io.disconnect()
+        }
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
+    )
     io.observe(el)
     return () => io.disconnect()
   }, [])
 
-  const n40 = useCountUp(40, mathVisible)
-  const n68 = useCountUp(68, mathVisible)
-  const n1200 = useCountUp(1200, mathVisible, 2600)
+  const n40 = useCountUp(40, mathTriggered)
+  const n68 = useCountUp(68, mathTriggered)
+  const n1200 = useCountUp(1200, mathTriggered, 2600)
 
   const scrollToPricing = () => {
     document.getElementById("medspa-pricing")?.scrollIntoView({ behavior: "smooth" })
@@ -200,32 +201,30 @@ export function MedSpaVoiceLanding() {
     >
       {/* SECTION 1 — Opening */}
       <section
-        ref={heroRef}
-        className="relative flex min-h-[100dvh] flex-col pt-24 md:pt-28"
+        className="relative isolate flex min-h-svh flex-col pt-[5.5rem] md:pt-28"
         style={{ backgroundColor: "var(--medspa-bg-primary)" }}
       >
         <div className="pointer-events-none absolute inset-0 medspa-noise" />
-        <motion.div
-          style={{ y: parallaxY }}
-          className="pointer-events-none absolute -right-[8%] top-[18%] select-none medspa-bebas text-[clamp(7rem,20vw,16rem)] leading-[1.05] text-[var(--medspa-text-muted)]/[0.12]"
+        {/* Static watermarks — no scroll listeners; kept in margins so they never cover the headline */}
+        <div
+          className="pointer-events-none absolute right-0 top-28 z-0 hidden w-[min(42vw,380px)] select-none text-right medspa-bebas text-[clamp(4rem,12vw,9rem)] leading-none text-[var(--medspa-text-muted)]/[0.11] md:block"
           aria-hidden
         >
           24/7
-        </motion.div>
-        <motion.div
-          style={{ y: parallaxY }}
-          className="pointer-events-none absolute -left-[4%] bottom-[12%] select-none medspa-bebas text-[clamp(4.5rem,12vw,10rem)] leading-[1.05] text-[var(--medspa-accent-gold)]/[0.06]"
+        </div>
+        <div
+          className="pointer-events-none absolute bottom-32 left-0 z-0 hidden select-none pl-4 medspa-bebas text-[clamp(3rem,9vw,6.5rem)] leading-none text-[var(--medspa-accent-gold)]/[0.07] md:block"
           aria-hidden
         >
           CALLS
-        </motion.div>
+        </div>
 
-        <div className="relative z-10 flex flex-1 flex-col px-5 pb-16 pt-2 md:px-10 md:pb-20 lg:px-16">
+        <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col px-5 pb-12 md:px-10 md:pb-16 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-xl"
+            transition={{ duration: 0.5 }}
+            className="max-w-xl shrink-0"
           >
             <p className="medspa-syne text-[10px] font-semibold uppercase tracking-[0.28em] text-[var(--medspa-text-secondary)] md:text-[11px]">
               AI Receptionist for Med Spas — US Market
@@ -235,40 +234,42 @@ export function MedSpaVoiceLanding() {
             </p>
           </motion.div>
 
-          <div className="flex flex-1 flex-col justify-center py-8 md:py-12">
-            <div className="mx-auto w-full max-w-6xl text-center">
-              {headlineLines.map((line, li) => (
-                <div
-                  key={li}
-                  className="mb-2 flex flex-wrap justify-center gap-x-1 overflow-visible pb-1 md:mb-3 md:gap-x-2 md:pb-2"
-                >
-                  {line.map((word, wi) => (
-                    <motion.span
-                      key={word + wi}
-                      initial={{ opacity: 0, y: 40 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.15 + li * 0.12 + wi * 0.06, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                      className="medspa-bebas inline-block px-0.5 pb-[0.08em] text-[clamp(2.75rem,11vw,7.5rem)] leading-[1.02] tracking-wide text-[var(--medspa-text-primary)] md:px-1.5"
-                      style={{ overflow: "visible" }}
-                    >
-                      {word}
-                    </motion.span>
-                  ))}
-                </div>
-              ))}
+          <div className="flex flex-1 flex-col justify-center py-10 md:py-14">
+            <div className="text-center">
+              <div className="flex flex-col items-stretch gap-y-2 md:gap-y-3">
+                {headlineLines.map((line, li) => (
+                  <div
+                    key={li}
+                    className="medspa-hero-line flex flex-wrap justify-center gap-x-2 gap-y-1 md:gap-x-3"
+                    style={{
+                      animation: `medspa-hero-line-in 0.58s cubic-bezier(0.22, 1, 0.36, 1) ${0.1 + li * 0.09}s forwards`,
+                      opacity: 0,
+                    }}
+                  >
+                    {line.map((word, wi) => (
+                      <span
+                        key={`${li}-${wi}-${word}`}
+                        className="medspa-bebas inline-block px-0.5 pb-[0.12em] text-[clamp(2.5rem,min(11vw,9vh),6.75rem)] leading-[1.08] tracking-wide text-[var(--medspa-text-primary)] md:px-1"
+                      >
+                        {word}
+                      </span>
+                    ))}
+                  </div>
+                ))}
+              </div>
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.9, duration: 0.7 }}
-                className="medspa-cormorant mx-auto mt-6 max-w-2xl text-lg italic leading-relaxed text-[var(--medspa-text-secondary)] md:text-[18px]"
+                transition={{ delay: 0.65, duration: 0.55 }}
+                className="medspa-cormorant mx-auto mt-8 max-w-2xl text-lg italic leading-relaxed text-[var(--medspa-text-secondary)] md:mt-10 md:text-[18px]"
               >
                 We answer every call. We book every consultation. You treat patients.
               </motion.p>
               <motion.div
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.1, duration: 0.55 }}
-                className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
+                transition={{ delay: 0.85, duration: 0.45 }}
+                className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row md:mt-12"
               >
                 <Link
                   href="/contact?topic=medspa-voice-demo"
@@ -290,8 +291,8 @@ export function MedSpaVoiceLanding() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.35, duration: 0.6 }}
-            className="medspa-syne mt-auto flex flex-col items-end gap-2 self-end text-right text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--medspa-text-secondary)] md:text-[11px]"
+            transition={{ delay: 1.05, duration: 0.45 }}
+            className="medspa-syne mt-auto flex shrink-0 flex-col items-end gap-2 self-end pb-2 text-right text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--medspa-text-secondary)] md:text-[11px]"
           >
             <span>&lt; 2 Rings</span>
             <span>24·7·365</span>
