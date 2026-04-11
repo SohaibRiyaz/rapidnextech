@@ -953,6 +953,27 @@
   }
 }
 
+/* Hero fits first screen: headline scales with viewport height */
+.medspa-hero-fold .medspa-hero-word {
+  font-size: clamp(1.45rem, min(5.5vw, 4.2svh), 3.35rem);
+  line-height: 1.06;
+}
+@media (min-height: 700px) {
+  .medspa-hero-fold .medspa-hero-word {
+    font-size: clamp(1.65rem, min(6.2vw, 5.2svh), 3.85rem);
+  }
+}
+@media (min-height: 820px) {
+  .medspa-hero-fold .medspa-hero-word {
+    font-size: clamp(1.85rem, min(6.8vw, 6svh), 4.35rem);
+  }
+}
+@media (min-height: 940px) {
+  .medspa-hero-fold .medspa-hero-word {
+    font-size: clamp(2rem, min(7.5vw, 7svh), 5rem);
+  }
+}
+
 .medspa-voice-landing {
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: antialiased;
