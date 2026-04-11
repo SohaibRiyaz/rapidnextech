@@ -50,14 +50,20 @@ export default function Header() {
   }, [pathname])
 
   const isDark = mode === "dark" || color === "black"
+  const isMedspaVoiceLP = pathname === "/solutions/never-miss-a-medspa-call"
+  const effectiveDark = isDark || isMedspaVoiceLP
 
-  const headerBgClass = isScrolled
-    ? isDark
-      ? "bg-gray-950/95 backdrop-blur-md shadow-md border-b border-white/10"
-      : "bg-white/95 backdrop-blur-md shadow-md border-b border-gray-100"
-    : isDark
-      ? "bg-gray-950/70 backdrop-blur-sm"
+  const headerBgClass = isMedspaVoiceLP
+    ? isScrolled
+      ? "bg-[#0A0A0A]/95 backdrop-blur-md border-b border-[#222222] shadow-md"
       : "bg-transparent"
+    : isScrolled
+      ? isDark
+        ? "bg-gray-950/95 backdrop-blur-md shadow-md border-b border-white/10"
+        : "bg-white/95 backdrop-blur-md shadow-md border-b border-gray-100"
+      : isDark
+        ? "bg-gray-950/70 backdrop-blur-sm"
+        : "bg-transparent"
 
   const linkClass = (isActive: boolean) =>
     `text-sm font-medium transition-colors hover:text-primary ${isActive ? "text-primary font-bold" : "text-foreground opacity-90"
@@ -66,14 +72,14 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerBgClass}`}
-      style={isDark ? { "--foreground": "210 40% 98%", "--muted-foreground": "215 20.2% 65.1%" } as React.CSSProperties : undefined}
+      style={effectiveDark ? { "--foreground": "210 40% 98%", "--muted-foreground": "215 20.2% 65.1%" } as React.CSSProperties : undefined}
     >
       <nav className={`container mx-auto px-6 flex items-center justify-between transition-all duration-300 ${isScrolled ? "h-16" : "h-20"}`}>
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
           <div className="relative h-10 w-10 md:h-12 md:w-12 transition-transform group-hover:scale-105">
             <Image
-              src={color === "white" || (mode === "light" && color !== "black") ? "/symbol-blue.png" : "/symbol-white.png"}
+              src={!isMedspaVoiceLP && (color === "white" || (mode === "light" && color !== "black")) ? "/symbol-blue.png" : "/symbol-white.png"}
               alt="RapidNexTech Symbol"
               fill
               className="object-contain"
@@ -82,7 +88,7 @@ export default function Header() {
           </div>
           <div className="relative h-10 w-32 sm:w-40 md:h-12 md:w-48 transition-transform group-hover:scale-105 ml-1 mt-2">
             <Image
-              src={color === "white" || (mode === "light" && color !== "black") ? "/header-logo-blue.png" : "/header-logo-white.png"}
+              src={!isMedspaVoiceLP && (color === "white" || (mode === "light" && color !== "black")) ? "/header-logo-blue.png" : "/header-logo-white.png"}
               alt="RapidNexTech"
               fill
               className="object-contain object-left"
@@ -122,7 +128,7 @@ export default function Header() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "100vh" }}
             exit={{ opacity: 0, height: 0 }}
-            className={`md:hidden absolute top-20 left-0 right-0 ${isDark ? "bg-gray-950" : "bg-white"
+            className={`md:hidden absolute top-20 left-0 right-0 ${effectiveDark ? (isMedspaVoiceLP ? "bg-[#0A0A0A]" : "bg-gray-950") : "bg-white"
               } border-t border-white/10 overflow-hidden`}
           >
             <div className="container mx-auto px-6 py-8 flex flex-col gap-6 h-full overflow-y-auto">

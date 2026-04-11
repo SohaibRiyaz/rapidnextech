@@ -397,4 +397,9 @@ export const industrySolutions = [
         href: "/solutions/diet-nutrition",
         description: "Automate diet inquiries, consultations, and plan signups.",
     },
+    {
+        title: "AI Voice Receptionist (Med Spas)",
+        href: "/solutions/never-miss-a-medspa-call",
+        description: "24/7 call answering and consultation booking for US med spas.",
+    },
 ]

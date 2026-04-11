@@ -922,3 +922,124 @@
   animation: float 2s ease-in-out infinite;
   will-change: transform;
 }
+
+/* Med Spa Voice LP — dark luxury (fonts: next/font variables on .medspa-voice-fonts parent) */
+.medspa-voice-fonts .medspa-bebas {
+  font-family: var(--font-medspa-bebas), ui-sans-serif, system-ui, sans-serif;
+}
+.medspa-voice-fonts .medspa-cormorant {
+  font-family: var(--font-medspa-cormorant), ui-serif, Georgia, serif;
+}
+.medspa-voice-fonts .medspa-syne {
+  font-family: var(--font-medspa-syne), ui-sans-serif, system-ui, sans-serif;
+}
+
+.medspa-voice-landing {
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  --medspa-bg-primary: #0a0a0a;
+  --medspa-bg-secondary: #111111;
+  --medspa-bg-card: #161616;
+  --medspa-accent-gold: #c9a052;
+  --medspa-accent-gold-light: #e8c87a;
+  --medspa-text-primary: #f5f0e8;
+  --medspa-text-secondary: #8a8a8a;
+  --medspa-text-muted: #444444;
+  --medspa-border: #222222;
+  --medspa-cta-bg: #c9a052;
+  --medspa-cta-text: #0a0a0a;
+}
+
+.medspa-cta-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.medspa-cta-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 40%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+.medspa-cta-shimmer:hover::after {
+  animation: medspa-shimmer-sweep 0.85s ease-out forwards;
+}
+
+@keyframes medspa-shimmer-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.medspa-card-trace {
+  position: relative;
+  background: var(--medspa-bg-card);
+  border: 1px solid var(--medspa-border);
+  transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
+}
+.medspa-card-trace::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    transparent 35%,
+    var(--medspa-accent-gold) 50%,
+    transparent 65%,
+    transparent 100%
+  );
+  background-size: 220% 220%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.medspa-card-trace:hover::before {
+  opacity: 1;
+  animation: medspa-border-trace 2.2s linear infinite;
+}
+.medspa-card-trace:hover {
+  border-color: transparent;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  transform: translateY(-4px);
+}
+
+@keyframes medspa-border-trace {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.medspa-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.medspa-reveal.medspa-reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.medspa-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+}

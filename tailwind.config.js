@@ -82,6 +82,22 @@ module.exports = {
                     "0%, 100%": { transform: "translateY(0)" },
                     "50%": { transform: "translateY(-8px)" },
                 },
+                "medspa-marquee": {
+                    "0%": { transform: "translateX(0)" },
+                    "100%": { transform: "translateX(-50%)" },
+                },
+                "medspa-shimmer": {
+                    "0%": { transform: "translateX(-120%) skewX(-12deg)" },
+                    "100%": { transform: "translateX(200%) skewX(-12deg)" },
+                },
+                "medspa-wave-pulse": {
+                    "0%, 100%": { opacity: "0.45", transform: "scaleY(1)" },
+                    "50%": { opacity: "1", transform: "scaleY(1.15)" },
+                },
+                "medspa-border-sweep": {
+                    "0%": { backgroundPosition: "0% 50%" },
+                    "100%": { backgroundPosition: "200% 50%" },
+                },
             },
             animation: {
                 "accordion-down": "accordion-down 0.2s ease-out",
@@ -90,6 +106,10 @@ module.exports = {
                 "drift-reverse": "drift-reverse 25s ease-in-out infinite",
                 "fade-in-up": "fade-in-up 0.6s ease-out forwards",
                 "float": "float 3s ease-in-out infinite",
+                "medspa-marquee": "medspa-marquee 45s linear infinite",
+                "medspa-shimmer": "medspa-shimmer 0.85s ease-out forwards",
+                "medspa-wave-pulse": "medspa-wave-pulse 0.9s ease-in-out infinite",
+                "medspa-border-sweep": "medspa-border-sweep 2s linear infinite",
             },
         },
     },
