@@ -72,7 +72,14 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${headerBgClass}`}
-      style={effectiveDark ? { "--foreground": "210 40% 98%", "--muted-foreground": "215 20.2% 65.1%" } as React.CSSProperties : undefined}
+      style={effectiveDark ? { 
+        "--foreground": "210 40% 98%", 
+        "--muted-foreground": "215 20.2% 65.1%",
+        "--background": "0 0% 5%",
+        "--border": "0 0% 12%",
+        "--popover": "0 0% 5%",
+        "--popover-foreground": "210 40% 98%"
+      } as React.CSSProperties : undefined}
     >
       <nav className={`container mx-auto px-6 flex items-center justify-between transition-all duration-300 ${isScrolled ? "h-16" : "h-20"}`}>
         {/* Logo */}
