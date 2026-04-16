@@ -24,23 +24,23 @@ const syne = Syne({
 })
 
 export const metadata: Metadata = {
-  title: "AI Call Answering for HVAC & Plumbing Contractors | RapidNexTech",
+  title: "24/7 Call Answering for HVAC & Plumbing Contractors | RapidNexTech",
   description:
-    "Never miss a job call again. Our AI dispatcher answers every HVAC, plumbing, and electrical call 24/7 — captures job details, books the service, and notifies your team instantly. Free first month.",
+    "Never miss a job call again. We answer every HVAC, plumbing, and electrical call in under 2 rings, 24/7, capture job details, and notify your team instantly. Free first month.",
   alternates: { canonical: "https://rapidnextech.com/solutions/never-miss-a-call" },
   openGraph: {
-    title: "AI Call Answering for HVAC & Plumbing Contractors | RapidNexTech",
+    title: "24/7 Call Answering for HVAC & Plumbing Contractors | RapidNexTech",
     description:
-      "Never miss a job call again. Our AI dispatcher answers every HVAC, plumbing, and electrical call 24/7 — captures job details, books the service, and notifies your team instantly.",
+      "Never miss a job call again. We answer every HVAC, plumbing, and electrical call in under 2 rings, 24/7, capture job details, and notify your team instantly.",
     type: "website",
     url: "https://rapidnextech.com/solutions/never-miss-a-call",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "RapidNexTech — AI Call Answering for HVAC & Plumbing Contractors" }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "RapidNexTech - 24/7 Call Answering for HVAC & Plumbing Contractors" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Call Answering for HVAC & Plumbing Contractors | RapidNexTech",
+    title: "24/7 Call Answering for HVAC & Plumbing Contractors | RapidNexTech",
     description:
-      "Never miss a job call again. Our AI dispatcher answers every HVAC, plumbing, and electrical call 24/7 — captures job details, books the service, and notifies your team instantly.",
+      "Never miss a job call again. We answer every HVAC, plumbing, and electrical call in under 2 rings, 24/7, capture job details, and notify your team instantly.",
     images: ["/og-image.png"],
   },
 }

@@ -123,7 +123,7 @@ function AudioDemoPlayer() {
   return (
     <div className="mx-auto max-w-lg rounded-2xl border border-[var(--medspa-accent-gold)] bg-[var(--medspa-bg-card)] p-8 md:p-10 medspa-card-trace">
       <p className="medspa-syne mb-8 text-center text-[11px] font-medium uppercase tracking-[0.2em] text-[var(--medspa-text-secondary)]">
-        Sample call — AC repair emergency — 10:47 PM
+        Sample call - AC repair emergency - 10:47 PM
       </p>
       <div className="flex flex-col items-center">
         <button
@@ -151,17 +151,39 @@ function AudioDemoPlayer() {
         </p>
         <div className="text-left space-y-4">
           <p className="medspa-cormorant text-base italic leading-relaxed text-[var(--medspa-text-secondary)] md:text-lg">
-            <span className="text-[var(--medspa-accent-gold)] not-italic font-semibold">AI:</span> &ldquo;Thank you for calling [Company Name] — I&apos;m your 24/7 virtual dispatcher. Are you calling about a repair or to schedule a service?&rdquo;
+            <span className="text-[var(--medspa-accent-gold)] not-italic font-semibold">Dispatcher:</span> &ldquo;Thank you for calling [Company Name] - I'm your 24/7 virtual dispatcher. Are you calling about a repair or to schedule a service?&rdquo;
           </p>
           <p className="medspa-cormorant text-base italic leading-relaxed text-[var(--medspa-text-secondary)] md:text-lg">
             <span className="text-[var(--medspa-text-primary)] not-italic font-semibold">Customer:</span> &ldquo;Yeah my AC just stopped working, it&apos;s like 95 degrees in here.&rdquo;
           </p>
           <p className="medspa-cormorant text-base italic leading-relaxed text-[var(--medspa-text-secondary)] md:text-lg">
-            <span className="text-[var(--medspa-accent-gold)] not-italic font-semibold">AI:</span> &ldquo;I&apos;m sorry to hear that — let&apos;s get someone out to you as soon as possible. Can I get your address and the best number to reach you?&rdquo;
+            <span className="text-[var(--medspa-accent-gold)] not-italic font-semibold">Dispatcher:</span> &ldquo;I'm sorry to hear that - let's get someone out to you as soon as possible. Can I get your address and the best number to reach you?&rdquo;
           </p>
         </div>
       </div>
     </div>
+  )
+}
+
+function UsageInfo({ text }: { text: string }) {
+  const [showTip, setShowTip] = useState(false)
+
+  return (
+    <span
+      className="relative inline-flex align-middle ml-1"
+      onMouseEnter={() => setShowTip(true)}
+      onMouseLeave={() => setShowTip(false)}
+      onClick={() => setShowTip((v) => !v)}
+    >
+      <span className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-[var(--medspa-accent-gold)] text-[10px] font-bold text-[var(--medspa-accent-gold)] cursor-pointer">
+        !
+      </span>
+      {showTip && (
+        <span className="absolute bottom-full left-1/2 z-20 mb-2 w-56 -translate-x-1/2 rounded-lg border border-[var(--medspa-border)] bg-[var(--medspa-bg-card)] px-3 py-2 text-xs normal-case tracking-normal text-[var(--medspa-text-secondary)] shadow-2xl leading-relaxed pointer-events-none">
+          {text}
+        </span>
+      )}
+    </span>
   )
 }
 
@@ -199,7 +221,7 @@ export function HomeServiceVoiceLanding() {
       role="main"
       className="medspa-voice-landing overflow-x-hidden bg-[var(--medspa-bg-primary)] text-[var(--medspa-text-primary)] antialiased"
     >
-      {/* SECTION 1 — Opening */}
+      {/* SECTION 1 - Opening */}
       <section
         className="medspa-hero-fold relative isolate box-border flex h-svh max-h-[100svh] flex-col overflow-hidden pt-[max(5rem,env(safe-area-inset-top,0px)+4.25rem)] pb-3 md:pt-[max(6.5rem,env(safe-area-inset-top,0px)+5.5rem)] md:pb-4"
         style={{ backgroundColor: "var(--medspa-bg-primary)" }}
@@ -227,10 +249,10 @@ export function HomeServiceVoiceLanding() {
             className="mb-5 max-w-xl shrink-0 leading-tight md:mb-7 lg:mb-9"
           >
             <p className="medspa-syne text-[9px] font-semibold uppercase tracking-[0.26em] text-[var(--medspa-text-secondary)] md:text-[10px]">
-              AI Dispatcher & Call Answering for Home Service Contractors — US Market
+              Always-On Call Answering for Home Service Contractors - US Market
             </p>
             <p className="medspa-syne mt-1 text-[9px] font-medium uppercase tracking-[0.2em] text-[var(--medspa-text-muted)] md:mt-1.5 md:text-[10px]">
-              Texas · Florida · California · Georgia · Arizona
+              Texas | Florida | California | Georgia | Arizona
             </p>
           </motion.div>
 
@@ -258,8 +280,11 @@ export function HomeServiceVoiceLanding() {
                 transition={{ delay: 0.65, duration: 0.55 }}
                 className="medspa-cormorant mx-auto mt-12 max-w-2xl text-base italic leading-snug text-[var(--medspa-text-secondary)] md:mt-14 md:text-[17px] md:leading-relaxed lg:mt-16"
               >
-                We answer every call. We book every job. You run the crew.
+                We answer every call in 2 rings, 24/7, capture full job details, and notify your team instantly.
               </motion.p>
+              <p className="medspa-syne mx-auto mt-5 max-w-3xl text-center text-xs font-medium uppercase tracking-[0.16em] text-[var(--medspa-text-secondary)] md:text-[11px]">
+                Works with your existing number | No new system to learn | We handle setup for you
+              </p>
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -270,7 +295,7 @@ export function HomeServiceVoiceLanding() {
                   href="/contact?topic=hvac-voice-demo"
                   className="medspa-cta-shimmer medspa-syne inline-flex min-h-[44px] min-w-[200px] items-center justify-center rounded-sm bg-[var(--medspa-cta-bg)] px-6 py-2.5 text-xs font-semibold uppercase tracking-wider text-[var(--medspa-cta-text)] transition-transform hover:scale-[1.02] md:min-w-[220px] md:px-8 md:py-3 md:text-sm"
                 >
-                  Hear It Answer a Call →
+                  Hear It Answer a Call ->
                 </Link>
                 <button
                   type="button"
@@ -296,7 +321,7 @@ export function HomeServiceVoiceLanding() {
         </div>
       </section>
 
-      {/* SECTION 2 — Math */}
+      {/* SECTION 2 - Math */}
       <section
         ref={mathRef}
         className="relative z-10 bg-[var(--medspa-bg-secondary)] px-5 py-20 md:px-10 md:py-28 lg:px-16"
@@ -335,7 +360,7 @@ export function HomeServiceVoiceLanding() {
         </RevealSection>
       </section>
 
-      {/* SECTION 3 — Marquee (edge to edge) */}
+      {/* SECTION 3 - Marquee (edge to edge) */}
       <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen overflow-hidden bg-[var(--medspa-accent-gold)] py-0">
         <div className="flex min-h-[52px] items-center overflow-hidden py-2">
           <div className="flex w-max min-w-full shrink-0 animate-medspa-marquee whitespace-nowrap will-change-transform">
@@ -349,7 +374,7 @@ export function HomeServiceVoiceLanding() {
         </div>
       </div>
 
-      {/* SECTION 4 — How it works */}
+      {/* SECTION 4 - How it works */}
       <section className="bg-[var(--medspa-bg-primary)] px-5 py-20 md:px-10 md:py-28 lg:px-16">
         <RevealSection className="mx-auto max-w-6xl">
           <h2 className="medspa-bebas text-center text-[clamp(2rem,5vw,3.25rem)] leading-[1.1] tracking-wide text-[var(--medspa-text-primary)]">
@@ -369,17 +394,17 @@ export function HomeServiceVoiceLanding() {
                 {
                   n: "02",
                   t: "Answered in 2 rings",
-                  d: "Your AI answers with your company name and a friendly, professional tone.",
+                  d: "We answer with your company name and a friendly, professional tone.",
                 },
                 {
                   n: "03",
                   t: "Job details captured",
-                  d: "Service needed, address, urgency level, and customer contact — all collected automatically.",
+                  d: "Service needed, address, urgency level, and customer contact are captured on every call.",
                 },
                 {
                   n: "04",
                   t: "Job booked or routed",
-                  d: "Either scheduled directly or an SMS with job details sent to your dispatcher instantly.",
+                  d: "Either scheduled directly or an instant notification with full job details sent to your dispatcher.",
                 },
                 {
                   n: "05",
@@ -412,9 +437,9 @@ export function HomeServiceVoiceLanding() {
           <div className="mt-10 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 md:hidden">
             {[
               ["01", "Call comes in", "Customer calls your company. Any time. Any day."],
-              ["02", "Answered in 2 rings", "Your AI answers with your company name and a friendly, professional tone."],
-              ["03", "Job details captured", "Service needed, address, urgency level, and customer contact — all collected automatically."],
-              ["04", "Job booked or routed", "Either scheduled directly or an SMS with job details sent to your dispatcher instantly."],
+              ["02", "Answered in 2 rings", "We answer with your company name and a friendly, professional tone."],
+              ["03", "Job details captured", "Service needed, address, urgency level, and customer contact are captured on every call."],
+              ["04", "Job booked or routed", "Either scheduled directly or an instant notification with full job details sent to your dispatcher."],
               ["05", "You get notified", "Full call summary with customer name, address, job type, and urgency hits your phone in real time."],
             ].map(([n, t, d]) => (
               <div
@@ -430,7 +455,7 @@ export function HomeServiceVoiceLanding() {
         </RevealSection>
       </section>
 
-      {/* SECTION 5 — Asymmetric grid + tags */}
+      {/* SECTION 5 - Asymmetric grid + tags */}
       <section className="bg-[var(--medspa-bg-secondary)] px-5 py-20 md:px-10 md:py-28 lg:px-16">
         <RevealSection className="mx-auto grid max-w-6xl grid-cols-1 gap-12 lg:grid-cols-5 lg:gap-16">
           <div className="lg:col-span-2">
@@ -442,7 +467,7 @@ export function HomeServiceVoiceLanding() {
               trade.
             </h2>
             <p className="medspa-syne mt-8 max-w-md text-base leading-relaxed text-[var(--medspa-text-secondary)]">
-              Before going live, we train the AI on your service area, job types, pricing ranges, and availability. It speaks your company&apos;s language from day one.
+              Before going live, we set up your service area, job types, pricing ranges, and availability. It sounds like your company from day one.
             </p>
           </div>
           <div className="flex flex-wrap content-start gap-3 lg:col-span-3">
@@ -466,68 +491,75 @@ export function HomeServiceVoiceLanding() {
         </RevealSection>
       </section>
 
-      {/* SECTION 6 — Audio */}
+      {/* SECTION 6 - Audio */}
       <section className="bg-[var(--medspa-bg-primary)] px-5 py-20 md:px-10 md:py-28 lg:px-16">
         <RevealSection className="mx-auto max-w-3xl text-center">
           <h2 className="medspa-bebas text-[clamp(2rem,5vw,3rem)] leading-[1.1] tracking-wide">
             Hear it handle a real call.
           </h2>
           <p className="medspa-cormorant mx-auto mt-4 max-w-xl text-lg italic text-[var(--medspa-text-secondary)] md:text-xl">
-            A customer calls about an AC breakdown at 10:47 PM on a Tuesday in July. Listen to how your AI dispatcher handles it.
+            A customer calls about an AC breakdown at 10:47 PM on a Tuesday in July. Listen to how we handle it.
           </p>
           <div className="mt-12">
             <AudioDemoPlayer />
           </div>
           <p className="medspa-syne mt-10 text-[14px] text-[var(--medspa-text-secondary)]">
-            Sounds natural <span className="mx-2 text-[var(--medspa-accent-gold)]">✦</span> Handles objections{" "}
-            <span className="mx-2 text-[var(--medspa-accent-gold)]">✦</span> Books the job
+            Sounds natural <span className="mx-2 text-[var(--medspa-accent-gold)]">*</span> Handles objections{" "}
+            <span className="mx-2 text-[var(--medspa-accent-gold)]">*</span> Books the job
           </p>
           <Link
             href="/contact?topic=hvac-voice-demo"
             className="medspa-syne mt-8 inline-flex items-center justify-center rounded-sm border border-[var(--medspa-accent-gold)] px-8 py-3 text-sm font-semibold uppercase tracking-wider text-[var(--medspa-accent-gold)] transition-colors hover:bg-[var(--medspa-accent-gold)] hover:text-[var(--medspa-cta-text)]"
           >
-            Get a Demo Built for Your Company →
+            Get a Demo Built for Your Company ->
           </Link>
         </RevealSection>
       </section>
 
-      {/* SECTION 7 — ROI */}
+      {/* SECTION 7 - ROI */}
       <RoiSection />
 
-      {/* SECTION 8 — Pricing */}
+      {/* SECTION 8 - Pricing */}
       <section id="medspa-pricing" className="scroll-mt-24 bg-[var(--medspa-bg-primary)] px-5 py-20 md:px-10 md:py-28 lg:px-16">
         <RevealSection className="mx-auto max-w-6xl">
           <h2 className="medspa-bebas text-center text-[clamp(2rem,5vw,3rem)] leading-[1.1] tracking-wide">
             Simple pricing. Serious ROI.
           </h2>
           <p className="medspa-cormorant mt-4 text-center text-lg italic text-[var(--medspa-text-secondary)] md:text-xl">
-            Every plan includes setup, training, and a live demo before you pay.
+            If you miss just 1-2 jobs per week, this pays for itself.
+          </p>
+          <p className="medspa-syne mx-auto mt-5 max-w-3xl text-center text-xs font-medium uppercase tracking-[0.16em] text-[var(--medspa-text-secondary)] md:text-[11px]">
+            Works with your existing number | No new system to learn | We handle setup for you
           </p>
           <div className="mt-14 grid grid-cols-1 gap-8 md:grid-cols-3">
             {[
               {
                 name: "Starter",
                 price: "$497 setup + $397/mo",
-                sub: "Single location · Up to 300 calls/mo",
+                sub: "Single location | Up to 300 calls/mo",
+                usage: "$0.75 per extra call after 300 calls per month.",
                 feats: [
                   "24/7 call answering",
-                  "Captures job type, address & customer details",
-                  "SMS job summary to your dispatcher instantly",
-                  "Handles your top 10 FAQs",
-                  "1-week setup",
+                  "Job detail capture (name, number, job type, urgency)",
+                  "Instant notification with full job details",
+                  "FAQ handling (up to 10 FAQs)",
+                  "Basic call log (Google Sheets)",
                 ],
                 popular: false,
               },
               {
                 name: "Growth",
                 price: "$997 setup + $597/mo",
-                sub: "Single location · Up to 800 calls/mo",
+                sub: "Single location | Up to 800 calls/mo",
+                usage: "$0.60 per extra call after 800 calls per month.",
                 feats: [
-                  "Everything in Starter, plus:",
+                  "Everything in Starter",
+                  "Post-call summary dashboard (see every call, every lead, every missed opportunity)",
+                  "Missed call auto-recovery SMS (automatically follow up with missed callers)",
                   "Direct calendar/scheduling integration",
-                  "Custom voice and tone matching",
-                  "CRM lead capture",
-                  "After-hours emergency routing rules",
+                  "CRM lead capture (HubSpot/Jobber)",
+                  "Emergency routing (urgent vs. standard)",
+                  "Up to 3 branded voice styles",
                   "Priority support",
                 ],
                 popular: true,
@@ -535,14 +567,17 @@ export function HomeServiceVoiceLanding() {
               {
                 name: "Pro",
                 price: "$1,997 setup + $997/mo",
-                sub: "Multi-location · Unlimited calls",
+                sub: "Multi-location | Up to 2,000 calls/mo",
+                usage: "$0.50 per extra call after 2,000 calls per month.",
                 feats: [
-                  "Everything in Growth, plus:",
+                  "Everything in Growth",
                   "Multi-location / multi-crew management",
-                  "Outbound callback to missed calls",
+                  "Outbound callback to missed callers",
                   "Full custom conversation design",
+                  "Advanced workflow sequences (Make.com)",
+                  "White-glove onboarding + monthly strategy call",
                   "Dedicated account manager",
-                  "Monthly performance review",
+                  "Priority support",
                 ],
                 popular: false,
               },
@@ -563,10 +598,14 @@ export function HomeServiceVoiceLanding() {
                 </h3>
                 <p className="medspa-syne mt-2 text-lg font-semibold text-[var(--medspa-accent-gold)]">{plan.price}</p>
                 <p className="medspa-syne mt-1 text-sm text-[var(--medspa-text-secondary)]">{plan.sub}</p>
+                <p className="medspa-syne mt-1 text-xs uppercase tracking-wide text-[var(--medspa-text-secondary)]">
+                  After included call limit
+                  <UsageInfo text={plan.usage} />
+                </p>
                 <ul className="medspa-syne mt-6 flex flex-col gap-2.5 text-sm leading-[1.6] text-[var(--medspa-text-secondary)]">
                   {plan.feats.map((f) => (
                     <li key={f} className="flex gap-2">
-                      <span className="text-[var(--medspa-accent-gold)]">✦</span>
+                      <span className="text-[var(--medspa-accent-gold)]">*</span>
                       {f}
                     </li>
                   ))}
@@ -577,12 +616,12 @@ export function HomeServiceVoiceLanding() {
         </RevealSection>
         <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mt-12 w-screen">
           <div className="medspa-bebas bg-[var(--medspa-accent-gold)] py-5 text-center text-lg uppercase tracking-wide text-[var(--medspa-cta-text)] md:text-xl">
-            Free first month — limited to next 10 contractors to sign up
+            Free first month - limited to next 10 contractors to sign up
           </div>
         </div>
       </section>
 
-      {/* SECTION 9 — Objections */}
+      {/* SECTION 9 - Objections */}
       <section className="bg-[var(--medspa-bg-secondary)] px-5 py-20 md:px-10 md:py-28 lg:px-16">
         <RevealSection className="mx-auto max-w-5xl">
           <h2 className="medspa-bebas text-center text-[clamp(2rem,5vw,3rem)] leading-[1.1] tracking-wide">
@@ -594,16 +633,16 @@ export function HomeServiceVoiceLanding() {
           <div className="mt-14 flex flex-col gap-0">
             {[
               {
-                q: "Will customers know they're talking to AI?",
-                a: "Some will, most won't. More importantly — they get answered immediately instead of hitting voicemail and calling your competitor. That's what wins the job.",
+                q: "Will customers know they're talking to a call answering assistant?",
+                a: "Some will, most won't. More importantly - they get answered immediately instead of hitting voicemail and calling your competitor. That's what wins the job.",
               },
               {
-                q: "What if the AI can't answer a complex question?",
-                a: "It only handles what you've approved. Anything outside its knowledge — it takes the customer's details and tells them your team will call back within minutes. No lost leads.",
+                q: "What if a caller asks a complex question?",
+                a: "It handles only what you approve. If something is outside scope, we capture the customer details and your team calls back within minutes. No lost leads.",
               },
               {
                 q: "We already have an office person who answers calls.",
-                a: "Most of our clients do too. This handles overflow when they're busy, after-hours calls, weekend emergencies, and lunch breaks. Your office person focuses on running operations — not stuck on hold.",
+                a: "Most of our clients do too. This handles overflow when they're busy, after-hours calls, weekend emergencies, and lunch breaks. Your office person focuses on running operations - not stuck on hold.",
               },
               {
                 q: "How long does setup take?",
@@ -615,7 +654,7 @@ export function HomeServiceVoiceLanding() {
               },
               {
                 q: "How does it handle emergency calls?",
-                a: "You define what counts as an emergency in setup. Those calls get flagged immediately — SMS alert to your phone with full details so you can call back within minutes. No emergency ever sits in a voicemail.",
+                a: "You define what counts as an emergency in setup. Those calls get flagged immediately - instant alert to your phone with full details so you can call back within minutes. No emergency sits in voicemail.",
               },
             ].map((row, i) => (
               <div
@@ -628,7 +667,7 @@ export function HomeServiceVoiceLanding() {
                   {row.q}
                 </div>
                 <div className="medspa-syne pl-0 text-base leading-[1.65] text-[var(--medspa-text-secondary)] md:pl-10">
-                  → {row.a}
+                  -> {row.a}
                 </div>
               </div>
             ))}
@@ -636,7 +675,7 @@ export function HomeServiceVoiceLanding() {
         </RevealSection>
       </section>
 
-      {/* SECTION 10 — Final CTA */}
+      {/* SECTION 10 - Final CTA */}
       <section className="flex min-h-[100dvh] flex-col items-center justify-center bg-[var(--medspa-accent-gold)] px-5 py-24 text-center md:px-10">
         <RevealSection className="max-w-3xl">
           <h2 className="medspa-bebas text-[clamp(2.5rem,8vw,5rem)] leading-[1.08] tracking-wide text-[var(--medspa-cta-text)]">
@@ -652,10 +691,10 @@ export function HomeServiceVoiceLanding() {
             href="/contact?topic=medspa-voice-demo"
             className="medspa-cta-shimmer medspa-syne mt-10 inline-flex items-center justify-center rounded-sm bg-[var(--medspa-bg-primary)] px-10 py-4 text-sm font-semibold uppercase tracking-wider text-white transition-transform hover:scale-[1.02]"
           >
-            Book your free demo call →
+            Book your free demo call ->
           </Link>
           <p className="medspa-syne mt-6 text-sm text-[var(--medspa-cta-text)]/70">
-            10-minute call. No slides. No pitch deck. Just the AI doing its job.
+            10-minute call. No slides. No pitch deck. Just call answering that does the job.
           </p>
         </RevealSection>
       </section>
@@ -665,7 +704,7 @@ export function HomeServiceVoiceLanding() {
 
 function RoiSection() {
   const [missed, setMissed] = useState(12)
-  const [value, setValue] = useState(450)
+  const [value, setValue] = useState(300)
   const monthly = Math.round(missed * 4.3 * value)
   const { ref, visible } = useReveal<HTMLElement>()
 
