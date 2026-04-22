@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { Search, MessageCircle, ArrowRight, Shield } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { WhatsAppDemoDialog } from "@/components/whatsapp/whatsapp-demo-dialog"
 
 export function CTASection() {
   return (
@@ -49,17 +50,21 @@ export function CTASection() {
                 </Link>
               </Button>
 
-              <Button
-                asChild
-                variant="outline"
-                size="lg"
-                className="h-14 px-8 rounded-xl font-semibold text-base border-border/60 hover:border-primary/30 transition-all duration-200"
-              >
-                <Link href="https://wa.me/923314664279" target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="mr-2 h-5 w-5" />
-                  Message Us on WhatsApp
-                </Link>
-              </Button>
+              <WhatsAppDemoDialog
+                contextLabel="Aesthetic clinics CTA section"
+                title="Open Live WhatsApp Flow"
+                description="You are about to open our live WhatsApp assistant demo in a new tab."
+                trigger={
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="h-14 px-8 rounded-xl font-semibold text-base border-border/60 hover:border-primary/30 transition-all duration-200"
+                  >
+                    <MessageCircle className="mr-2 h-5 w-5" />
+                    Message Us on WhatsApp
+                  </Button>
+                }
+              />
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">

@@ -4,6 +4,7 @@ import type React from "react"
 import { usePathname } from "next/navigation"
 import Header from "@/components/Header"
 import { Footer } from "@/components/Footer"
+import { FloatingWhatsAppWidget } from "@/components/whatsapp/floating-whatsapp-widget"
 
 interface ConditionalLayoutProps {
     children: React.ReactNode
@@ -26,6 +27,7 @@ export function ConditionalLayout({ children }: ConditionalLayoutProps) {
                 {children}
             </main>
             <Footer />
+            <FloatingWhatsAppWidget />
         </>
     )
 }
