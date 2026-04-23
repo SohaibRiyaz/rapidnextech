@@ -388,6 +388,16 @@ export const industrySolutions = [
         description: "AI-powered appointment conversion & automation for aesthetic clinics.",
     },
     {
+        title: "AI Call Answering (HVAC & Plumbing)",
+        href: "/solutions/never-miss-a-call",
+        description: "24/7 AI dispatcher for HVAC, plumbing, and electrical contractors.",
+    },
+    {
+        title: "AI Voice Receptionist (Med Spas)",
+        href: "/solutions/never-miss-a-medspa-call",
+        description: "24/7 call answering and consultation booking for US med spas.",
+    },
+    {
         title: "Real Estate Agencies",
         href: "/solutions/real-estate",
         description: "Automated property inquiry qualification and viewing bookings.",
@@ -396,15 +406,5 @@ export const industrySolutions = [
         title: "Diet & Nutrition",
         href: "/solutions/diet-nutrition",
         description: "Automate diet inquiries, consultations, and plan signups.",
-    },
-    {
-        title: "AI Voice Receptionist (Med Spas)",
-        href: "/solutions/never-miss-a-medspa-call",
-        description: "24/7 call answering and consultation booking for US med spas.",
-    },
-    {
-        title: "AI Call Answering (HVAC & Plumbing)",
-        href: "/solutions/never-miss-a-call",
-        description: "24/7 AI dispatcher for HVAC, plumbing, and electrical contractors.",
     },
 ]

@@ -1,7 +1,7 @@
 ﻿"use client"
 
 import Link from "next/link"
-import { ArrowRight, Search } from "lucide-react"
+import { Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { WhatsAppDemoDialog } from "@/components/whatsapp/whatsapp-demo-dialog"
 
@@ -52,12 +52,14 @@ export function AestheticHero() {
           </Button>
           <WhatsAppDemoDialog
             contextLabel="Aesthetic clinics hero section"
-            title="Try the Live WhatsApp Demo"
-            description="You are being redirected to our live WhatsApp demo assistant so you can test the exact conversation flow."
+            title="Experience how your clinic could respond instantly"
+            description="This demo shows how a real patient inquiry is handled - from first message to booking."
+            helperText="Takes ~2 minutes. No signup needed."
+            continueLabel="Start the Live Demo →"
+            showExternalIcon={false}
             trigger={
               <Button variant="outline" size="lg" className="h-12 px-8 text-base font-semibold rounded-xl border-border hover:bg-muted/50 transition-all duration-200">
-                Try a Live WhatsApp Flow
-                <ArrowRight className="ml-2 h-4 w-4" />
+                See It Handle a Real Inquiry →
               </Button>
             }
           />

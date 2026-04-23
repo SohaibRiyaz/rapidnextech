@@ -10,7 +10,15 @@ export async function POST(req: Request) {
             console.error('RESEND_API_KEY is missing');
             return NextResponse.json({ error: 'Mail service unconfigured' }, { status: 500 });
         }
-        const { name, email, message } = await req.json();
+        const {
+            name,
+            email,
+            message,
+            phone,
+            inquiryType,
+            preferredCallTime,
+            bookingSource,
+        } = await req.json();
 
         // Basic server-side validation
         if (!name || !email || !message) {
@@ -25,11 +33,15 @@ export async function POST(req: Request) {
             from: 'RapidNexTech <notifications@rapidnextech.com>', // Matches working Loveable pattern
             to: ['sohaib@rapidnextech.com'], // Sent to confirmed working inbox
             replyTo: email, // Allow replying directly to the user
-            subject: `New Lead: ${name} via Website`,
+            subject: `${inquiryType ? `[${inquiryType}] ` : ""}New Lead: ${name} via Website`,
             html: `
         <h2>New Contact Form Submission</h2>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
+        ${phone ? `<p><strong>Phone / WhatsApp:</strong> ${phone}</p>` : ""}
+        ${inquiryType ? `<p><strong>Inquiry Type:</strong> ${inquiryType}</p>` : ""}
+        ${preferredCallTime ? `<p><strong>Preferred Call Time:</strong> ${preferredCallTime}</p>` : ""}
+        ${bookingSource ? `<p><strong>Booking Source:</strong> ${bookingSource}</p>` : ""}
         <p><strong>Message:</strong></p>
         <blockquote style="background: #f9f9f9; padding: 10px; border-left: 5px solid #ccc;">
           ${message.replace(/\n/g, '<br>')}

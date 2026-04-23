@@ -39,16 +39,21 @@ export function FloatingWhatsAppWidget() {
             <X className="h-4 w-4" />
           </button>
           <p className="pr-5 text-xs font-semibold text-foreground">
-            See the live WhatsApp demo in one click
+            See how a patient inquiry gets handled instantly
           </p>
           <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
-            Tap the button, then send the first pre-filled message to start the demo flow.
+            Try the live WhatsApp demo (2 min) - no signup
           </p>
         </div>
       )}
 
       <WhatsAppDemoDialog
         contextLabel="Website floating widget"
+        title="Experience how your clinic could respond instantly"
+        description="This demo shows how a real patient inquiry is handled - from first message to booking."
+        helperText="Takes ~2 minutes. No signup needed."
+        continueLabel="Start the Live Demo →"
+        showExternalIcon={false}
         trigger={
           <Button
             type="button"

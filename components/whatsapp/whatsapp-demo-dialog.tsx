@@ -21,6 +21,8 @@ interface WhatsAppDemoDialogProps {
   title?: string
   description?: string
   continueLabel?: string
+  helperText?: string
+  showExternalIcon?: boolean
 }
 
 export function WhatsAppDemoDialog({
@@ -29,6 +31,8 @@ export function WhatsAppDemoDialog({
   title = "Open Live WhatsApp Demo",
   description = "You are about to open our live WhatsApp demo assistant in a new tab.",
   continueLabel = "Continue to WhatsApp",
+  helperText = "A first message is pre-filled for you. Send it to start the live demo flow instantly.",
+  showExternalIcon = true,
 }: WhatsAppDemoDialogProps) {
   const [open, setOpen] = useState(false)
 
@@ -52,9 +56,7 @@ export function WhatsAppDemoDialog({
             <MessageCircle className="h-4 w-4 text-primary" />
             WhatsApp demo number: {WHATSAPP_DEMO_PHONE_DISPLAY}
           </p>
-          <p className="mt-2 text-xs text-muted-foreground">
-            A first message is pre-filled for you. Send it to start the live demo flow instantly.
-          </p>
+          <p className="mt-2 text-xs text-muted-foreground">{helperText}</p>
         </div>
 
         <DialogFooter>
@@ -63,7 +65,7 @@ export function WhatsAppDemoDialog({
           </Button>
           <Button type="button" onClick={handleContinue}>
             {continueLabel}
-            <ExternalLink className="ml-2 h-4 w-4" />
+            {showExternalIcon ? <ExternalLink className="ml-2 h-4 w-4" /> : null}
           </Button>
         </DialogFooter>
       </DialogContent>

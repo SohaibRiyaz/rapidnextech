@@ -88,7 +88,7 @@ export function HeaderNav() {
                             Solutions
                         </NavigationMenuTrigger>
                         <NavigationMenuContent>
-                            <div className="w-[420px] p-6 bg-background/95 backdrop-blur-xl rounded-2xl border border-border shadow-2xl">
+                            <div className="w-[420px] max-h-[calc(100vh-8rem)] overflow-y-auto p-6 bg-background/95 backdrop-blur-xl rounded-2xl border border-border shadow-2xl overscroll-contain">
                                 <div className="mb-4">
                                     <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                                         Industry Solutions
