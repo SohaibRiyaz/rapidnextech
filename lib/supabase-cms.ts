@@ -194,8 +194,26 @@ export class BlogCMS {
       .eq("slug", slug)
       .eq("is_published", true)
       .single()
-    if (error) throw error
-    return data
+    if (!error && data) {
+      return data
+    }
+
+    if (error && error.code !== "PGRST116") {
+      throw error
+    }
+
+    // Fallback: support normalized lookups when legacy slugs in DB were saved with inconsistent formatting.
+    const { data: allPosts, error: allError } = await supabase
+      .from("blog_posts")
+      .select("*")
+      .eq("is_published", true)
+
+    if (allError) throw allError
+    if (!allPosts || allPosts.length === 0) return null
+
+    const normalizedTarget = slugify(slug)
+    const match = allPosts.find((post) => slugify(post.slug || post.title) === normalizedTarget)
+    return match || null
   })
 
   static getRelatedBlogPosts = cache(async (currentPostId: number, limit: number = 3): Promise<any[]> => {

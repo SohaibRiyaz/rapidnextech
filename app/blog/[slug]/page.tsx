@@ -19,7 +19,7 @@ export const dynamicParams = true // Allow visiting newly created posts without 
 export async function generateStaticParams() {
   const posts = await BlogCMS.getPublishedBlogPosts()
   return posts.map((post) => ({
-    slug: post.slug || slugify(post.title),
+    slug: slugify(post.slug || post.title),
   }))
 }
 

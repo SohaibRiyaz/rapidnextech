@@ -6,7 +6,10 @@ import { unstable_noStore } from "next/cache"
 
 function blogPostPath(post: { slug?: string | null; title?: string }): string | null {
   const s = post.slug?.trim()
-  if (s) return s
+  if (s) {
+    const normalized = slugify(s)
+    if (normalized) return normalized
+  }
   const t = post.title?.trim()
   if (!t) return null
   return slugify(t)
@@ -14,7 +17,10 @@ function blogPostPath(post: { slug?: string | null; title?: string }): string | 
 
 function caseStudyPath(project: { slug?: string | null; title?: string }): string | null {
   const s = project.slug?.trim()
-  if (s) return s
+  if (s) {
+    const normalized = slugify(s)
+    if (normalized) return normalized
+  }
   const t = project.title?.trim()
   if (!t) return null
   return slugify(t)
