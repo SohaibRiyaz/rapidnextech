@@ -33,10 +33,36 @@ export const metadata: Metadata = {
   },
 }
 
-export default function AestheticClinicsPage() {
+interface AestheticClinicsPageProps {
+  searchParams?: {
+    [key: string]: string | string[] | undefined
+  }
+}
+
+const isTruthyQueryValue = (value: string | string[] | undefined) => {
+  if (value === undefined) {
+    return false
+  }
+
+  const firstValue = Array.isArray(value) ? value[0] : value
+
+  if (firstValue === "") {
+    return true
+  }
+
+  const normalized = firstValue.toLowerCase()
+  return normalized === "1" || normalized === "true" || normalized === "yes" || normalized === "on"
+}
+
+export default function AestheticClinicsPage({ searchParams }: AestheticClinicsPageProps) {
+  const shouldAutoOpenDemoPopup =
+    isTruthyQueryValue(searchParams?.["open-popup-automatically"]) ||
+    isTruthyQueryValue(searchParams?.openPopup) ||
+    isTruthyQueryValue(searchParams?.demo)
+
   return (
     <main className="bg-background text-foreground theme-transition">
-      <AestheticHero />
+      <AestheticHero autoOpenDemoPopup={shouldAutoOpenDemoPopup} />
       <ProblemSection />
       <SolutionSection />
       <HowItWorksSection />

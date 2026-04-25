@@ -2,7 +2,7 @@
 
 import type React from "react"
 import { ExternalLink, MessageCircle } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -23,6 +23,7 @@ interface WhatsAppDemoDialogProps {
   continueLabel?: string
   helperText?: string
   showExternalIcon?: boolean
+  autoOpen?: boolean
 }
 
 export function WhatsAppDemoDialog({
@@ -33,8 +34,15 @@ export function WhatsAppDemoDialog({
   continueLabel = "Continue to WhatsApp",
   helperText = "A first message is pre-filled for you. Send it to start the live demo flow instantly.",
   showExternalIcon = true,
+  autoOpen = false,
 }: WhatsAppDemoDialogProps) {
   const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    if (autoOpen) {
+      setOpen(true)
+    }
+  }, [autoOpen])
 
   const handleContinue = () => {
     const targetUrl = getWhatsAppDemoUrl(contextLabel)

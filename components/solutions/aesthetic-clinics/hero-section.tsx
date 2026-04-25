@@ -5,7 +5,11 @@ import { Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { WhatsAppDemoDialog } from "@/components/whatsapp/whatsapp-demo-dialog"
 
-export function AestheticHero() {
+interface AestheticHeroProps {
+  autoOpenDemoPopup?: boolean
+}
+
+export function AestheticHero({ autoOpenDemoPopup = false }: AestheticHeroProps) {
   return (
     <section className="relative min-h-[calc(100dvh-4rem)] flex items-center justify-center overflow-hidden pt-16 md:pt-20 pb-8 md:pb-12 theme-transition">
       {/* Theme glow */}
@@ -51,6 +55,7 @@ export function AestheticHero() {
             </Link>
           </Button>
           <WhatsAppDemoDialog
+            autoOpen={autoOpenDemoPopup}
             contextLabel="Aesthetic clinics hero section"
             title="Experience how your clinic could respond instantly"
             description="This demo shows how a real patient inquiry is handled - from first message to booking."
