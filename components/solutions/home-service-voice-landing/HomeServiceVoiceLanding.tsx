@@ -5,6 +5,7 @@ import type { ReactNode } from "react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { Pause, Play } from "lucide-react"
+import { VoiceDemoEmbed } from "@/components/solutions/shared/voice-demo-embed"
 
 const MARQUEE_TEXT =
   "AC REPAIR CALLS ✦ EMERGENCY PLUMBING ✦ ELECTRICAL FAULTS ✦ AFTER-HOURS JOBS ✦ WEEKEND EMERGENCIES ✦ PRICING QUESTIONS ✦ BOOKING REQUESTS ✦ DISPATCH COORDINATION ✦ NEW CUSTOMER CALLS ✦ QUOTE REQUESTS ✦ "
@@ -291,12 +292,15 @@ export function HomeServiceVoiceLanding() {
                 transition={{ delay: 0.85, duration: 0.45 }}
                 className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row md:mt-12 md:gap-4 lg:mt-14"
               >
-                <Link
-                  href="/contact?topic=hvac-voice-demo"
+                <button
+                  type="button"
+                  onClick={() => {
+                    document.getElementById("live-demo-embed")?.scrollIntoView({ behavior: "smooth", block: "start" })
+                  }}
                   className="medspa-cta-shimmer medspa-syne inline-flex min-h-[44px] min-w-[200px] items-center justify-center rounded-sm bg-[var(--medspa-cta-bg)] px-6 py-2.5 text-xs font-semibold uppercase tracking-wider text-[var(--medspa-cta-text)] transition-transform hover:scale-[1.02] md:min-w-[220px] md:px-8 md:py-3 md:text-sm"
                 >
                   Hear It Answer a Call ->
-                </Link>
+                </button>
                 <button
                   type="button"
                   onClick={scrollToPricing}
@@ -492,16 +496,24 @@ export function HomeServiceVoiceLanding() {
       </section>
 
       {/* SECTION 6 - Audio */}
-      <section className="bg-[var(--medspa-bg-primary)] px-5 py-20 md:px-10 md:py-28 lg:px-16">
+      <section id="live-demo" className="scroll-mt-28 bg-[var(--medspa-bg-primary)] px-5 py-20 md:px-10 md:py-28 lg:px-16">
         <RevealSection className="mx-auto max-w-3xl text-center">
+          <p className="medspa-syne text-[10px] font-semibold uppercase tracking-[0.28em] text-[var(--medspa-text-secondary)]">
+            Live testing stage
+          </p>
           <h2 className="medspa-bebas text-[clamp(2rem,5vw,3rem)] leading-[1.1] tracking-wide">
-            Hear it handle a real call.
+            Watch it answer a real call.
           </h2>
           <p className="medspa-cormorant mx-auto mt-4 max-w-xl text-lg italic text-[var(--medspa-text-secondary)] md:text-xl">
-            A customer calls about an AC breakdown at 10:47 PM on a Tuesday in July. Listen to how we handle it.
+            Speak to the assistant live, or just watch how it handles a real customer question in real time.
           </p>
           <div className="mt-12">
-            <AudioDemoPlayer />
+            <VoiceDemoEmbed
+              pageKey="dental"
+              title="Live home-service voice demo"
+              description="Try the assistant directly in this page. Ask about service availability, emergencies, or pricing and see how it responds in real time."
+              targetId="live-demo-embed"
+            />
           </div>
           <p className="medspa-syne mt-10 text-[14px] text-[var(--medspa-text-secondary)]">
             Sounds natural <span className="mx-2 text-[var(--medspa-accent-gold)]">*</span> Handles objections{" "}
