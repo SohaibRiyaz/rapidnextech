@@ -55,7 +55,7 @@ function useReveal<T extends HTMLElement>() {
 }
 
 function useCountUp(target: number, enabled: boolean, duration = 2200) {
-  const [v, setV] = useState(0)
+  const [v, setV] = useState(target)
   useEffect(() => {
     if (!enabled) return
     let raf = 0
@@ -299,7 +299,7 @@ export function HomeServiceVoiceLanding() {
                   }}
                   className="medspa-cta-shimmer medspa-syne inline-flex min-h-[44px] min-w-[200px] items-center justify-center rounded-sm bg-[var(--medspa-cta-bg)] px-6 py-2.5 text-xs font-semibold uppercase tracking-wider text-[var(--medspa-cta-text)] transition-transform hover:scale-[1.02] md:min-w-[220px] md:px-8 md:py-3 md:text-sm"
                 >
-                  Hear It Answer a Call ->
+                  Hear It Answer a Call -&gt;
                 </button>
                 <button
                   type="button"
@@ -523,7 +523,7 @@ export function HomeServiceVoiceLanding() {
             href="/contact?topic=hvac-voice-demo"
             className="medspa-syne mt-8 inline-flex items-center justify-center rounded-sm border border-[var(--medspa-accent-gold)] px-8 py-3 text-sm font-semibold uppercase tracking-wider text-[var(--medspa-accent-gold)] transition-colors hover:bg-[var(--medspa-accent-gold)] hover:text-[var(--medspa-cta-text)]"
           >
-            Get a Demo Built for Your Company ->
+            Get a Demo Built for Your Company -&gt;
           </Link>
         </RevealSection>
       </section>
@@ -679,7 +679,7 @@ export function HomeServiceVoiceLanding() {
                   {row.q}
                 </div>
                 <div className="medspa-syne pl-0 text-base leading-[1.65] text-[var(--medspa-text-secondary)] md:pl-10">
-                  -> {row.a}
+                  -&gt; {row.a}
                 </div>
               </div>
             ))}
@@ -703,7 +703,7 @@ export function HomeServiceVoiceLanding() {
             href="/contact?topic=medspa-voice-demo"
             className="medspa-cta-shimmer medspa-syne mt-10 inline-flex items-center justify-center rounded-sm bg-[var(--medspa-bg-primary)] px-10 py-4 text-sm font-semibold uppercase tracking-wider text-white transition-transform hover:scale-[1.02]"
           >
-            Book your free demo call ->
+            Book your free demo call -&gt;
           </Link>
           <p className="medspa-syne mt-6 text-sm text-[var(--medspa-cta-text)]/70">
             10-minute call. No slides. No pitch deck. Just call answering that does the job.

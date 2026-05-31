@@ -3,7 +3,7 @@ import Link from "next/link"
 import { LegalLayout } from "@/components/legal/legal-layout"
 
 export const metadata: Metadata = {
-  title: "Privacy Policy - RapidNexTech",
+  title: "Privacy Policy",
   description:
     "Learn how RapidNexTech collects, uses, and protects personal information on rapidnextech.com.",
   alternates: { canonical: "https://rapidnextech.com/privacy-policy" },
@@ -149,8 +149,9 @@ export default function PrivacyPolicyPage() {
           <strong>RapidNexTech</strong>
           <div>Email: <a href="mailto:contact@rapidnextech.com">contact@rapidnextech.com</a></div>
           <div>Website: https://rapidnextech.com</div>
-          <div>Address: 38 Scotia Road, ST6 4EP, UK</div>
-          <div>Phone: +44 7311 133668</div>
+          <div>UK address: 38 Scotia Road, Stoke-on-Trent, ST6 4EP, UK</div>
+          <div>US sales phone: +1 214 896 4186</div>
+          <div>UK phone: +44 7311 133668</div>
         </div>
       </section>
     </LegalLayout>

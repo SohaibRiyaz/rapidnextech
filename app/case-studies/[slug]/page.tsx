@@ -4,6 +4,8 @@ import { PortfolioCMS } from "@/lib/supabase-cms"
 import ProjectDetailClient from "./ProjectDetailClient"
 import Script from "next/script"
 import { slugify } from "@/lib/utils"
+import { absoluteSiteUrl } from "@/lib/site-url"
+import { breadcrumbSchema, jsonLd } from "@/lib/seo"
 
 // Generate static params for all published projects
 export const dynamicParams = true
@@ -40,11 +42,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
   const seoDescription = buildMetaDescription(baseDescription, project.title)
 
-  const url = `https://rapidnextech.com/case-studies/${params.slug}`
-  const image = project.images?.[0]?.url || "https://rapidnextech.com/og-image.jpg"
+  const url = absoluteSiteUrl(`/case-studies/${params.slug}`)
+  const image = project.images?.[0]?.url || absoluteSiteUrl("/og-image.jpg")
 
   return {
-    title: seoTitle,
+    title: {
+      absolute: seoTitle,
+    },
     description: seoDescription,
     openGraph: {
       title: seoTitle,
@@ -66,8 +70,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 export default async function ProjectDetailPage({ params }: { params: { slug: string } }) {
   const data = await PortfolioCMS.getProjectBySlug(params.slug)
   if (!data) return notFound()
-  const url = `https://rapidnextech.com/case-studies/${params.slug}`
-  const jsonLd = {
+  const url = absoluteSiteUrl(`/case-studies/${params.slug}`)
+  const caseStudySchema = {
     "@context": "https://schema.org",
     "@type": "CaseStudy",
     name: `${data.title} Case Study`,
@@ -77,14 +81,19 @@ export default async function ProjectDetailPage({ params }: { params: { slug: st
     publisher: {
       "@type": "Organization",
       name: "RapidNexTech",
-      logo: { "@type": "ImageObject", url: "https://rapidnextech.com/logo.png" },
+      logo: { "@type": "ImageObject", url: absoluteSiteUrl("/logo.png") },
     },
   }
+  const breadcrumb = breadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "Case Studies", path: "/case-studies" },
+    { name: data.title, path: `/case-studies/${params.slug}` },
+  ])
   return (
     <>
       <ProjectDetailClient project={data} />
       <Script id="case-study-jsonld" type="application/ld+json" strategy="afterInteractive"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        dangerouslySetInnerHTML={jsonLd([caseStudySchema, breadcrumb])} />
     </>
   )
 }

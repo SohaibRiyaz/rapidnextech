@@ -45,7 +45,7 @@ function AccentMesh() {
 }
 
 const Counter = ({ value, suffix }: { value: number; suffix: string }) => {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(value)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true })
 

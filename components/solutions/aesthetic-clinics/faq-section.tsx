@@ -7,7 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 
-const faqs = [
+export const aestheticClinicFaqs = [
   {
     question: "Does this replace my booking system or calendar?",
     answer:
@@ -79,7 +79,7 @@ export function FAQSection() {
 
         {/* Accordion */}
         <Accordion type="single" collapsible className="w-full space-y-3">
-          {faqs.map((faq, i) => (
+          {aestheticClinicFaqs.map((faq, i) => (
             <AccordionItem
               key={i}
               value={`faq-${i}`}

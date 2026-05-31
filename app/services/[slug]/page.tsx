@@ -3,6 +3,8 @@ import { ServiceHero } from "@/components/services/service-hero"
 import { BlockRenderer } from "@/components/services/block-renderer"
 import { notFound } from "next/navigation"
 import { Metadata } from "next"
+import { absoluteSiteUrl } from "@/lib/site-url"
+import { breadcrumbSchema, faqSchema, jsonLd, serviceSchema } from "@/lib/seo"
 
 // 1. Static Generation of ALL 9 Service Pages
 export async function generateStaticParams() {
@@ -15,10 +17,27 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
     const service = servicesData[params.slug]
     if (!service) return {}
+    const canonical = absoluteSiteUrl(`/services/${params.slug}`)
 
     return {
-        title: `${service.title} | RapidNexTech Services`,
+        title: {
+            absolute: `${service.title} | RapidNexTech Services`,
+        },
         description: service.shortDescription,
+        alternates: { canonical },
+        openGraph: {
+            title: `${service.title} | RapidNexTech Services`,
+            description: service.shortDescription,
+            url: canonical,
+            type: "website",
+            images: [{ url: "/og-image.png", width: 1200, height: 630, alt: `${service.title} by RapidNexTech` }],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: `${service.title} | RapidNexTech Services`,
+            description: service.shortDescription,
+            images: ["/og-image.png"],
+        },
     }
 }
 
@@ -31,9 +50,28 @@ export default function ServicePage({ params }: { params: { slug: string } }) {
     }
 
     const Icon = service.icon
+    const faqBlock = service.contentBlocks.find((block) => block.type === "faq")
+    const faqItems = faqBlock?.type === "faq" ? faqBlock.data.items : []
+    const pagePath = `/services/${params.slug}`
 
     return (
         <main className="min-h-screen bg-background text-foreground">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={jsonLd([
+                    breadcrumbSchema([
+                        { name: "Home", path: "/" },
+                        { name: "Services", path: "/services" },
+                        { name: service.title, path: pagePath },
+                    ]),
+                    serviceSchema({
+                        name: service.title,
+                        description: service.shortDescription,
+                        path: pagePath,
+                    }),
+                    ...(faqItems.length ? [faqSchema(faqItems)] : []),
+                ])}
+            />
             {/* Hero Section */}
             <ServiceHero
                 title={service.title}

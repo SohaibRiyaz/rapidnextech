@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 
 // Update the metadata
 export const metadata: Metadata = {
-  title: "Page Not Found | RapidNexTech",
+  title: "Page Not Found",
   description: "The page you are looking for does not exist.",
 }
 

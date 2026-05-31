@@ -1,43 +1,53 @@
 import type { Metadata } from "next"
 import Script from "next/script"
 import AboutClient from "@/components/about/AboutClient"
+import { breadcrumbSchema, jsonLd } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "About Us — Our Mission, Process & Team",
+  title: "About RapidNexTech - AI Automation & Software Engineering Team",
   description:
-    "RapidNexTech is a remote-first software engineering team specializing in custom SaaS, AI automation, and scalable web & mobile apps. Learn how we work.",
+    "RapidNexTech is a remote-first software engineering team specializing in custom SaaS, AI automation, and scalable web and mobile apps for businesses in the GCC, US, and UK.",
   alternates: { canonical: "https://rapidnextech.com/about" },
   openGraph: {
-    title: "About RapidNexTech — Engineering That Delivers",
+    title: "About RapidNexTech - AI Automation & Software Engineering Team",
     description:
-      "A remote-first team building custom software, SaaS platforms, and AI-powered automation for businesses worldwide.",
+      "A remote-first team building custom software, SaaS platforms, and AI-powered automation for businesses in the GCC, US, UK, and global markets.",
     url: "https://rapidnextech.com/about",
     type: "website",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "About RapidNexTech" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "About RapidNexTech — Engineering That Delivers",
+    title: "About RapidNexTech - AI Automation & Software Engineering Team",
     description:
-      "A remote-first team building custom software, SaaS platforms, and AI-powered automation for businesses worldwide.",
+      "A remote-first team building custom software, SaaS platforms, and AI-powered automation for businesses in the GCC, US, UK, and global markets.",
     images: ["/og-image.png"],
   },
 }
 
 export default function AboutPage() {
-  const jsonLd = {
+  const aboutSchema = {
     "@context": "https://schema.org",
-    "@type": "WebPage",
+    "@type": "AboutPage",
     name: "About RapidNexTech",
     url: "https://rapidnextech.com/about",
     description:
-      "RapidNexTech is a modern software company specializing in web, mobile, and AI-driven solutions. Learn about our mission, process, and values that drive innovation and performance.",
+      "RapidNexTech is a remote-first software engineering company specializing in custom SaaS, AI automation, web applications, and mobile apps.",
+    breadcrumb: breadcrumbSchema([
+      { name: "Home", path: "/" },
+      { name: "About", path: "/about" },
+    ]),
   }
+
   return (
     <>
       <AboutClient />
-      <Script id="about-jsonld" type="application/ld+json" strategy="afterInteractive"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <Script
+        id="about-jsonld"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={jsonLd(aboutSchema)}
+      />
     </>
   )
 }

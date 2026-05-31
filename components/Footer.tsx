@@ -91,6 +91,21 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/solutions/never-miss-a-call" className="theme-text opacity-70 hover:opacity-100 hover:text-primary transition-colors text-sm">
+                  Home-Service Call Answering
+                </Link>
+              </li>
+              <li>
+                <Link href="/solutions/never-miss-a-medspa-call" className="theme-text opacity-70 hover:opacity-100 hover:text-primary transition-colors text-sm">
+                  Med Spa Voice Receptionist
+                </Link>
+              </li>
+              <li>
+                <Link href="/solutions/dental-clinics" className="theme-text opacity-70 hover:opacity-100 hover:text-primary transition-colors text-sm">
+                  Dental Clinics
+                </Link>
+              </li>
+              <li>
                 <Link href="/solutions/real-estate" className="theme-text opacity-70 hover:opacity-100 hover:text-primary transition-colors text-sm">
                   Real Estate Agencies
                 </Link>
@@ -138,14 +153,22 @@ export function Footer() {
               </li>
               <li>
                 <a
+                  href="tel:+12148964186"
+                  className="theme-text opacity-70 hover:opacity-100 hover:text-primary transition-colors text-sm flex items-center gap-2 whitespace-nowrap"
+                >
+                  US: +1 214 896 4186
+                </a>
+              </li>
+              <li>
+                <a
                   href="tel:+447311133668"
                   className="theme-text opacity-70 hover:opacity-100 hover:text-primary transition-colors text-sm flex items-center gap-2 whitespace-nowrap"
                 >
-                  +44 7311 133668
+                  UK: +44 7311 133668
                 </a>
               </li>
               <li className="theme-text opacity-70 text-sm leading-relaxed">
-                38 Scotia Road, ST6 4EP, UK
+                38 Scotia Road, Stoke-on-Trent, ST6 4EP, UK
               </li>
             </ul>
           </div>

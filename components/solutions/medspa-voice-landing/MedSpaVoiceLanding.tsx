@@ -55,7 +55,7 @@ function useReveal<T extends HTMLElement>() {
 }
 
 function useCountUp(target: number, enabled: boolean, duration = 2200) {
-  const [v, setV] = useState(0)
+  const [v, setV] = useState(target)
   useEffect(() => {
     if (!enabled) return
     let raf = 0

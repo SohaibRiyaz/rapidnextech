@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 import { slugify } from "@/lib/utils"
 import { absoluteSiteUrl } from "@/lib/site-url"
+import { breadcrumbSchema, faqSchema } from "@/lib/seo"
 
 type Props = {
   params: { slug: string }
@@ -52,7 +53,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const seoDescription = buildMetaDescription(baseDescription, post.title)
 
   return {
-    title: post.seo_title ? post.seo_title : `${post.title} | RapidNexTech Blog`,
+    title: {
+      absolute: post.seo_title ? post.seo_title : `${post.title} | RapidNexTech Blog`,
+    },
     description: seoDescription,
     keywords: post.tags?.join(', '),
     authors: [{ name: post.author }],
@@ -146,37 +149,45 @@ export default async function BlogPostPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "BlogPosting",
-            headline: post.seo_title || post.title,
-            description: post.seo_description || post.excerpt,
-            image: post.images?.[0]?.url || absoluteSiteUrl("/og-image.jpg"),
-            datePublished: post.date,
-            dateModified: post.updated_at,
-            author: {
-              "@type": "Person",
-              name: post.author,
-              url: absoluteSiteUrl("/about")
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "BlogPosting",
+              headline: post.seo_title || post.title,
+              description: post.seo_description || post.excerpt,
+              image: post.images?.[0]?.url || absoluteSiteUrl("/og-image.jpg"),
+              datePublished: post.date,
+              dateModified: post.updated_at,
+              author: {
+                "@type": "Person",
+                name: post.author,
+                url: absoluteSiteUrl("/about")
+              },
+              publisher: {
+                "@type": "Organization",
+                name: "RapidNexTech",
+                logo: {
+                  "@type": "ImageObject",
+                  url: absoluteSiteUrl("/logo.png")
+                }
+              },
+              url: fullUrl,
+              mainEntityOfPage: {
+                "@type": "WebPage",
+                "@id": fullUrl
+              },
+              keywords: post.tags?.join(', '),
+              articleSection: "Technology",
+              inLanguage: "en-US",
+              isFamilyFriendly: true
             },
-            publisher: {
-              "@type": "Organization",
-              name: "RapidNexTech",
-              logo: {
-                "@type": "ImageObject",
-                url: absoluteSiteUrl("/logo.png")
-              }
-            },
-            url: fullUrl,
-            mainEntityOfPage: {
-              "@type": "WebPage",
-              "@id": fullUrl
-            },
-            keywords: post.tags?.join(', '),
-            articleSection: "Technology",
-            inLanguage: "en-US",
-            isFamilyFriendly: true
-          })
+            breadcrumbSchema([
+              { name: "Home", path: "/" },
+              { name: "Blog", path: "/blog" },
+              { name: post.title, path: `/blog/${params.slug}` },
+            ]),
+            ...(post.faqs?.length ? [faqSchema(post.faqs)] : []),
+          ])
         }}
       />
 

@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import Script from "next/script"
+import { Suspense } from "react"
 import ContactClient from "./ContactClient"
+import { breadcrumbSchema, jsonLd, salesEmail, salesPhone, ukAddress, ukPhone } from "@/lib/seo"
 
 export const metadata: Metadata = {
   title: "Contact Us - Start Your Project",
@@ -25,7 +27,7 @@ export const metadata: Metadata = {
 }
 
 export default function ContactPage() {
-  const jsonLd = {
+  const contactSchema = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
     name: "Contact RapidNexTech",
@@ -34,26 +36,44 @@ export default function ContactPage() {
     mainEntity: {
       "@type": "Organization",
       name: "RapidNexTech",
-      telephone: "+1 214 896 4186",
-      email: "contact@rapidnextech.com",
+      email: salesEmail,
       address: {
         "@type": "PostalAddress",
-        streetAddress: "47 Fairways Commercial, Defence Raya Golf Resort Sector M, DHA Phase 6",
-        addressLocality: "Lahore",
-        postalCode: "54792",
-        addressCountry: "PK",
+        ...ukAddress,
       },
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          telephone: salesPhone,
+          email: salesEmail,
+          contactType: "sales",
+          areaServed: ["US", "GCC", "UK", "Worldwide"],
+        },
+        {
+          "@type": "ContactPoint",
+          telephone: ukPhone,
+          email: salesEmail,
+          contactType: "customer service",
+          areaServed: ["UK", "Worldwide"],
+        },
+      ],
     },
+    breadcrumb: breadcrumbSchema([
+      { name: "Home", path: "/" },
+      { name: "Contact", path: "/contact" },
+    ]),
   }
 
   return (
     <>
-      <ContactClient />
+      <Suspense fallback={null}>
+        <ContactClient />
+      </Suspense>
       <Script
         id="contact-jsonld"
         type="application/ld+json"
         strategy="afterInteractive"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={jsonLd(contactSchema)}
       />
     </>
   )

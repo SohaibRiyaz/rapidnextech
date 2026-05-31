@@ -398,6 +398,11 @@ export const industrySolutions = [
         description: "24/7 call answering and consultation booking for US med spas.",
     },
     {
+        title: "Dental Clinics",
+        href: "/solutions/dental-clinics",
+        description: "AI receptionist for dental practices that captures patient calls and booking requests.",
+    },
+    {
         title: "Real Estate Agencies",
         href: "/solutions/real-estate",
         description: "Automated property inquiry qualification and viewing bookings.",

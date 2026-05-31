@@ -14,6 +14,7 @@ const nextConfig = {
 
   experimental: {
     missingSuspenseWithCSRBailout: false,
+    webpackBuildWorker: true,
   },
 
   // Use static export only when explicitly requested via NEXT_OUTPUT=export

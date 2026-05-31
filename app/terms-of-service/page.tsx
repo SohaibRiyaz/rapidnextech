@@ -2,7 +2,7 @@
 import { LegalLayout } from "@/components/legal/legal-layout"
 
 export const metadata: Metadata = {
-  title: "Terms of Service - RapidNexTech",
+  title: "Terms of Service",
   description:
     "Read the terms governing your use of the RapidNexTech website and services.",
   alternates: { canonical: "https://rapidnextech.com/terms-of-service" },
@@ -136,8 +136,9 @@ export default function TermsOfServicePage() {
           <strong>RapidNexTech</strong>
           <div>Email: contact@rapidnextech.com</div>
           <div>Website: https://rapidnextech.com</div>
-          <div>Address: 38 Scotia Road, ST6 4EP, UK</div>
-          <div>Phone: +44 7311 133668</div>
+          <div>UK address: 38 Scotia Road, Stoke-on-Trent, ST6 4EP, UK</div>
+          <div>US sales phone: +1 214 896 4186</div>
+          <div>UK phone: +44 7311 133668</div>
         </div>
       </section>
     </LegalLayout>

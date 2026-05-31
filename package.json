@@ -10,6 +10,7 @@
     "build:only": "next build",
     "copy-htaccess": "node -e \"const fs = require('fs'); if (fs.existsSync('.htaccess') && fs.existsSync('out')) { fs.copyFileSync('.htaccess', 'out/.htaccess'); console.log('.htaccess copied to out/'); } else { console.log('htaccess not copied (missing .htaccess or out/)'); }\"",
     "dev": "next dev",
+    "seo:audit-blog": "node scripts/audit-blog-seo.js",
     "lint": "next lint",
     "start": "next start"
   },

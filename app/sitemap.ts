@@ -151,10 +151,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
+  const explicitSeoSolutionPages: MetadataRoute.Sitemap = [
+    {
+      url: absoluteSiteUrl("/solutions/never-miss-a-call/texas"),
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.75,
+    },
+    {
+      url: absoluteSiteUrl("/solutions/dental-clinics"),
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.75,
+    },
+  ]
+
   return dedupeByUrl([
     ...staticPages,
     ...servicePages,
     ...solutionPages,
+    ...explicitSeoSolutionPages,
     ...blogPages,
     ...portfolioPages,
   ])

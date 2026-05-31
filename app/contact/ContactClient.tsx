@@ -410,12 +410,12 @@ export default function ContactClient() {
                   <div>
                     <h3 className="font-semibold theme-text mb-1">WhatsApp</h3>
                     <a
-                      href="https://wa.me/923314664279"
+                      href="https://wa.me/12148964186"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-primary hover:underline transition-all"
                     >
-                      +92 331 4664 279
+                      +1 214 896 4186
                     </a>
                   </div>
                 </div>
@@ -425,9 +425,21 @@ export default function ContactClient() {
                     <Phone className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-semibold theme-text mb-1">Phone (Calls)</h3>
+                    <h3 className="font-semibold theme-text mb-1">US Sales Phone</h3>
                     <a href="tel:+12148964186" className="text-primary hover:underline transition-all">
                       +1 214 896 4186
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Phone className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold theme-text mb-1">UK Phone</h3>
+                    <a href="tel:+447311133668" className="text-primary hover:underline transition-all">
+                      +44 7311 133668
                     </a>
                   </div>
                 </div>
@@ -437,13 +449,11 @@ export default function ContactClient() {
                     <MapPin className="w-6 h-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-semibold theme-text mb-1">Address</h3>
+                    <h3 className="font-semibold theme-text mb-1">UK Address</h3>
                     <p className="theme-text opacity-80 text-sm leading-relaxed">
-                      47 Fairways Commercial,
+                      38 Scotia Road,
                       <br />
-                      Defence Raya Golf Resort Sector M,
-                      <br />
-                      DHA Phase 6, Lahore, 54792
+                      Stoke-on-Trent, ST6 4EP, UK
                     </p>
                   </div>
                 </div>

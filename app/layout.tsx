@@ -6,9 +6,8 @@ import { ConditionalLayout } from "@/components/conditional-layout"
 import NextTopLoader from "nextjs-toploader"
 import { ThemeProvider } from "../components/theme-provider"
 import { ThemeContextProvider } from "@/context/theme-context"
-import { AuthProvider } from "@/context/auth-context"
-import Script from "next/script"
-import { Suspense } from "react"
+import { getSiteOrigin } from "@/lib/site-url"
+import { jsonLd, organizationSchema, websiteSchema } from "@/lib/seo"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -22,32 +21,22 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 })
 
-// Enhanced SEO metadata
+const siteOrigin = getSiteOrigin()
+const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim()
+const bingVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION?.trim()
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://rapidnextech.com"),
+  metadataBase: new URL(siteOrigin),
   title: {
     default: "RapidNexTech — Custom Software, SaaS & AI Automation",
     template: "%s | RapidNexTech",
   },
   description:
     "We build custom software, scalable SaaS platforms, and AI-powered automation systems that solve real business problems. From MVPs to enterprise scale.",
-  keywords: [
-    "custom software development",
-    "SaaS development",
-    "AI automation",
-    "web application development",
-    "mobile app development",
-    "WhatsApp automation",
-    "enterprise solutions",
-    "React development",
-    "Node.js development",
-    "full-stack development",
-    "digital transformation",
-    "startup MVP development",
-    "API development",
-    "cloud solutions",
-    "DevOps services",
-  ],
+  verification: {
+    ...(googleVerification ? { google: googleVerification } : {}),
+    ...(bingVerification ? { other: { "msvalidate.01": bingVerification } } : {}),
+  },
   authors: [{ name: "RapidNexTech Team", url: "https://rapidnextech.com" }],
   creator: "RapidNexTech",
   publisher: "RapidNexTech",
@@ -96,18 +85,10 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "verification_token",
-    yandex: "verification_token",
-    yahoo: "verification_token",
-    other: {
-      me: ["mailto:contact@rapidnextech.com"],
-    },
-  },
   alternates: {
-    canonical: "https://rapidnextech.com",
+    canonical: siteOrigin,
     languages: {
-      "en-US": "https://rapidnextech.com",
+      "en-US": siteOrigin,
     },
   },
   icons: {
@@ -148,122 +129,24 @@ export default function RootLayout({
       <body className={`${inter.className} ${spaceGrotesk.variable} theme-transition antialiased overflow-x-hidden`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <ThemeContextProvider>
-            <AuthProvider>
-              <div className="flex flex-col min-h-screen relative theme-bg theme-transition">
-                <NextTopLoader color="#3b82f6" showSpinner={false} />
-                <ConditionalLayout>
-                  {children}
-                </ConditionalLayout>
-              </div>
-            </AuthProvider>
+            <div className="flex flex-col min-h-screen relative theme-bg theme-transition">
+              <NextTopLoader color="#3b82f6" showSpinner={false} />
+              <ConditionalLayout>
+                {children}
+              </ConditionalLayout>
+            </div>
           </ThemeContextProvider>
         </ThemeProvider>
 
-        {/* Enhanced structured data */}
-        <Script
+        <script
           id="organization-schema"
           type="application/ld+json"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Organization",
-              "@id": "https://rapidnextech.com/#organization",
-              name: "RapidNexTech",
-              url: "https://rapidnextech.com",
-              logo: {
-                "@type": "ImageObject",
-                url: "https://rapidnextech.com/logo.png",
-                width: 200,
-                height: 60,
-              },
-              description:
-                "Innovative software development company specializing in web development, mobile apps, and enterprise solutions.",
-              foundingDate: "2020",
-              address: {
-                "@type": "PostalAddress",
-                streetAddress: "38 Scotia Road",
-                postalCode: "ST6 4EP",
-                addressCountry: "GB",
-              },
-              contactPoint: {
-                "@type": "ContactPoint",
-                telephone: "+44 7311 133668",
-                contactType: "customer service",
-                availableLanguage: ["English"],
-                areaServed: "Worldwide",
-              },
-              sameAs: [
-                "https://twitter.com/RapidNexTech",
-                "https://facebook.com/RapidNexTech",
-                "https://github.com/RapidNexTech",
-                "https://linkedin.com/company/RapidNexTech",
-              ],
-              serviceType: [
-                "Software Development",
-                "Web Development",
-                "Mobile App Development",
-                "UI/UX Design",
-                "Enterprise Solutions",
-              ],
-            }),
-          }}
+          dangerouslySetInnerHTML={jsonLd(organizationSchema())}
         />
-
-        {/* Website schema */}
-        <Script
+        <script
           id="website-schema"
           type="application/ld+json"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebSite",
-              "@id": "https://rapidnextech.com/#website",
-              url: "https://rapidnextech.com",
-              name: "RapidNexTech",
-              description: "Innovative software development company",
-              publisher: {
-                "@id": "https://rapidnextech.com/#organization",
-              },
-              potentialAction: {
-                "@type": "SearchAction",
-                target: {
-                  "@type": "EntryPoint",
-                  urlTemplate: "https://rapidnextech.com/search?q={search_term_string}",
-                },
-                "query-input": "required name=search_term_string",
-              },
-            }),
-          }}
-        />
-
-        {/* Performance monitoring */}
-        <Script
-          id="performance-observer"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('PerformanceObserver' in window) {
-                const observer = new PerformanceObserver((list) => {
-                  for (const entry of list.getEntries()) {
-                    if (entry.entryType === 'largest-contentful-paint') {
-                      console.log('LCP:', entry.startTime);
-                    }
-                    if (entry.entryType === 'first-input') {
-                      console.log('FID:', entry.processingStart - entry.startTime);
-                    }
-                    if (entry.entryType === 'layout-shift') {
-                      if (!entry.hadRecentInput) {
-                        console.log('CLS:', entry.value);
-                      }
-                    }
-                  }
-                });
-                observer.observe({entryTypes: ['largest-contentful-paint', 'first-input', 'layout-shift']});
-              }
-            `,
-          }}
+          dangerouslySetInnerHTML={jsonLd(websiteSchema())}
         />
       </body>
     </html>
