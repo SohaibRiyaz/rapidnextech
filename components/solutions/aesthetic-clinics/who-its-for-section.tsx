@@ -1,40 +1,33 @@
-﻿import { CheckCircle2 } from "lucide-react"
+import { CheckCircle2 } from "lucide-react"
 
 const segments = [
   {
-    title: "Botox & Injectables Clinics",
+    title: "Skin & Laser Clinics",
     badge: "Best Fit",
     description:
-      "Treatments repeat every 3\u20134 months. Average appointment value AED 1,500\u20133,000. Automated rebooking reminders alone recover thousands in annual revenue per patient.",
-    economics: "AED 1,500\u20133,000 per appointment",
+      "If patients compare clinics fast and book whoever replies first, this pays for itself within a week.",
+    economics: "PKR 15,000–40,000 per consultation",
   },
   {
-    title: "Laser Hair Removal Clinics",
+    title: "Aesthetic & Injectable Clinics",
     badge: null,
     description:
-      "Multi-session packages (AED 3,000\u20138,000 per course) require 4\u20136 visits. Automated reminders protect completion rates and revenue.",
-    economics: "AED 3,000\u20138,000 per course",
+      "One filler or PRP consultation is worth PKR 15,000–40,000. Losing even one to a slow reply hurts.",
+    economics: "High-ticket, repeat treatments",
   },
   {
-    title: "Premium Skin Clinics",
+    title: "Cosmetic & Derma Clinics",
     badge: null,
     description:
-      "High Instagram inquiry volume + high-ticket treatments (AED 800\u20134,500+ per session). AI handles complex suitability questions perfectly.",
-    economics: "AED 800\u20134,500+ per session",
-  },
-  {
-    title: "Multi-Treatment Aesthetic Centres",
-    badge: null,
-    description:
-      "Clinics offering injectables, laser, and skin treatments across multiple practitioners. Full patient lifecycle automation = compounding revenue.",
-    economics: "Multi-practitioner clinics across GCC",
+      "Patients ask detailed questions before committing. The assistant handles all of it and sends you only the serious ones.",
+    economics: "Longer patient journey, higher commitment",
   },
 ]
 
 export function WhoItsForSection() {
   return (
-    <section id="who-its-for" className="py-20 md:py-28 theme-transition">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+    <section id="who-its-for" className="py-20 md:py-28 bg-muted/30 theme-transition">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left column */}
           <div className="lg:sticky lg:top-32">
@@ -42,21 +35,23 @@ export function WhoItsForSection() {
               Who This Is For
             </p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight mb-6">
-              Built for GCC Aesthetic Clinics Where{" "}
+              Built for Lahore Clinics{" "}
               <span className="theme-gradient-text bg-clip-text text-transparent">
-                Treatments Repeat
+                Where Every Patient Matters
               </span>
             </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed mb-4">
-              The highest ROI comes from clinics with recurring treatments.
-              Every rebooking reminder we send is revenue you would have
-              otherwise lost.
+            <p className="text-lg text-muted-foreground leading-relaxed mb-6">
+              The highest ROI comes from clinics where patients compare and book fast — and where a
+              missed inquiry means a missed consultation.
             </p>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              We sit on top of your existing booking system and calendar. No process change required.
-            </p>
+            <div className="rounded-xl border border-border/60 bg-card/50 p-4 text-sm text-muted-foreground">
+              <span className="font-semibold text-foreground">Honest note:</span> Not for
+              clinics already fully booked with a waitlist. If you&apos;re not losing inquiries,
+              you don&apos;t need this yet.
+            </div>
           </div>
 
+          {/* Right column */}
           <div className="space-y-4">
             {segments.map((segment) => (
               <div
@@ -66,21 +61,17 @@ export function WhoItsForSection() {
                 <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-semibold text-foreground">
-                      {segment.title}
-                    </h3>
+                    <h3 className="font-semibold text-foreground">{segment.title}</h3>
                     {segment.badge && (
                       <span className="text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded-full">
                         {segment.badge}
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-2">
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-1">
                     {segment.description}
                   </p>
-                  <p className="text-xs font-medium text-foreground/70">
-                    {segment.economics}
-                  </p>
+                  <p className="text-xs font-medium text-foreground/60">{segment.economics}</p>
                 </div>
               </div>
             ))}

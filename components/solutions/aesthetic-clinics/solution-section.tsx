@@ -1,48 +1,32 @@
-import {
-  Globe,
-  MessageCircle,
-  Bot,
-  Bell,
-} from "lucide-react"
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card"
+import { Zap, Languages, Filter, CalendarCheck } from "lucide-react"
 
-const solutions = [
+const features = [
   {
-    icon: Globe,
-    title: "Multi-Channel Inquiry Automation",
+    icon: Zap,
+    title: "Instant Replies, 24/7",
     description:
-      "Respond instantly to inquiries from Instagram, WhatsApp, or your website \u2014 from one system. No missed messages, no manual routing.",
-    outcome: "Every inquiry on Instagram, WhatsApp, or website gets an instant response in under 60 seconds.",
-    accent: "from-blue-500 to-cyan-500",
-  },
-  {
-    icon: MessageCircle,
-    title: "WhatsApp Conversation Engine",
-    description:
-      "AI-led WhatsApp conversations that qualify leads, answer treatment questions, and guide patients to your booking page \u2014 with zero manual work.",
-    outcome: "AI qualifies leads, answers treatment questions, and guides patients straight to your booking page \u2014 zero manual work.",
+      "Every message answered in under 60 seconds — day, night, weekend. No patient left waiting, no lead gone cold.",
     accent: "from-emerald-500 to-green-500",
   },
   {
-    icon: Bot,
-    title: "AI Receptionist Layer",
+    icon: Languages,
+    title: "Replies in Roman Urdu or English",
     description:
-      "Your AI Sales Rep that mirrors your clinic tone and handles pricing, suitability, availability, and lead recovery \u2014 24/7.",
-    outcome: "Your intelligent AI Sales Rep that handles price inquiries, treatment suitability, availability, and lead recovery using your exact clinic tone and branding.",
+      "Patients message in Roman Urdu, English, or a mix — the assistant replies the same way, naturally. Most patients don't realise they aren't chatting with a real coordinator.",
+    accent: "from-blue-500 to-cyan-500",
+  },
+  {
+    icon: Filter,
+    title: "Answers & Qualifies Automatically",
+    description:
+      "Handles everyday questions — treatments, timings, general pricing — and figures out what the patient needs, so only serious, ready-to-book patients reach your team.",
     accent: "from-violet-500 to-purple-500",
   },
   {
-    icon: Bell,
-    title: "Reminder & Rebooking System",
+    icon: CalendarCheck,
+    title: "Books Consultations For You",
     description:
-      "Automated confirmations, no-show follow-ups, and treatment-cycle reminders that keep patients returning on schedule.",
-    outcome: "Automated confirmations + treatment-cycle rebooking reminders that protect your recurring revenue and cut no-shows.",
+      "When a patient's ready, it collects their details and sends a confirmed booking request to your team. No back-and-forth, no missed leads.",
     accent: "from-orange-500 to-amber-500",
   },
 ]
@@ -50,54 +34,40 @@ const solutions = [
 export function SolutionSection() {
   return (
     <section id="solution" className="py-20 md:py-28 bg-muted/30 theme-transition">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-14">
           <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
             The Solution
           </p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight mb-4">
-            Zero-Lead-Loss AI Closer{" "}
-            <span className="theme-gradient-text bg-clip-text text-transparent">for Aesthetic Clinics</span>
+            A WhatsApp Receptionist{" "}
+            <span className="theme-gradient-text bg-clip-text text-transparent">
+              That Never Misses a Message
+            </span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-3">
-            Your 24/7 AI Sales Rep and revenue engine that recovers every lost inquiry &mdash; automatically.
-            We never replace your booking system. We sit on top and turn inquiries into revenue.
-          </p>
-          <p className="text-sm text-muted-foreground max-w-xl mx-auto">
-            This is the unfair advantage over basic bots like Wati, Wazzy, or HalaFlow.
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            We set up a smart booking assistant on your clinic&apos;s existing WhatsApp. It replies to
+            every patient instantly, answers questions, understands what treatment they want, and books
+            a consultation — around the clock. Your team only steps in when a real booking is ready.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          {solutions.map((solution) => (
-            <Card
-              key={solution.title}
-              className="group border-border bg-card/60 backdrop-blur-sm hover:border-border/80 hover:shadow-lg transition-all duration-300"
+        <div className="grid sm:grid-cols-2 gap-5">
+          {features.map((feature) => (
+            <div
+              key={feature.title}
+              className="group flex gap-4 p-6 rounded-2xl border border-border bg-card/60 hover:border-border/80 hover:shadow-lg transition-all duration-300"
             >
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-2">
-                  <div
-                    className={`w-10 h-10 rounded-lg bg-gradient-to-br ${solution.accent} flex items-center justify-center`}
-                  >
-                    <solution.icon className="w-5 h-5 text-white" />
-                  </div>
-                  <CardTitle className="text-xl">{solution.title}</CardTitle>
-                </div>
-                <CardDescription className="text-sm text-muted-foreground leading-relaxed">
-                  {solution.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-start gap-2 p-3 rounded-lg bg-muted/50 border border-border/50">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground whitespace-nowrap mt-0.5">
-                    Outcome
-                  </span>
-                  <p className="text-sm font-medium text-foreground">
-                    {solution.outcome}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+              <div
+                className={`w-11 h-11 rounded-xl bg-gradient-to-br ${feature.accent} flex items-center justify-center flex-shrink-0`}
+              >
+                <feature.icon className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
+              </div>
+            </div>
           ))}
         </div>
       </div>
