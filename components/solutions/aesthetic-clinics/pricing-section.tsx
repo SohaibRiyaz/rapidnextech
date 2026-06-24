@@ -1,21 +1,33 @@
 "use client"
 
-import { Check, Sparkles } from "lucide-react"
+import Link from "next/link"
+import { Check, Sparkles, MessageCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { WhatsAppDemoDialog } from "@/components/whatsapp/whatsapp-demo-dialog"
+
+const BUYER_WA = "923314664279"
 
 function formatPKR(amount: number) {
   return `PKR ${amount.toLocaleString("en-PK")}`
 }
 
+function buildWALink(tierName: string) {
+  const msg =
+    tierName === "Premium"
+      ? `Hi, I run an aesthetic clinic in Lahore and I'm interested in the Premium package. I'd like to discuss setting it up for my clinic.`
+      : `Hi, I run an aesthetic clinic in Lahore and I'm interested in the ${tierName} package. I'd like to see a demo and discuss getting started.`
+  return `https://wa.me/${BUYER_WA}?text=${encodeURIComponent(msg)}`
+}
+
 const tiers = [
   {
     name: "Standard",
+    slug: "standard",
     tagline: "For most single-location clinics",
     setupFee: 25000,
     monthlyFee: 12000,
     highlight: false,
     badge: undefined as string | undefined,
+    cta: "Book a Free Demo",
     features: [
       "WhatsApp booking assistant on your existing number",
       "Instant replies 24/7 in English & Roman Urdu",
@@ -27,11 +39,13 @@ const tiers = [
   },
   {
     name: "Advanced",
+    slug: "advanced",
     tagline: "For clinics with higher inquiry volume or multiple treatment categories",
     setupFee: 45000,
     monthlyFee: 22000,
     highlight: true,
     badge: "Recommended",
+    cta: "Book a Free Demo",
     features: [
       "Everything in Standard, plus:",
       "Separate conversation flows for different treatments (skin, laser, injectables)",
@@ -42,11 +56,13 @@ const tiers = [
   },
   {
     name: "Premium",
+    slug: "premium",
     tagline: "For multi-service clinics & growing brands that want hands-on management",
     setupFee: 60000,
     monthlyFee: 30000,
     highlight: false,
     badge: undefined,
+    cta: "Talk to Us",
     features: [
       "Everything in Advanced, plus:",
       "A dedicated point of contact for changes, updates, and support",
@@ -68,13 +84,13 @@ export function PricingSection() {
             Pricing
           </p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-tight mb-4">
-            Simple, Local Pricing{" "}
-            <span className="theme-gradient-text bg-clip-text text-transparent">in PKR</span>
+            Simple,{" "}
+            <span className="theme-gradient-text bg-clip-text text-transparent">Honest Pricing</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            A one-time setup fee to build and launch your assistant, plus a monthly fee to run it.
-            Priced for Pakistani clinics — no foreign currency, no surprises. Works on your existing
-            WhatsApp number.
+            A one-time setup fee to build and launch your assistant, plus a flat monthly fee to run
+            it. No hidden charges, no per-message billing, no long-term lock-in. Most clinics make
+            back the cost from just a few recovered bookings a month.
           </p>
         </div>
 
@@ -159,24 +175,28 @@ export function PricingSection() {
                 ))}
               </ul>
 
-              <WhatsAppDemoDialog
-                contextLabel={`Aesthetic clinics pricing — ${tier.name} tier`}
-                title="Book a Free Demo"
-                description="Message us on WhatsApp and we'll walk you through the right package for your clinic."
-                continueLabel="Open WhatsApp →"
-                showExternalIcon={false}
-                trigger={
-                  <Button
-                    className={`w-full h-12 rounded-xl font-semibold text-base transition-all duration-200 ${
-                      tier.highlight
-                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 hover:scale-[1.02]"
-                        : "bg-foreground text-background hover:bg-foreground/90"
-                    }`}
-                  >
-                    {tier.name === "Premium" ? "Talk to Us" : "Book a Free Demo"}
-                  </Button>
-                }
-              />
+              {/* Primary CTA — WhatsApp to buyer number */}
+              <Button
+                asChild
+                className={`w-full h-12 rounded-xl font-semibold text-base transition-all duration-200 ${
+                  tier.highlight
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 hover:scale-[1.02]"
+                    : "bg-foreground text-background hover:bg-foreground/90"
+                }`}
+              >
+                <a href={buildWALink(tier.name)} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="mr-2 h-4 w-4" />
+                  {tier.cta}
+                </a>
+              </Button>
+
+              {/* Secondary CTA — contact form */}
+              <Link
+                href={`/contact?plan=${tier.slug}&type=aesthetic`}
+                className="mt-3 block text-center text-xs text-muted-foreground hover:text-primary transition-colors"
+              >
+                or fill a quick form →
+              </Link>
             </div>
           ))}
         </div>
@@ -184,8 +204,14 @@ export function PricingSection() {
         <p className="mt-10 text-center text-sm text-muted-foreground max-w-xl mx-auto">
           Every package includes WhatsApp setup, staff handover, and a launch period where we
           fine-tune the assistant. Not sure which fits?{" "}
-          <span className="text-primary font-medium">Book a free demo</span> and we&apos;ll recommend
-          the right one.
+          <a
+            href={`https://wa.me/${BUYER_WA}?text=${encodeURIComponent("Hi, I run an aesthetic clinic in Lahore and I'm not sure which package fits. Can we have a quick chat?")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary font-medium hover:underline"
+          >
+            Message us and we&apos;ll recommend the right one.
+          </a>
         </p>
       </div>
     </section>
