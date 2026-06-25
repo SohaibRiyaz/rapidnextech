@@ -1,7 +1,8 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
-import { Check, Sparkles, MessageCircle } from "lucide-react"
+import { Check, Sparkles, MessageCircle, Info } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 const BUYER_WA = "923314664279"
@@ -18,7 +19,62 @@ function buildWALink(tierName: string) {
   return `https://wa.me/${BUYER_WA}?text=${encodeURIComponent(msg)}`
 }
 
-const tiers = [
+/* ------------------------------------------------------------------ */
+/* Tooltip feature item — same pattern as diet-nutrition pricing       */
+/* ------------------------------------------------------------------ */
+
+interface Feature {
+  text: string
+  tooltip?: string
+}
+
+function FeatureItem({ feature, highlight }: { feature: Feature; highlight: boolean }) {
+  const [showTip, setShowTip] = useState(false)
+
+  return (
+    <li className={`flex items-start gap-2.5 ${showTip ? "relative z-[60]" : ""}`}>
+      <Check
+        className={`w-4 h-4 mt-0.5 shrink-0 ${
+          highlight ? "text-primary" : "text-muted-foreground"
+        }`}
+      />
+      <span className="text-sm text-foreground/80 leading-relaxed">
+        {feature.text}
+        {feature.tooltip && (
+          <span
+            className="relative inline-flex align-middle cursor-pointer ml-1"
+            onMouseEnter={() => setShowTip(true)}
+            onMouseLeave={() => setShowTip(false)}
+            onClick={() => setShowTip((v) => !v)}
+          >
+            <Info className="w-3.5 h-3.5 text-muted-foreground hover:text-primary transition-colors" />
+            {showTip && (
+              <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-60 rounded-lg bg-popover border border-border px-3 py-2 text-xs text-popover-foreground shadow-2xl z-[100] leading-relaxed pointer-events-none">
+                {feature.tooltip}
+              </span>
+            )}
+          </span>
+        )}
+      </span>
+    </li>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/* Tier data                                                            */
+/* ------------------------------------------------------------------ */
+
+const tiers: {
+  name: string
+  slug: string
+  tagline: string
+  setupFee: number
+  monthlyFee: number
+  highlight: boolean
+  badge?: string
+  cta: string
+  features: Feature[]
+}[] = [
   {
     name: "Standard",
     slug: "standard",
@@ -26,15 +82,23 @@ const tiers = [
     setupFee: 25000,
     monthlyFee: 12000,
     highlight: false,
-    badge: undefined as string | undefined,
     cta: "Book a Free Demo",
     features: [
-      "WhatsApp booking assistant on your existing number",
-      "Instant replies 24/7 in English & Roman Urdu",
-      "Answers common questions (treatments, timings, general pricing)",
-      "Collects patient details & sends booking requests to your team",
-      "2 rounds of revisions during setup to match your clinic's tone",
-      "Monthly check-in and fine-tuning",
+      { text: "WhatsApp booking assistant on your existing number" },
+      { text: "Instant replies 24/7 in English & Roman Urdu" },
+      { text: "Answers common questions (treatments, timings, general pricing)" },
+      { text: "Collects patient details & sends booking requests to your team" },
+      { text: "2 rounds of revisions during setup to match your clinic's tone" },
+      { text: "Monthly check-in and fine-tuning" },
+      {
+        text: "Conversation dashboard (view-only)",
+        tooltip: "See every patient conversation your assistant handles, in one place.",
+      },
+      {
+        text: "Up to 1,000 patient conversations/month",
+        tooltip:
+          "A conversation = one patient chat thread. Replies within WhatsApp's 24-hour service window are free. Outbound template messages sent outside that window (e.g. next-day reminders) are billed at Meta's Pakistan rate — utility messages ~PKR 2.79 each. Most clinic chats stay in the free window.",
+      },
     ],
   },
   {
@@ -47,11 +111,22 @@ const tiers = [
     badge: "Recommended",
     cta: "Book a Free Demo",
     features: [
-      "Everything in Standard, plus:",
-      "Separate conversation flows for different treatments (skin, laser, injectables)",
-      "Appointment reminders via WhatsApp",
-      "Follow-up messages for patients who inquired but didn't book",
-      "Faster turnaround on changes and updates",
+      { text: "Everything in Standard, plus:" },
+      { text: "Separate conversation flows for different treatments (skin, laser, injectables)" },
+      { text: "Appointment reminders via WhatsApp" },
+      { text: "Follow-up messages for patients who inquired but didn't book" },
+      { text: "Faster turnaround on changes and updates" },
+      {
+        text: "Live takeover dashboard",
+        tooltip:
+          "Jump into any conversation in real time and reply as staff, then hand it back to the assistant whenever you want.",
+      },
+      { text: "One-tap hand back to bot" },
+      {
+        text: "Up to 3,000 patient conversations/month",
+        tooltip:
+          "Triple the volume of Standard, for clinics with steady daily inquiries. Same billing model — in-window replies free, outbound templates at Meta's Pakistan utility rate (~PKR 2.79 each).",
+      },
     ],
   },
   {
@@ -61,18 +136,32 @@ const tiers = [
     setupFee: 60000,
     monthlyFee: 30000,
     highlight: false,
-    badge: undefined,
     cta: "Talk to Us",
     features: [
-      "Everything in Advanced, plus:",
-      "A dedicated point of contact for changes, updates, and support",
-      "Multiple treatment flows built and maintained",
-      "Monthly performance review — what's converting, where patients drop off",
-      "Higher message volume handled",
-      "Priority build time for new flows or seasonal campaigns",
+      { text: "Everything in Advanced, plus:" },
+      {
+        text: "Multi-user dashboard access",
+        tooltip:
+          "Multiple staff logins so your whole team can monitor and reply to patient chats live.",
+      },
+      { text: "Real-time conversation monitoring — your whole team sees patient chats live" },
+      { text: "A dedicated point of contact for changes, updates, and support" },
+      { text: "Multiple treatment flows built and maintained" },
+      { text: "Monthly performance review — what's converting, where patients drop off" },
+      { text: "Higher message volume handled" },
+      { text: "Priority build time for new flows or seasonal campaigns" },
+      {
+        text: "High-volume / custom conversation limits",
+        tooltip:
+          "No fixed cap — limits matched to your clinic's actual volume. Built for multi-service clinics running reminders and campaigns at scale.",
+      },
     ],
   },
 ]
+
+/* ------------------------------------------------------------------ */
+/* Section                                                              */
+/* ------------------------------------------------------------------ */
 
 export function PricingSection() {
   return (
@@ -121,7 +210,7 @@ export function PricingSection() {
           {tiers.map((tier) => (
             <div
               key={tier.name}
-              className={`relative flex flex-col rounded-2xl border p-8 transition-all duration-300 ${
+              className={`relative flex flex-col rounded-2xl border p-8 transition-all duration-300 overflow-visible ${
                 tier.highlight
                   ? "border-primary/40 bg-card shadow-xl shadow-primary/5 scale-[1.02] md:scale-105 z-10"
                   : "border-border bg-card/60 hover:border-border/80 hover:shadow-lg"
@@ -163,15 +252,8 @@ export function PricingSection() {
               </div>
 
               <ul className="space-y-3 mb-8 flex-grow">
-                {tier.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2.5">
-                    <Check
-                      className={`w-4 h-4 mt-0.5 shrink-0 ${
-                        tier.highlight ? "text-primary" : "text-muted-foreground"
-                      }`}
-                    />
-                    <span className="text-sm text-foreground/80 leading-relaxed">{feature}</span>
-                  </li>
+                {tier.features.map((feature, i) => (
+                  <FeatureItem key={i} feature={feature} highlight={tier.highlight} />
                 ))}
               </ul>
 
