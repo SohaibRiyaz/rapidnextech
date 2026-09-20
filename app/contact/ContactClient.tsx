@@ -411,7 +411,7 @@ export default function ContactClient() {
                   value={formData.phone}
                   onChange={handleChange}
                   className={`${inputBgClass} theme-text focus:border-primary theme-transition`}
-                  placeholder="+1 000 000 0000"
+                  placeholder="+1 (555) 123 4567"
                 />
                 <p className="mt-1 text-xs text-muted-foreground">We&apos;ll reply on WhatsApp if you prefer.</p>
               </div>
