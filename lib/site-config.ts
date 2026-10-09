@@ -25,8 +25,8 @@ export const siteConfig = {
   ukPhone: { display: "+44 7311 133668", e164: "+447311133668" } as PhoneNumber,
 
   /** Feature flags */
-  supportsSpanish: true,
-  whatsappBadgeEnabled: false,
+  supportsSpanish: true as boolean,
+  whatsappBadgeEnabled: false as boolean,
 
   /** Optional media / links: blocks are hidden while these are null. */
   sampleCallUrl: null as string | null,
@@ -77,8 +77,8 @@ export const siteConfig = {
     setupFee: 497,
     annualFreeMonths: 2,
     founding: {
-      enabled: true,
-      spotsRemaining: 5,
+      enabled: true as boolean,
+      spotsRemaining: 5 as number,
       text: "First 5 practices: price locked for 12 months + setup waived, in exchange for a testimonial.",
     },
     allPlansTerms: [
