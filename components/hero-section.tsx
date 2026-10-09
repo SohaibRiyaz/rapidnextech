@@ -4,7 +4,7 @@ import Link from "next/link"
 import { MeshGradient } from "./mesh-gradient"
 import { TypewriterText } from "./typewriter-text"
 
-export function HeroSection() {
+export function HeroSection({ primaryHref = "/contact" }: { primaryHref?: string }) {
     return (
         <section className="min-h-screen relative flex items-center justify-center overflow-hidden pt-16 md:pt-24">
             {/* Lightweight CSS-only animated background */}
@@ -38,7 +38,7 @@ export function HeroSection() {
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 max-w-xs sm:max-w-none mx-auto">
                         <Link
-                            href="/contact"
+                            href={primaryHref}
                             className="inline-flex items-center justify-center bg-gradient-to-r from-primary via-purple-500 to-pink-500 text-white w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-bold rounded-xl shadow-2xl shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.02] active:scale-95 transition-all duration-200"
                         >
                             Discuss Your Project
