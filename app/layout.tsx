@@ -28,11 +28,11 @@ const bingVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION?.trim()
 export const metadata: Metadata = {
   metadataBase: new URL(siteOrigin),
   title: {
-    default: "RapidNexTech — Custom Software, SaaS & AI Automation",
+    default: "RapidNexTech — AI Receptionist for Dental Practices",
     template: "%s | RapidNexTech",
   },
   description:
-    "We build custom software, scalable SaaS platforms, and AI-powered automation systems that solve real business problems. From MVPs to enterprise scale.",
+    "AI receptionist for US dental practices. Answers after-hours, weekend and overflow calls 24/7, captures new patients, handles dental emergencies, and sends every request to your front desk.",
   verification: {
     ...(googleVerification ? { google: googleVerification } : {}),
     ...(bingVerification ? { other: { "msvalidate.01": bingVerification } } : {}),
@@ -50,24 +50,24 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://rapidnextech.com",
     siteName: "RapidNexTech",
-    title: "RapidNexTech — Custom Software, SaaS & AI Automation",
+    title: "RapidNexTech — AI Receptionist for Dental Practices",
     description:
-      "We build custom software, scalable SaaS platforms, and AI-powered automation that solve real business problems.",
+      "24/7 AI receptionist for dental practices: new patients, dental emergencies, insurance questions and appointment requests, sent to your front desk.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "RapidNexTech — Custom Software, SaaS & AI Automation",
+        alt: "RapidNexTech — AI receptionist for dental practices",
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "RapidNexTech — Custom Software, SaaS & AI Automation",
+    title: "RapidNexTech — AI Receptionist for Dental Practices",
     description:
-      "We build custom software, scalable SaaS platforms, and AI-powered automation that solve real business problems.",
+      "24/7 AI receptionist for dental practices: new patients, dental emergencies, insurance questions and appointment requests, sent to your front desk.",
     images: ["/og-image.png"],
     creator: "@RapidNexTech",
     site: "@RapidNexTech",
@@ -97,7 +97,7 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
   category: "technology",
-  generator: 'v0.app'
+  generator: 'Next.js'
 }
 
 export default function RootLayout({

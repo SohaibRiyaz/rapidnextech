@@ -1,4 +1,5 @@
 ﻿import type { Metadata } from "next"
+import { siteConfig, telHref } from "@/lib/site-config"
 import Link from "next/link"
 import { LegalLayout } from "@/components/legal/legal-layout"
 
@@ -150,8 +151,8 @@ export default function PrivacyPolicyPage() {
           <div>Email: <a href="mailto:contact@rapidnextech.com">contact@rapidnextech.com</a></div>
           <div>Website: https://rapidnextech.com</div>
           <div>UK address: 38 Scotia Road, Stoke-on-Trent, ST6 4EP, UK</div>
-          <div>US sales phone: +1 214 896 4186</div>
-          <div>UK phone: +44 7311 133668</div>
+          <div>US phone: <a href={telHref(siteConfig.publicPhone)}>{siteConfig.publicPhone.display}</a></div>
+          <div>UK phone: <a href={telHref(siteConfig.ukPhone)}>{siteConfig.ukPhone.display}</a></div>
         </div>
       </section>
     </LegalLayout>
