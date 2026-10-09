@@ -110,7 +110,7 @@ export default function ContactPage() {
                     className="inline-flex min-h-[44px] items-center text-lg font-semibold text-foreground underline underline-offset-4 decoration-primary/60"
                   />
                   <p className="mt-2 text-sm">
-                    <Link href="/#try-it" className={textLink}>
+                    <Link href="/#live-demo" className={textLink}>
                       Or talk to it in your browser <ArrowRight className="h-4 w-4" aria-hidden="true" />
                     </Link>
                   </p>

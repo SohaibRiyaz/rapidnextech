@@ -254,7 +254,7 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
         onChange={(e) => set(name, e.target.value as never)}
         className={inputClass}
       >
-        <option value="">Select…</option>
+        <option value="">Select one</option>
         {options.map((o) => (
           <option key={o} value={o}>
             {o}
@@ -264,7 +264,13 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
     )
   )
 
-  const text = (name: "practiceName" | "ownerName" | "email" | "phone" | "cityState", label: string, type: string, autoComplete: string) => (
+  const text = (
+    name: "practiceName" | "ownerName" | "email" | "phone" | "cityState",
+    label: string,
+    type: string,
+    autoComplete: string,
+    placeholder: string,
+  ) => (
     field(
       name,
       label,
@@ -273,6 +279,7 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
         {...a11y(name)}
         type={type}
         autoComplete={autoComplete}
+        placeholder={placeholder}
         required
         aria-required="true"
         value={values[name]}
@@ -297,11 +304,11 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
       </p>
 
       <div className="grid gap-5 sm:grid-cols-2">
-        <div className="sm:col-span-2">{text("practiceName", "Practice name", "text", "organization")}</div>
-        {text("ownerName", "Owner / decision-maker name", "text", "name")}
-        {text("email", "Email", "email", "email")}
-        {text("phone", "Phone", "tel", "tel")}
-        {text("cityState", "Practice city / state", "text", "address-level2")}
+        <div className="sm:col-span-2">{text("practiceName", "Practice name", "text", "organization", "e.g. Bright Smile Family Dentistry")}</div>
+        {text("ownerName", "Owner / decision-maker name", "text", "name", "e.g. Dr. Jane Smith")}
+        {text("email", "Email", "email", "email", "you@yourpractice.com")}
+        {text("phone", "Phone", "tel", "tel", "(555) 123-4567")}
+        {text("cityState", "Practice city / state", "text", "address-level2", "e.g. Tampa, FL")}
         {select("callsPerWeek", CALLS_PER_WEEK, "Approx. after-hours calls per week")}
         {select("phoneSystem", PHONE_SYSTEMS, "Phone system")}
         {select("practiceSoftware", PRACTICE_SOFTWARE, "Practice management software")}
@@ -316,6 +323,7 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
               {...a11y("message")}
               rows={4}
               maxLength={2000}
+              placeholder="Anything we should know: your hours, services, how you handle emergencies, or questions for us."
               value={values.message}
               onChange={(e) => set("message", e.target.value)}
               className={`${inputClass} h-auto min-h-[112px] py-3`}
@@ -364,11 +372,11 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
         <div role="alert" className="mt-6 flex gap-3 rounded-xl border border-border bg-muted p-4 text-sm text-foreground">
           <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
           <p>
-            {serverError || "Something went wrong sending your request."} You can also reach us at{" "}
+            {serverError || "Something went wrong sending your request."} Please call us at{" "}
             <a href={telHref(siteConfig.publicPhone)} className="font-semibold underline underline-offset-2">
               {siteConfig.publicPhone.display}
             </a>{" "}
-            or{" "}
+            or email{" "}
             <a href={`mailto:${siteConfig.email}`} className="font-semibold underline underline-offset-2">
               {siteConfig.email}
             </a>

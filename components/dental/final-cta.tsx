@@ -18,7 +18,7 @@ export function DentalFinalCta({ pilotHref = "#pilot" }: { pilotHref?: string })
               Hear it answer a call, then try it on your own phone line for {siteConfig.pilot.days} days.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <a href="#try-it" className={primaryCta}>
+              <a href="#live-demo" className={primaryCta}>
                 Talk to our AI receptionist <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </a>
               <a href={pilotHref} className={secondaryCta}>

@@ -53,7 +53,7 @@ function formatIn(date: Date, timeZone: string) {
   }).format(date)
 }
 
-const fallbackError = `We couldn't send your request right now. Please call us at ${siteConfig.publicPhone.display} or email ${siteConfig.email}.`
+const fallbackError = "We couldn't send your request right now."
 
 function logError(stage: string, error: unknown) {
   // Never log submission contents (names, emails, phones, messages).
@@ -137,7 +137,7 @@ export async function POST(req: Request) {
   try {
     if (rateLimited(clientIp(req))) {
       return NextResponse.json(
-        { ok: false, error: `Too many requests. Please try again in a few minutes, or call ${siteConfig.publicPhone.display}.` },
+        { ok: false, error: "Too many requests. Please try again in a few minutes." },
         { status: 429 },
       )
     }

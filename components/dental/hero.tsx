@@ -36,7 +36,7 @@ export function DentalHero() {
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <a href="#try-it" className={primaryCta}>
+              <a href="#live-demo" className={primaryCta}>
                 Talk to our AI receptionist
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </a>

@@ -18,7 +18,10 @@ export function DentalTryItNow() {
         />
 
         <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1fr_320px]">
-          <DemoLauncher location="try-it" />
+          {/* "Talk to our AI receptionist" CTAs land here, so the start button is in view (not the section heading). */}
+          <div id="live-demo" className={`${anchorOffset} min-w-0`}>
+            <DemoLauncher location="try-it" />
+          </div>
 
           <div className="flex flex-col gap-6">
             {siteConfig.demoPhone ? (
