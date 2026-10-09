@@ -24,7 +24,7 @@ export function DentalHero() {
 
             <h1
               id="hero-title"
-              className="text-4xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-6xl"
+              className="text-4xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-5xl xl:text-6xl"
             >
               Your dental practice never loses another after-hours or weekend call to{" "}
               <span className="bg-clip-text text-transparent theme-gradient-text">voicemail or a competitor</span>.
