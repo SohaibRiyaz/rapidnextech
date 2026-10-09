@@ -117,6 +117,13 @@ export default function Header() {
 
         {/* Desktop actions */}
         <div className="hidden lg:flex items-center gap-3">
+          <a
+            href={telHref(siteConfig.publicPhone)}
+            onClick={() => trackEvent("tel_click_public", { location: "header" })}
+            className="hidden xl:inline-flex min-h-[44px] items-center whitespace-nowrap rounded-lg px-2 text-sm font-semibold text-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            {siteConfig.publicPhone.display}
+          </a>
           <ThemeSwitcher />
           <Link href="/#pilot" className={pilotButtonClass}>
             Free Pilot

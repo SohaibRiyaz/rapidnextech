@@ -8,6 +8,8 @@ import { ThemeProvider } from "../components/theme-provider"
 import { ThemeContextProvider } from "@/context/theme-context"
 import { getSiteOrigin } from "@/lib/site-url"
 import { jsonLd, organizationSchema, websiteSchema } from "@/lib/seo"
+import Script from "next/script"
+import { Analytics } from "@vercel/analytics/react"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,6 +26,12 @@ const spaceGrotesk = Space_Grotesk({
 const siteOrigin = getSiteOrigin()
 const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim()
 const bingVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION?.trim()
+
+// Optional analytics: each loads only when its ID is set (and well-formed). Both off by default.
+const ga4Id = process.env.NEXT_PUBLIC_GA4_ID?.trim()
+const ga4Enabled = !!ga4Id && /^G-[A-Z0-9]+$/i.test(ga4Id)
+const clarityId = process.env.NEXT_PUBLIC_CLARITY_ID?.trim()
+const clarityEnabled = !!clarityId && /^[a-z0-9]+$/i.test(clarityId)
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteOrigin),
@@ -148,6 +156,32 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={jsonLd(websiteSchema())}
         />
+
+        {/* Vercel Analytics: page views */}
+        <Analytics />
+
+        {ga4Enabled ? (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`} strategy="afterInteractive" />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+window.gtag = gtag;
+gtag('js', new Date());
+gtag('config', '${ga4Id}');`}
+            </Script>
+          </>
+        ) : null}
+
+        {clarityEnabled ? (
+          <Script id="ms-clarity" strategy="afterInteractive">
+            {`(function(c,l,a,r,i,t,y){
+c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "${clarityId}");`}
+          </Script>
+        ) : null}
       </body>
     </html>
   )

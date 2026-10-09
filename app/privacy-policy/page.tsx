@@ -29,7 +29,7 @@ export default function PrivacyPolicyPage() {
   return (
     <LegalLayout
       title="Privacy Policy"
-      lastUpdated="March 16, 2026"
+      lastUpdated="October 10, 2026"
       intro="This Privacy Policy explains how RapidNexTech collects, uses, and protects personal information when you visit our website or contact us about our services."
     >
       <section>
@@ -46,10 +46,15 @@ export default function PrivacyPolicyPage() {
         <p>When you submit a form or inquiry, we may collect:</p>
         <ul>
           <li>Name</li>
-          <li>Email address</li>
-          <li>Company name</li>
+          <li>Email address and phone number</li>
+          <li>Company or practice name and location</li>
+          <li>Details you choose to share about your practice or project</li>
           <li>Message or project details</li>
         </ul>
+        <p>
+          Pilot signup requests are delivered to us by email through our email provider and are not stored in a website
+          database.
+        </p>
 
         <h3>2.2 Analytics and Usage Data</h3>
         <p>When you visit our website, we may automatically collect:</p>
@@ -87,9 +92,14 @@ export default function PrivacyPolicyPage() {
         <h2>5. Third-Party Services</h2>
         <p>We may use trusted third-party services, including:</p>
         <ul>
-          <li>Google Analytics (traffic and usage insights)</li>
+          <li>Vercel Analytics (anonymous page-view statistics)</li>
+          <li>
+            Microsoft Clarity (session recordings and usage heatmaps), only when enabled. Form fields on our pilot
+            signup form are masked, so what you type there is never recorded.
+          </li>
+          <li>Google Analytics (traffic and usage insights), only when enabled</li>
           <li>Hosting and infrastructure providers</li>
-          <li>Communication tools used to reply to inquiries</li>
+          <li>Email delivery and communication tools used to send and reply to inquiries</li>
         </ul>
         <p>We do not sell or rent personal data to third parties.</p>
       </section>
