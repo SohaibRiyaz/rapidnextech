@@ -9,7 +9,8 @@ import { anchorOffset, card, sectionY } from "./styles"
 export function DentalTryItNow() {
   return (
     <section id="try-it" aria-labelledby="try-title" className={`${sectionY} ${anchorOffset} bg-muted/40`}>
-      <div className="container mx-auto px-4 sm:px-6">
+      {/* "Talk to our AI receptionist" CTAs land here: heading just below the header, skipping the section's top padding. */}
+      <div id="live-demo" className={`container mx-auto px-4 sm:px-6 ${anchorOffset}`}>
         <SectionHeading
           id="try-title"
           eyebrow="Try it now"
@@ -18,8 +19,7 @@ export function DentalTryItNow() {
         />
 
         <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1fr_320px]">
-          {/* "Talk to our AI receptionist" CTAs land here, so the start button is in view (not the section heading). */}
-          <div id="live-demo" className={`${anchorOffset} min-w-0`}>
+          <div className="min-w-0">
             <DemoLauncher location="try-it" />
           </div>
 
