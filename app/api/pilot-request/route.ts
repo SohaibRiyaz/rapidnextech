@@ -45,10 +45,14 @@ function escapeHtml(value: string) {
 }
 
 function formatIn(date: Date, timeZone: string) {
+  // Explicit parts: dateStyle/timeStyle can't be combined with timeZoneName (throws a TypeError).
   return new Intl.DateTimeFormat("en-US", {
     timeZone,
-    dateStyle: "medium",
-    timeStyle: "short",
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
     timeZoneName: "short",
   }).format(date)
 }
