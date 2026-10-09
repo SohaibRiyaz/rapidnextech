@@ -26,6 +26,8 @@ const syne = Syne({
 })
 
 export const metadata: Metadata = {
+  // Non-dental vertical: kept live, but excluded from search and the sitemap.
+  robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
   title: "AI Voice Receptionist for Med Spas - Never Miss a Call",
   description:
     "Every call answered in under 2 rings, 24/7. Consultations booked automatically for US med spas in Texas, Florida, California, Georgia, and Arizona. From $397/month after a free demo.",

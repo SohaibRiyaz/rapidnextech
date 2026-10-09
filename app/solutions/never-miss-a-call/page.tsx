@@ -26,6 +26,8 @@ const syne = Syne({
 })
 
 export const metadata: Metadata = {
+  // Non-dental vertical: kept live, but excluded from search and the sitemap.
+  robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
   title: "AI Call Answering for HVAC & Plumbing Contractors - 24/7",
   description:
     "Never miss a job call again. We answer every HVAC, plumbing, and electrical call in under 2 rings, 24/7, capture job details, and notify your team instantly. Free first month.",

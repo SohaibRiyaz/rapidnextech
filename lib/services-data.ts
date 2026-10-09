@@ -381,35 +381,13 @@ export const serviceCategories = [
     },
 ]
 
+// Dental is the only vertical shown in navigation, /services and the sitemap.
+// The other solution pages (aesthetic clinics, home-service, med spa, real estate, diet & nutrition)
+// remain live but are noindexed and unlinked.
 export const industrySolutions = [
     {
-        title: "Aesthetic Clinics",
-        href: "/solutions/aesthetic-clinics",
-        description: "AI-powered appointment conversion & automation for aesthetic clinics.",
-    },
-    {
-        title: "AI Call Answering (HVAC & Plumbing)",
-        href: "/solutions/never-miss-a-call",
-        description: "24/7 AI dispatcher for HVAC, plumbing, and electrical contractors.",
-    },
-    {
-        title: "AI Voice Receptionist (Med Spas)",
-        href: "/solutions/never-miss-a-medspa-call",
-        description: "24/7 call answering and consultation booking for US med spas.",
-    },
-    {
-        title: "Dental Clinics",
+        title: "AI Receptionist for Dental Practices",
         href: "/solutions/dental-clinics",
-        description: "AI receptionist for dental practices that captures patient calls and booking requests.",
-    },
-    {
-        title: "Real Estate Agencies",
-        href: "/solutions/real-estate",
-        description: "Automated property inquiry qualification and viewing bookings.",
-    },
-    {
-        title: "Diet & Nutrition",
-        href: "/solutions/diet-nutrition",
-        description: "Automate diet inquiries, consultations, and plan signups.",
+        description: "24/7 call answering for US dental practices: new patients, emergencies, insurance questions and appointment requests.",
     },
 ]

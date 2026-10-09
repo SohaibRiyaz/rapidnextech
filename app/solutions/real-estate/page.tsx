@@ -12,6 +12,8 @@ import { CTASection } from "@/components/solutions/real-estate/cta-section"
 import { FAQSection } from "@/components/solutions/real-estate/faq-section"
 
 export const metadata: Metadata = {
+  // Non-dental vertical: kept live, but excluded from search and the sitemap.
+  robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
   title: "Property Inquiry Conversion & Viewing Booking Automation for Real Estate",
   description:
     "Respond instantly to WhatsApp and website property inquiries, qualify buyers, and guide them to book site visits automatically. Works with your CRM or a booking page we create.",
