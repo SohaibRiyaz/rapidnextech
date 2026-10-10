@@ -14,4 +14,10 @@ export const card = "rounded-2xl border border-border bg-card text-card-foregrou
 /** Anchor targets sit below the fixed header (h-20 → h-16). */
 export const anchorOffset = "scroll-mt-24"
 
+/**
+ * For whole sections used as jump targets: cancels the section's own top padding (sectionY) so the
+ * heading lands just under the fixed header instead of after a band of empty space.
+ */
+export const sectionAnchor = "scroll-mt-6 md:scroll-mt-0"
+
 export const sectionY = "py-16 md:py-24"

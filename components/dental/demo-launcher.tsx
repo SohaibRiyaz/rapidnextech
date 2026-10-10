@@ -29,7 +29,7 @@ export function DemoLauncher({ location }: { location: string }) {
   }
 
   return (
-    <div className="flex aspect-[4/5] w-full flex-col items-center justify-center gap-5 rounded-3xl border border-border bg-card p-6 text-center shadow-xl sm:aspect-[16/11] lg:aspect-[16/9]">
+    <div className="flex aspect-[4/5] w-full flex-col items-center justify-center gap-5 rounded-3xl short:aspect-auto short:h-[clamp(300px,calc(100vh-340px),480px)] short:gap-4 border border-border bg-card p-6 text-center shadow-xl sm:aspect-[16/11] lg:aspect-[16/9]">
       <span className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
         <Mic className="h-8 w-8" aria-hidden="true" />
       </span>

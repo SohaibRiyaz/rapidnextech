@@ -1,7 +1,7 @@
 import { ClipboardList, PhoneForwarded, Send } from "lucide-react"
 import { siteConfig } from "@/lib/site-config"
 import { SectionHeading } from "./section-heading"
-import { anchorOffset, sectionY } from "./styles"
+import { sectionAnchor, sectionY } from "./styles"
 
 const steps = [
   {
@@ -24,7 +24,7 @@ const steps = [
 export function DentalHowItWorks() {
   const systems = siteConfig.copy.phoneSystems.join(", ")
   return (
-    <section id="how-it-works" aria-labelledby="how-title" className={`${sectionY} ${anchorOffset} bg-muted/40`}>
+    <section id="how-it-works" aria-labelledby="how-title" className={`${sectionY} ${sectionAnchor} bg-muted/40`}>
       <div className="container mx-auto px-4 sm:px-6">
         <SectionHeading id="how-title" eyebrow="How it works" title="Three steps. Your patients keep dialing the same number." />
 

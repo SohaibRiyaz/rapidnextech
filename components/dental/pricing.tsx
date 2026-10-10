@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { SELECT_PLAN_EVENT } from "./events"
 import { InfoTip } from "./info-tip"
 import { SectionHeading } from "./section-heading"
-import { anchorOffset, primaryCta, secondaryCta, sectionY } from "./styles"
+import { sectionAnchor, primaryCta, secondaryCta, sectionY } from "./styles"
 
 function PlanCard({ plan, crossPage }: { plan: Plan; crossPage: boolean }) {
   const href = crossPage ? `/?plan=${plan.id}#pilot` : "#pilot"
@@ -85,7 +85,7 @@ export function DentalPricing({ crossPage = false }: { crossPage?: boolean }) {
   const { pricing } = siteConfig
   const founding = pricing.founding
   return (
-    <section id="pricing" aria-labelledby="pricing-title" className={`${sectionY} ${anchorOffset} bg-muted/40`}>
+    <section id="pricing" aria-labelledby="pricing-title" className={`${sectionY} ${sectionAnchor} bg-muted/40`}>
       <div className="container mx-auto px-4 sm:px-6">
         <SectionHeading
           id="pricing-title"

@@ -3,7 +3,7 @@ import { siteConfig } from "@/lib/site-config"
 import { PilotForm } from "./pilot-form"
 import { SecurityNote } from "./security-note"
 import { SectionHeading } from "./section-heading"
-import { anchorOffset, sectionY } from "./styles"
+import { sectionAnchor, sectionY } from "./styles"
 
 export const pilotTimeline = [
   { when: "Day 0", title: "30-min onboarding call", text: "We learn your hours, services, insurance list and emergency rules." },
@@ -40,7 +40,7 @@ export function PilotTimeline() {
 
 export function DentalPilotSection() {
   return (
-    <section id="pilot" aria-labelledby="pilot-title" className={`${sectionY} ${anchorOffset}`}>
+    <section id="pilot" aria-labelledby="pilot-title" className={`${sectionY} ${sectionAnchor}`}>
       <div className="container mx-auto px-4 sm:px-6">
         <SectionHeading
           id="pilot-title"
