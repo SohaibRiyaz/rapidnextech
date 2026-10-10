@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import Header from "@/components/Header"
 import { Footer } from "@/components/Footer"
 import { FloatingWhatsAppWidget } from "@/components/whatsapp/floating-whatsapp-widget"
+import { siteConfig } from "@/lib/site-config"
 
 interface ConditionalLayoutProps {
     children: React.ReactNode
@@ -29,7 +30,7 @@ export function ConditionalLayout({ children }: ConditionalLayoutProps) {
                 {children}
             </main>
             <Footer />
-            {!isHomeServiceDemoRoute ? <FloatingWhatsAppWidget /> : null}
+            {siteConfig.whatsappBadgeEnabled && !isHomeServiceDemoRoute ? <FloatingWhatsAppWidget /> : null}
         </>
     )
 }

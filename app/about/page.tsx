@@ -4,23 +4,23 @@ import AboutClient from "@/components/about/AboutClient"
 import { breadcrumbSchema, jsonLd } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "About RapidNexTech - AI Automation & Software Engineering Team",
+  title: "About RapidNexTech - AI Receptionist for Dental Practices",
   description:
-    "RapidNexTech is a remote-first software engineering team specializing in custom SaaS, AI automation, and scalable web and mobile apps for businesses in the GCC, US, and UK.",
+    "RapidNexTech builds the AI receptionist for US dental practices: 24/7 answering for after-hours, weekend and overflow calls, with every request sent to the front desk. We also build custom software.",
   alternates: { canonical: "https://rapidnextech.com/about" },
   openGraph: {
-    title: "About RapidNexTech - AI Automation & Software Engineering Team",
+    title: "About RapidNexTech - AI Receptionist for Dental Practices",
     description:
-      "A remote-first team building custom software, SaaS platforms, and AI-powered automation for businesses in the GCC, US, UK, and global markets.",
+      "The team behind the AI receptionist for US dental practices. We also build custom software.",
     url: "https://rapidnextech.com/about",
     type: "website",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "About RapidNexTech" }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "About RapidNexTech, AI receptionist for dental practices" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "About RapidNexTech - AI Automation & Software Engineering Team",
+    title: "About RapidNexTech - AI Receptionist for Dental Practices",
     description:
-      "A remote-first team building custom software, SaaS platforms, and AI-powered automation for businesses in the GCC, US, UK, and global markets.",
+      "The team behind the AI receptionist for US dental practices. We also build custom software.",
     images: ["/og-image.png"],
   },
 }
@@ -32,7 +32,7 @@ export default function AboutPage() {
     name: "About RapidNexTech",
     url: "https://rapidnextech.com/about",
     description:
-      "RapidNexTech is a remote-first software engineering company specializing in custom SaaS, AI automation, web applications, and mobile apps.",
+      "RapidNexTech is a software engineering company that builds the AI receptionist for US dental practices, and also builds custom software.",
     breadcrumb: breadcrumbSchema([
       { name: "Home", path: "/" },
       { name: "About", path: "/about" },

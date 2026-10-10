@@ -90,8 +90,8 @@ export default function AboutClient() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-[1.1]"
             >
-              <span className="bg-clip-text text-transparent theme-gradient-text">The Speed You Need,</span> <br className="hidden md:block" />
-              <span className="theme-text opacity-90">The Technology You Trust.</span>
+              <span className="theme-text opacity-90">We build the</span>{" "}
+              <span className="bg-clip-text text-transparent theme-gradient-text">AI receptionist for dental practices.</span>
             </motion.h1>
 
             <motion.p
@@ -100,7 +100,9 @@ export default function AboutClient() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-xl md:text-2xl theme-text opacity-70 max-w-3xl mx-auto mb-8 font-light leading-relaxed"
             >
-              We help founders and enterprises turn ambitious ideas into reliable, scalable software—without the usual risks or delays.
+              RapidNexTech is a software engineering company. Our product answers after-hours, weekend and overflow
+              calls for US dental practices, captures new patients and emergencies, and sends every request to the
+              front desk. We also build custom software for businesses.
             </motion.p>
 
             <motion.div
@@ -109,14 +111,14 @@ export default function AboutClient() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
-              <Link href="/contact">
-                <Button className="h-14 px-8 text-lg rounded-full bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-primary/25 transition-all w-full sm:w-auto">
-                  Start Your Project
+              <Link href="/#pilot">
+                <Button className="h-14 px-8 text-lg rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-primary/25 transition-all w-full sm:w-auto">
+                  Start your free pilot
                 </Button>
               </Link>
-              <Link href="/case-studies">
+              <Link href="/software">
                 <Button variant="outline" className={`h-14 px-8 text-lg rounded-full border-2 bg-transparent hover:bg-transparent ${mode === 'dark' ? 'border-white/20 text-white hover:border-white' : 'border-black/10 text-black hover:border-black'} transition-all w-full sm:w-auto`}>
-                  View Our Work
+                  Custom software
                 </Button>
               </Link>
             </motion.div>

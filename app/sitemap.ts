@@ -47,6 +47,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1.0,
     },
     {
+      url: absoluteSiteUrl("/software"),
+      lastModified: currentDate,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: absoluteSiteUrl("/about"),
       lastModified: currentDate,
       changeFrequency: "monthly",
@@ -148,29 +154,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: absoluteSiteUrl(solution.href),
     lastModified: currentDate,
     changeFrequency: "monthly" as const,
-    priority: 0.7,
+    priority: 0.9,
   }))
 
-  const explicitSeoSolutionPages: MetadataRoute.Sitemap = [
-    {
-      url: absoluteSiteUrl("/solutions/never-miss-a-call/texas"),
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.75,
-    },
-    {
-      url: absoluteSiteUrl("/solutions/dental-clinics"),
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.75,
-    },
-  ]
+  // Only the dental solution page is listed. The other vertical pages (aesthetic clinics,
+  // never-miss-a-call incl. /texas, med spa, real estate, diet & nutrition) are noindexed.
 
   return dedupeByUrl([
     ...staticPages,
     ...servicePages,
     ...solutionPages,
-    ...explicitSeoSolutionPages,
     ...blogPages,
     ...portfolioPages,
   ])

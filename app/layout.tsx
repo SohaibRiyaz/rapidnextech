@@ -8,6 +8,8 @@ import { ThemeProvider } from "../components/theme-provider"
 import { ThemeContextProvider } from "@/context/theme-context"
 import { getSiteOrigin } from "@/lib/site-url"
 import { jsonLd, organizationSchema, websiteSchema } from "@/lib/seo"
+import Script from "next/script"
+import { Analytics } from "@vercel/analytics/react"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,14 +27,20 @@ const siteOrigin = getSiteOrigin()
 const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim()
 const bingVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION?.trim()
 
+// Optional analytics: each loads only when its ID is set (and well-formed). Both off by default.
+const ga4Id = process.env.NEXT_PUBLIC_GA4_ID?.trim()
+const ga4Enabled = !!ga4Id && /^G-[A-Z0-9]+$/i.test(ga4Id)
+const clarityId = process.env.NEXT_PUBLIC_CLARITY_ID?.trim()
+const clarityEnabled = !!clarityId && /^[a-z0-9]+$/i.test(clarityId)
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteOrigin),
   title: {
-    default: "RapidNexTech — Custom Software, SaaS & AI Automation",
+    default: "RapidNexTech — AI Receptionist for Dental Practices",
     template: "%s | RapidNexTech",
   },
   description:
-    "We build custom software, scalable SaaS platforms, and AI-powered automation systems that solve real business problems. From MVPs to enterprise scale.",
+    "AI receptionist for US dental practices. Answers after-hours, weekend and overflow calls 24/7, captures new patients, handles dental emergencies, and sends every request to your front desk.",
   verification: {
     ...(googleVerification ? { google: googleVerification } : {}),
     ...(bingVerification ? { other: { "msvalidate.01": bingVerification } } : {}),
@@ -50,24 +58,24 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://rapidnextech.com",
     siteName: "RapidNexTech",
-    title: "RapidNexTech — Custom Software, SaaS & AI Automation",
+    title: "RapidNexTech — AI Receptionist for Dental Practices",
     description:
-      "We build custom software, scalable SaaS platforms, and AI-powered automation that solve real business problems.",
+      "24/7 AI receptionist for dental practices: new patients, dental emergencies, insurance questions and appointment requests, sent to your front desk.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "RapidNexTech — Custom Software, SaaS & AI Automation",
+        alt: "RapidNexTech — AI receptionist for dental practices",
         type: "image/png",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "RapidNexTech — Custom Software, SaaS & AI Automation",
+    title: "RapidNexTech — AI Receptionist for Dental Practices",
     description:
-      "We build custom software, scalable SaaS platforms, and AI-powered automation that solve real business problems.",
+      "24/7 AI receptionist for dental practices: new patients, dental emergencies, insurance questions and appointment requests, sent to your front desk.",
     images: ["/og-image.png"],
     creator: "@RapidNexTech",
     site: "@RapidNexTech",
@@ -97,7 +105,7 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
   category: "technology",
-  generator: 'v0.app'
+  generator: 'Next.js'
 }
 
 export default function RootLayout({
@@ -148,6 +156,32 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={jsonLd(websiteSchema())}
         />
+
+        {/* Vercel Analytics: page views */}
+        <Analytics />
+
+        {ga4Enabled ? (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`} strategy="afterInteractive" />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+window.gtag = gtag;
+gtag('js', new Date());
+gtag('config', '${ga4Id}');`}
+            </Script>
+          </>
+        ) : null}
+
+        {clarityEnabled ? (
+          <Script id="ms-clarity" strategy="afterInteractive">
+            {`(function(c,l,a,r,i,t,y){
+c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+})(window, document, "clarity", "script", "${clarityId}");`}
+          </Script>
+        ) : null}
       </body>
     </html>
   )

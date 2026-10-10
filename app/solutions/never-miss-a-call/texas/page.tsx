@@ -6,6 +6,8 @@ import { breadcrumbSchema, faqSchema, jsonLd, serviceSchema } from "@/lib/seo"
 const pagePath = "/solutions/never-miss-a-call/texas"
 
 export const metadata: Metadata = {
+  // Non-dental vertical: kept live, but excluded from search and the sitemap.
+  robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
   title: "AI Call Answering for HVAC Contractors in Texas - 24/7",
   description:
     "Never miss an HVAC job call in Texas. RapidNexTech's AI receptionist answers calls 24/7, captures job details, flags emergencies, and notifies your team instantly.",

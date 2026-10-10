@@ -12,6 +12,8 @@ import { CTASection } from "@/components/solutions/diet-nutrition/cta-section"
 import { FAQSection } from "@/components/solutions/diet-nutrition/faq-section"
 
 export const metadata: Metadata = {
+  // Non-dental vertical: kept live, but excluded from search and the sitemap.
+  robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
   title: "WhatsApp Automation for Diet & Nutrition Businesses",
   description:
     "Respond instantly to diet inquiries, qualify goals, and guide clients to book consultations or purchase meal plans automatically. Works with your calendar or a booking page we create.",

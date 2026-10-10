@@ -14,6 +14,8 @@ import { breadcrumbSchema, jsonLd } from "@/lib/seo"
 import { aestheticClinicFaqs } from "@/components/solutions/aesthetic-clinics/faq-data"
 
 export const metadata: Metadata = {
+  // Non-dental vertical: kept live, but excluded from search and the sitemap.
+  robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
   title: "WhatsApp Booking Assistant for Lahore Clinics | RapidNexTech",
   description:
     "WhatsApp booking assistant for aesthetic & skin clinics in Lahore. Replies instantly, books consultations 24/7. Try the live demo on WhatsApp in 30 seconds.",

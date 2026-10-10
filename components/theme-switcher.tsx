@@ -54,7 +54,7 @@ export function ThemeSwitcher() {
           size="icon"
           onClick={() => setMode(mode === "dark" ? "light" : "dark")}
           aria-label="Toggle theme mode"
-          className={`rounded-full ${getButtonStyle()}`}
+          className={`h-11 w-11 rounded-full ${getButtonStyle()}`}
         >
           {mode === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </Button>
@@ -63,7 +63,7 @@ export function ThemeSwitcher() {
           size="icon"
           onClick={() => setShowColorPicker(!showColorPicker)}
           aria-label="Change theme color"
-          className={`rounded-full ${getButtonStyle()}`}
+          className={`h-11 w-11 rounded-full ${getButtonStyle()}`}
         >
           <Palette className="h-5 w-5" />
         </Button>
