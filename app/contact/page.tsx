@@ -15,11 +15,11 @@ const DESCRIPTION =
   "Start a 14-day free pilot of RapidNexTech's AI receptionist for your dental practice, or call +1 (813) 214-2552. No credit card, no contract, keep your number."
 
 export const metadata: Metadata = {
-  title: "Contact Us: Start Your Free Dental AI Receptionist Pilot",
+  title: { absolute: "Contact RapidNexTech | Free Dental AI Receptionist Pilot" },
   description: DESCRIPTION,
   alternates: { canonical: "https://rapidnextech.com/contact" },
   openGraph: {
-    title: "Start Your Free Pilot | RapidNexTech AI Receptionist for Dental Practices",
+    title: "Contact RapidNexTech | Free Dental AI Receptionist Pilot",
     description: DESCRIPTION,
     url: "https://rapidnextech.com/contact",
     type: "website",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Start Your Free Pilot | RapidNexTech AI Receptionist for Dental Practices",
+    title: "Contact RapidNexTech | Free Dental AI Receptionist Pilot",
     description: DESCRIPTION,
     images: ["/og-image.png"],
   },

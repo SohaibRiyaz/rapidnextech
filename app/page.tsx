@@ -13,9 +13,9 @@ import { RevenueCalculator } from "@/components/dental/revenue-calculator"
 import { DentalTryItNow } from "@/components/dental/try-it-now"
 import { dentalReceptionistServiceSchema, faqSchema, jsonLd } from "@/lib/seo"
 
-const TITLE = "AI Receptionist for Dental Practices — 24/7 Call Answering"
+const TITLE = "24/7 AI Receptionist for Dental Practices"
 const DESCRIPTION =
-  "AI receptionist for dental practices. Answers after-hours, weekend and overflow calls 24/7, captures new patients, handles dental emergencies and insurance questions, and sends every request to your front desk. 14-day free pilot."
+  "AI receptionist for US dental practices. Answers after-hours, weekend and overflow calls, captures new patients and emergencies. 14-day free pilot, no card."
 
 export const metadata: Metadata = {
   title: { absolute: `${TITLE} | RapidNexTech` },

@@ -4,23 +4,23 @@ import BlogClient from "./BlogClient"
 import { BlogCMS } from "@/lib/supabase-cms"
 
 export const metadata: Metadata = {
-  title: "Insights & Articles — Software, AI & SaaS",
+  title: { absolute: "Blog: AI Receptionists, Automation & Software | RapidNexTech" },
   description:
-    "Expert articles on custom software development, AI automation, SaaS architecture, and digital transformation. Stay ahead with RapidNexTech's engineering blog.",
+    "Articles on AI receptionists, patient call handling, practice automation and custom software development from the RapidNexTech team.",
   alternates: { canonical: "https://rapidnextech.com/blog" },
   openGraph: {
-    title: "RapidNexTech Insights — Software, AI & SaaS Articles",
+    title: "Blog: AI Receptionists, Automation & Software | RapidNexTech",
     description:
-      "Expert articles on custom software development, AI automation, and modern engineering practices.",
+      "Articles on AI receptionists, patient call handling, practice automation and custom software development from the RapidNexTech team.",
     url: "https://rapidnextech.com/blog",
     type: "website",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "RapidNexTech Blog" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "RapidNexTech Insights — Software, AI & SaaS Articles",
+    title: "Blog: AI Receptionists, Automation & Software | RapidNexTech",
     description:
-      "Expert articles on custom software development, AI automation, and modern engineering practices.",
+      "Articles on AI receptionists, patient call handling, practice automation and custom software development from the RapidNexTech team.",
     images: ["/og-image.png"],
   },
 }

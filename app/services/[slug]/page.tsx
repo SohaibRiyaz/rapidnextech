@@ -21,12 +21,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
     return {
         title: {
-            absolute: `${service.title} | RapidNexTech Services`,
+            absolute: `${service.title} | RapidNexTech`,
         },
         description: service.shortDescription,
         alternates: { canonical },
         openGraph: {
-            title: `${service.title} | RapidNexTech Services`,
+            title: `${service.title} | RapidNexTech`,
             description: service.shortDescription,
             url: canonical,
             type: "website",
@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         },
         twitter: {
             card: "summary_large_image",
-            title: `${service.title} | RapidNexTech Services`,
+            title: `${service.title} | RapidNexTech`,
             description: service.shortDescription,
             images: ["/og-image.png"],
         },

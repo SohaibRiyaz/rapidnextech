@@ -4,12 +4,12 @@ import AboutClient from "@/components/about/AboutClient"
 import { breadcrumbSchema, jsonLd } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "About RapidNexTech - AI Receptionist for Dental Practices",
+  title: { absolute: "About RapidNexTech | AI Receptionist for Dental Practices" },
   description:
-    "RapidNexTech builds the AI receptionist for US dental practices: 24/7 answering for after-hours, weekend and overflow calls, with every request sent to the front desk. We also build custom software.",
+    "Meet the team behind RapidNexTech, the 24/7 AI receptionist for US dental practices. We also build custom software and AI automation for growing businesses.",
   alternates: { canonical: "https://rapidnextech.com/about" },
   openGraph: {
-    title: "About RapidNexTech - AI Receptionist for Dental Practices",
+    title: "About RapidNexTech | AI Receptionist for Dental Practices",
     description:
       "The team behind the AI receptionist for US dental practices. We also build custom software.",
     url: "https://rapidnextech.com/about",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "About RapidNexTech - AI Receptionist for Dental Practices",
+    title: "About RapidNexTech | AI Receptionist for Dental Practices",
     description:
       "The team behind the AI receptionist for US dental practices. We also build custom software.",
     images: ["/og-image.png"],

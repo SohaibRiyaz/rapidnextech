@@ -16,14 +16,14 @@ import { breadcrumbSchema, dentalReceptionistServiceSchema, faqSchema, jsonLd } 
 
 const pagePath = "/solutions/dental-clinics"
 const DESCRIPTION =
-  "How RapidNexTech's AI receptionist works for dental practices: call forwarding from your existing number, dental emergency rules, insurance questions, appointment requests sent to your front desk, pricing and the 14-day free pilot."
+  "See how the AI receptionist works for dental practices: call forwarding, emergency rules, insurance questions and appointment requests sent to your front desk."
 
 export const metadata: Metadata = {
-  title: "How the AI Receptionist Works for Dental Practices",
+  title: { absolute: "How Our Dental AI Receptionist Works | RapidNexTech" },
   description: DESCRIPTION,
   alternates: { canonical: "https://rapidnextech.com/solutions/dental-clinics" },
   openGraph: {
-    title: "How the AI Receptionist Works for Dental Practices | RapidNexTech",
+    title: "How Our Dental AI Receptionist Works | RapidNexTech",
     description: DESCRIPTION,
     url: "https://rapidnextech.com/solutions/dental-clinics",
     type: "website",
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "How the AI Receptionist Works for Dental Practices | RapidNexTech",
+    title: "How Our Dental AI Receptionist Works | RapidNexTech",
     description: DESCRIPTION,
     images: ["/og-image.png"],
   },
