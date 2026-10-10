@@ -3,12 +3,12 @@ import { ArrowRight } from "lucide-react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { getDentalFaqs } from "./faq-data"
 import { SectionHeading } from "./section-heading"
-import { anchorOffset, sectionY, textLink } from "./styles"
+import { sectionAnchor, sectionY, textLink } from "./styles"
 
 export function DentalFaq({ showDeepLink = true }: { showDeepLink?: boolean }) {
   const faqs = getDentalFaqs()
   return (
-    <section id="faq" aria-labelledby="faq-title" className={`${sectionY} ${anchorOffset}`}>
+    <section id="faq" aria-labelledby="faq-title" className={`${sectionY} ${sectionAnchor}`}>
       <div className="container mx-auto max-w-3xl px-4 sm:px-6">
         <SectionHeading id="faq-title" eyebrow="FAQ" title="Questions dental practices ask us" />
 

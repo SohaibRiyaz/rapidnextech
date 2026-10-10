@@ -17,6 +17,10 @@ module.exports = {
             },
         },
         extend: {
+            screens: {
+                // Laptops with little vertical room (e.g. 1280×~600 at 150% Windows scaling).
+                short: { raw: "(min-width: 1024px) and (max-height: 820px)" },
+            },
             colors: {
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",

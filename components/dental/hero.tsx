@@ -7,7 +7,7 @@ import { primaryCta, secondaryCta, textLink } from "./styles"
 
 export function DentalHero() {
   return (
-    <section aria-labelledby="hero-title" className="relative overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24">
+    <section aria-labelledby="hero-title" className="relative overflow-hidden pt-28 pb-16 md:pt-32 md:pb-20 short:pt-24 short:pb-10">
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <MeshGradient />
         <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-[0.06]" />
@@ -15,27 +15,27 @@ export function DentalHero() {
       </div>
 
       <div className="container relative z-10 mx-auto px-4 sm:px-6">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:gap-10">
           <div className="motion-safe:animate-fade-in-up">
-            <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
+            <p className="mb-5 short:mb-3 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
               <PhoneIncoming className="h-4 w-4" aria-hidden="true" />
               AI receptionist for US dental practices
             </p>
 
             <h1
               id="hero-title"
-              className="text-4xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-5xl xl:text-6xl"
+              className="text-4xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-[clamp(2.25rem,min(calc(10vh-1.25rem),3.6vw),3.75rem)]"
             >
               Your dental practice never loses another after-hours or weekend call to{" "}
               <span className="bg-clip-text text-transparent theme-gradient-text">voicemail or a competitor</span>.
             </h1>
 
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl short:mt-3 short:text-lg">
               AI receptionist for dental practices that answers 24/7, captures new patients, handles emergencies, and
               sends every request to your front desk.
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap short:mt-4">
               <a href="#live-demo" className={primaryCta}>
                 Talk to our AI receptionist
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -56,7 +56,7 @@ export function DentalHero() {
               </p>
             ) : null}
 
-            <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-foreground/80" aria-label="Pilot terms">
+            <ul className="mt-5 short:mt-2 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-foreground/80" aria-label="Pilot terms">
               {siteConfig.pilot.chips.map((chip) => (
                 <li key={chip} className="inline-flex items-center gap-1.5">
                   <Check className="h-4 w-4 text-primary" aria-hidden="true" />
@@ -65,7 +65,7 @@ export function DentalHero() {
               ))}
             </ul>
 
-            <Link href="/solutions/dental-clinics" className={`${textLink} mt-4 text-sm`}>
+            <Link href="/solutions/dental-clinics" className={`${textLink} mt-4 text-sm short:mt-1`}>
               How it works for dental practices <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>

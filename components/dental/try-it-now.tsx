@@ -4,11 +4,11 @@ import { DemoLauncher } from "./demo-launcher"
 import { PhoneLink } from "./phone-link"
 import { SampleCallPlayer } from "./sample-call-player"
 import { SectionHeading } from "./section-heading"
-import { anchorOffset, card, sectionY } from "./styles"
+import { anchorOffset, card, sectionAnchor, sectionY } from "./styles"
 
 export function DentalTryItNow() {
   return (
-    <section id="try-it" aria-labelledby="try-title" className={`${sectionY} ${anchorOffset} bg-muted/40`}>
+    <section id="try-it" aria-labelledby="try-title" className={`${sectionY} ${sectionAnchor} bg-muted/40`}>
       {/* "Talk to our AI receptionist" CTAs land here: heading just below the header, skipping the section's top padding. */}
       <div id="live-demo" className={`container mx-auto px-4 sm:px-6 ${anchorOffset}`}>
         <SectionHeading
