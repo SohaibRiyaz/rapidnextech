@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     template: "%s | RapidNexTech",
   },
   description:
-    "AI receptionist for US dental practices. Answers after-hours, weekend and overflow calls 24/7, captures new patients, handles dental emergencies, and sends every request to your front desk.",
+    "24/7 AI receptionist for US dental practices: answers after-hours, weekend and overflow calls, captures new patients and sends every request to your front desk.",
   verification: {
     ...(googleVerification ? { google: googleVerification } : {}),
     ...(bingVerification ? { other: { "msvalidate.01": bingVerification } } : {}),
