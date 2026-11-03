@@ -1,0 +1,26 @@
+Subject: Custom software and extra engineering capacity for {{CompanyName}}
+
+Hello {{FirstName}},
+
+As one of our valued K Gulf Hosting customers, I wanted to personally introduce you to a team that may be useful to {{CompanyName}}.
+
+When CRM, accounting and in-house tools don't talk to each other, teams lose hours moving data and building reports by hand. And when projects pile up, hiring engineers takes months.
+
+RapidNexTech is a software development team I have worked with directly. They build custom systems and integrations, and also work as a white-label team for IT firms.
+
+A few examples of what they could build:
+- Internal systems for requests, approvals and job tracking
+- Integrations and live dashboards across your existing systems
+- AI and automation for repetitive work, or engineers working under your brand
+
+They have put together a short page with examples and common questions:
+https://rapidnextech.com/software/industries/enterprise-it?ref=kgulf&for={{CompanyName}}&utm_source=kgulf&utm_medium=email&utm_campaign=enterprise-it
+
+If anything there is relevant, you can contact them directly from that page. There is no obligation.
+
+Best regards,
+Dr. Nimr
+CEO, K Gulf Hosting
+
+--
+RapidNexTech is an independent software company. Your hosting services remain with K Gulf Hosting.

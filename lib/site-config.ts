@@ -28,6 +28,17 @@ export const siteConfig = {
   supportsSpanish: true as boolean,
   whatsappBadgeEnabled: false as boolean,
 
+  /**
+   * Hosting partner shown as one small line in the site footers. Set `enabled: false` to hide it.
+   * Wording is fixed: "Hosting partner". Don't call it owner, parent, affiliate or official partner.
+   */
+  hostingPartner: {
+    enabled: true as boolean,
+    name: "K Gulf Hosting",
+    url: "https://kgulfhosting.com.sa/",
+    logo: "/partners/kgulf-hosting.png",
+  },
+
   /** Optional media / links: blocks are hidden while these are null. */
   sampleCallUrl: null as string | null,
   bookingUrl: null as string | null,

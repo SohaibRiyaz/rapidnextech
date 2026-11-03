@@ -3,6 +3,7 @@ import { industrySolutions, servicesData } from "@/lib/services-data"
 import { slugify } from "@/lib/utils"
 import { absoluteSiteUrl, getSiteOrigin } from "@/lib/site-url"
 import { unstable_noStore } from "next/cache"
+import { INDUSTRIES_HUB_PATH, START_PROJECT_PATH, indexableIndustries, industryPath } from "@/lib/industries"
 
 function blogPostPath(post: { slug?: string | null; title?: string }): string | null {
   const s = post.slug?.trim()
@@ -160,10 +161,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Only the dental solution page is listed. The other vertical pages (aesthetic clinics,
   // never-miss-a-call incl. /texas, med spa, real estate, diet & nutrition) are noindexed.
 
+  // Custom-software industry pages: only published pages with index: true. The hub is listed once
+  // at least one is live; the inquiry page is always listed.
+  const industryPages: MetadataRoute.Sitemap = [
+    ...(indexableIndustries.length
+      ? [{ url: absoluteSiteUrl(INDUSTRIES_HUB_PATH), lastModified: currentDate, changeFrequency: "monthly" as const, priority: 0.7 }]
+      : []),
+    ...indexableIndustries.map((industry) => ({
+      url: absoluteSiteUrl(industryPath(industry.slug)),
+      lastModified: currentDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
+    { url: absoluteSiteUrl(START_PROJECT_PATH), lastModified: currentDate, changeFrequency: "yearly" as const, priority: 0.5 },
+  ]
+
   return dedupeByUrl([
     ...staticPages,
     ...servicePages,
     ...solutionPages,
+    ...industryPages,
     ...blogPages,
     ...portfolioPages,
   ])

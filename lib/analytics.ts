@@ -15,6 +15,8 @@ export type AnalyticsEvent =
   | "demo_start"
   | "pricing_cta_click"
   | "pilot_form_submit"
+  | "software_lead_submit"
+  | "industry_page_view"
 
 type EventParams = Record<string, string | number | boolean | undefined>
 
@@ -22,6 +24,7 @@ declare global {
   interface Window {
     dataLayer?: unknown[]
     gtag?: (...args: unknown[]) => void
+    fbq?: (...args: unknown[]) => void
   }
 }
 
