@@ -39,7 +39,16 @@ export type ProofItem = {
 export type FaqEntry = { question: string; answer: string }
 
 /** Sections an industry page can render, in the order listed in `sections`. */
-export type IndustrySectionKey = "audience" | "problems" | "solutions" | "scenarios" | "proof" | "process" | "faq"
+export type IndustrySectionKey =
+  | "audience"
+  | "problems"
+  | "solutions"
+  | "scenarios"
+  | "proof"
+  | "testimonial"
+  | "process"
+  | "faq"
+  | "related"
 
 export type IndustryContent = {
   slug: string
@@ -56,7 +65,8 @@ export type IndustryContent = {
   /** One or two sentences for the hub card. */
   hubSummary: string
 
-  seo: { title: string; description: string; serviceType: string }
+  /** title ≤ 60 chars, description ≤ 155 chars. ogImage defaults to the site OG image. */
+  seo: { title: string; description: string; serviceType: string; ogImage?: string }
 
   hero: {
     eyebrow: string
@@ -64,7 +74,7 @@ export type IndustryContent = {
     intro: string
     /** Label of the primary CTA (links to the inquiry form with this industry preselected). */
     primaryCta: string
-    /** Optional in-page anchor, e.g. { label: "What we build", href: "#solutions" }. */
+    /** Optional in-page anchor, e.g. { label: "What we build", href: "#what-we-build" }. */
     secondaryCta?: { label: string; href: string }
     /** Short reassurance chips under the CTAs. */
     chips?: string[]
@@ -78,7 +88,11 @@ export type IndustryContent = {
   solutions: { title: string; intro?: string; items: SolutionItem[] }
   scenarios?: { title: string; intro?: string; items: ScenarioItem[] }
   proof?: { title: string; intro?: string; items: ProofItem[] }
+  /** id from lib/software-testimonials.ts. Real client quotes only, shown verbatim. */
+  testimonialId?: number
   faqs: FaqEntry[]
+  /** Slugs of other industry pages to link to. Unpublished slugs are skipped. */
+  relatedIndustries?: string[]
 
   finalCta: { title: string; body: string; button: string }
 

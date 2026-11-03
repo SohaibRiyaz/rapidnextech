@@ -5,15 +5,19 @@ import {
   IndustryFaqSection,
   IndustryFinalCta,
   IndustryHero,
+  IndustryTestimonial,
   ProcessSection,
+  RelatedIndustries,
   ProofSection,
   ScenariosSection,
   SolutionsSection,
 } from "@/components/software/industry-sections"
+import { IndustryPageView } from "@/components/software/industry-page-view"
 import { INDUSTRIES_HUB_PATH, getPublishedIndustry, industryPath, publishedIndustries, startProjectHref } from "@/lib/industries"
 import type { IndustryContent, IndustrySectionKey } from "@/lib/industries/types"
 import { breadcrumbSchema, faqSchema, jsonLd, serviceSchema } from "@/lib/seo"
 import { absoluteSiteUrl } from "@/lib/site-url"
+import { softwareClientTestimonials } from "@/lib/software-testimonials"
 
 // Only published industries are routed; anything else is a 404.
 export const dynamicParams = false
@@ -27,6 +31,7 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
   if (!industry) return {}
   // Canonical is always the clean path, so ?for= / ?ref= / UTM variants consolidate to it.
   const url = absoluteSiteUrl(industryPath(industry.slug))
+  const ogImage = industry.seo.ogImage ?? "/og-image.png"
   return {
     title: { absolute: industry.seo.title },
     description: industry.seo.description,
@@ -39,13 +44,13 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
       description: industry.seo.description,
       url,
       type: "website",
-      images: [{ url: "/og-image.png", width: 1200, height: 630, alt: `RapidNexTech: ${industry.name}` }],
+      images: [{ url: ogImage, width: 1200, height: 630, alt: `RapidNexTech: ${industry.name}` }],
     },
     twitter: {
       card: "summary_large_image",
       title: industry.seo.title,
       description: industry.seo.description,
-      images: ["/og-image.png"],
+      images: [ogImage],
     },
   }
 }
@@ -64,10 +69,21 @@ function renderSection(key: IndustrySectionKey, industry: IndustryContent) {
       return industry.scenarios ? <ScenariosSection key={key} {...industry.scenarios} /> : null
     case "proof":
       return industry.proof?.items.length ? <ProofSection key={key} {...industry.proof} /> : null
+    case "testimonial": {
+      const t = softwareClientTestimonials.find((x) => x.id === industry.testimonialId)
+      return t ? <IndustryTestimonial key={key} quote={t.text} name={t.name} position={t.position} company={t.company} /> : null
+    }
     case "process":
       return <ProcessSection key={key} />
     case "faq":
       return <IndustryFaqSection key={key} faqs={industry.faqs} title={`${industry.name}: common questions`} />
+    case "related": {
+      const items = (industry.relatedIndustries ?? [])
+        .map((slug) => getPublishedIndustry(slug))
+        .filter((i): i is IndustryContent => Boolean(i))
+        .map((i) => ({ name: i.name, href: industryPath(i.slug), summary: i.hubSummary }))
+      return <RelatedIndustries key={key} items={items} hubHref={INDUSTRIES_HUB_PATH} />
+    }
   }
 }
 
@@ -92,6 +108,7 @@ export default function IndustryPage({ params }: { params: { slug: string } }) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(schemas)} />
+      <IndustryPageView slug={industry.slug} />
       <IndustryHero industry={industry} ctaHref={ctaHref} />
       {industry.sections.map((key) => renderSection(key, industry))}
       <IndustryFinalCta {...industry.finalCta} href={ctaHref} />

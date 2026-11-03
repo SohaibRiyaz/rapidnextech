@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, Check, Mail } from "lucide-react"
+import { ArrowRight, Check, Mail, Quote } from "lucide-react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { SectionHeading } from "@/components/dental/section-heading"
 import { card, primaryCta, secondaryCta, sectionAnchor, sectionY, textLink } from "@/components/dental/styles"
@@ -119,7 +119,7 @@ export function IconGridSection({
 
 export function SolutionsSection({ title, intro, items }: { title: string; intro?: string; items: SolutionItem[] }) {
   return (
-    <section id="solutions" aria-labelledby="solutions-title" className={`${sectionY} ${sectionAnchor}`}>
+    <section id="what-we-build" aria-labelledby="solutions-title" className={`${sectionY} ${sectionAnchor}`}>
       <div className="container mx-auto px-4 sm:px-6">
         <SectionHeading id="solutions-title" eyebrow="What we build" title={title} intro={intro} />
         <ul className="mx-auto grid max-w-6xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -303,6 +303,74 @@ export function IndustryFinalCta({
             </a>
           </div>
         </div>
+      </div>
+    </section>
+  )
+}
+
+/** One real client quote, verbatim from lib/software-testimonials.ts. */
+export function IndustryTestimonial({
+  quote,
+  name,
+  position,
+  company,
+}: {
+  quote: string
+  name: string
+  position: string
+  company: string
+}) {
+  return (
+    <section aria-label="What a client says" className={`${sectionY} bg-muted/40`}>
+      <div className="container mx-auto max-w-3xl px-4 sm:px-6">
+        <figure className={`${card} p-8 md:p-10`}>
+          <Quote className="mb-4 h-8 w-8 text-primary" aria-hidden="true" />
+          <blockquote className="text-lg leading-relaxed text-card-foreground md:text-xl">&ldquo;{quote}&rdquo;</blockquote>
+          <figcaption className="mt-6 text-sm text-muted-foreground">
+            <span className="font-semibold text-foreground">{name}</span>, {position}, {company}
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+  )
+}
+
+/** Links to related industry pages and the hub (internal linking). */
+export function RelatedIndustries({
+  items,
+  hubHref,
+}: {
+  items: { name: string; href: string; summary: string }[]
+  hubHref: string
+}) {
+  return (
+    <section id="related" aria-labelledby="related-title" className={`${sectionY} ${sectionAnchor}`}>
+      <div className="container mx-auto px-4 sm:px-6">
+        <SectionHeading id="related-title" eyebrow="Related" title="We also build for" />
+        {items.length ? (
+          <ul className="mx-auto grid max-w-6xl gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {items.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className={`${card} group flex h-full flex-col p-6 transition-colors hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring`}
+                >
+                  <span className="text-lg font-semibold text-card-foreground group-hover:text-primary">{item.name}</span>
+                  <span className="mt-2 flex-1 leading-relaxed text-muted-foreground">{item.summary}</span>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
+                    See what we build
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 rtl:rotate-180" aria-hidden="true" />
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+        <p className="mt-8 text-center">
+          <Link href={hubHref} className={`${textLink} justify-center`}>
+            All industries <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </p>
       </div>
     </section>
   )
