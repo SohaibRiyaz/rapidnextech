@@ -28,7 +28,7 @@ export default function TermsOfServicePage() {
   return (
     <LegalLayout
       title="Terms of Service"
-      lastUpdated="March 16, 2026"
+      lastUpdated="November 3, 2026"
       intro="These Terms of Service govern your use of the RapidNexTech website and services."
     >
       <section>
@@ -116,7 +116,12 @@ export default function TermsOfServicePage() {
       </section>
 
       <section>
-        <h2>10. Termination</h2>
+        <h2>10. Third-Party Partners</h2>
+        <p>{"RapidNexTech works with K Gulf Hosting (kgulfhosting.com.sa) as a hosting partner, and clients may be introduced to RapidNexTech through this partnership. RapidNexTech and K Gulf Hosting are independent companies. RapidNexTech is responsible only for the software development and related services it agrees to provide. Hosting, infrastructure, email, backup and security services purchased from K Gulf Hosting are provided by K Gulf Hosting under its own terms. Neither company is responsible for the other’s services, obligations or commitments."}</p>
+      </section>
+
+      <section>
+        <h2>11. Termination</h2>
         <p>
           We may suspend or terminate access to the website or services if these Terms are violated or if required by
           law. Client project termination will follow the terms outlined in the applicable agreement.
@@ -124,14 +129,14 @@ export default function TermsOfServicePage() {
       </section>
 
       <section>
-        <h2>11. Governing Law</h2>
+        <h2>12. Governing Law</h2>
         <p>
           These Terms are governed by the laws of England and Wales, without regard to conflict of law principles.
         </p>
       </section>
 
       <section>
-        <h2>12. Contact Information</h2>
+        <h2>13. Contact Information</h2>
         <p>If you have questions about these Terms, please contact:</p>
         <div>
           <strong>RapidNexTech</strong>
