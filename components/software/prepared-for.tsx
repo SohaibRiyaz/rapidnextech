@@ -13,7 +13,18 @@ export function PreparedFor() {
 
   useEffect(() => {
     try {
-      setCompany(sanitizeFor(new URLSearchParams(window.location.search).get("for")))
+      const value = sanitizeFor(new URLSearchParams(window.location.search).get("for"))
+      setCompany(value)
+      // Belt and braces with the X-Robots-Tag header from middleware.ts.
+      if (value) {
+        let meta = document.querySelector<HTMLMetaElement>('meta[name="robots"]')
+        if (!meta) {
+          meta = document.createElement("meta")
+          meta.name = "robots"
+          document.head.appendChild(meta)
+        }
+        meta.content = "noindex, follow"
+      }
     } catch {
       /* ignore */
     }

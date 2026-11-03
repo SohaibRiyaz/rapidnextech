@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 }
 
 const nextSteps = [
-  "We read your details and reply by email, usually within one business day.",
+  "We read your details and reply by email within 1 business day.",
   "A short call or email exchange to understand what you need.",
   "A written proposal with scope, timeline and price. No obligation.",
 ]

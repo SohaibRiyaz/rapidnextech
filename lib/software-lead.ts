@@ -20,27 +20,26 @@ export const LEAD_INDUSTRIES = [
 ] as const
 
 export const PROJECT_TYPES = [
-  "New website",
-  "Website redesign",
+  "Business website",
   "E-commerce store",
-  "Web application or portal",
+  "Web app / portal",
   "Mobile app",
-  "Automation or integrations",
-  "AI features",
-  "Ongoing support or dedicated developer",
-  "Not sure yet",
-] as const
-
-export const BUDGET_RANGES = [
-  "Under SAR 10,000",
-  "SAR 10,000 – 25,000",
-  "SAR 25,000 – 50,000",
-  "SAR 50,000 – 100,000",
-  "SAR 100,000+",
+  "Automation / AI",
+  "Custom software",
   "Not sure",
 ] as const
 
-export const TIMELINES = ["As soon as possible", "Within 1–3 months", "Within 3–6 months", "Flexible / exploring"] as const
+// The brief's bands (under $2,000 / $2,000–5,000 / $5,000–15,000 / $15,000+), shown in SAR
+// to match the SAR starting prices on the industry pages.
+export const BUDGET_RANGES = [
+  "Under SAR 7,500",
+  "SAR 7,500 – 19,000",
+  "SAR 19,000 – 56,000",
+  "SAR 56,000+",
+  "Not sure yet",
+] as const
+
+export const TIMELINES = ["As soon as possible", "1–3 months", "3+ months", "Just exploring"] as const
 
 export const COUNTRIES = [
   "Saudi Arabia",
@@ -103,14 +102,14 @@ export function industryLabel(slug: string) {
 /* Attribution (first-party, internal only: never shown to visitors)   */
 /* ------------------------------------------------------------------ */
 
-export const REF_COOKIE = "rnt_ref"
+export const REF_COOKIE = "rapidnex_ref"
 export const REF_COOKIE_MAX_AGE = 60 * 60 * 24 * 90 // 90 days
 
-/** Referral codes: short slugs only, e.g. "kgulf". Anything else is ignored. */
+/** Referral codes: [a-z0-9-] only, max 32 chars, e.g. "kgulf". Anything else is ignored. */
 export function sanitizeRef(value: string | null | undefined): string | null {
   if (!value) return null
   const v = value.trim().toLowerCase()
-  return /^[a-z0-9][a-z0-9_-]{0,39}$/.test(v) ? v : null
+  return /^[a-z0-9-]{1,32}$/.test(v) ? v : null
 }
 
 /**

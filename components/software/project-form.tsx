@@ -154,6 +154,8 @@ export function ProjectForm() {
       const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; fieldErrors?: SoftwareLeadFieldErrors }
       if (res.ok && json.ok) {
         trackEvent("software_lead_submit", { status: "success", industry: values.industry, project_type: values.projectType })
+        // Meta Pixel is not installed today; this fires only if it is added later.
+        if (typeof window.fbq === "function") window.fbq("track", "Lead")
         setStatus("success")
         return
       }
@@ -161,11 +163,11 @@ export function ProjectForm() {
         setErrors(json.fieldErrors)
         focusFirstError(json.fieldErrors)
       }
-      trackEvent("software_lead_submit", { status: "error" })
+      trackEvent("software_lead_submit", { status: "error", industry: values.industry })
       setServerError(json.error || "")
       setStatus("error")
     } catch {
-      trackEvent("software_lead_submit", { status: "error" })
+      trackEvent("software_lead_submit", { status: "error", industry: values.industry })
       setStatus("error")
     }
   }
@@ -178,7 +180,7 @@ export function ProjectForm() {
           Thank you. Your project details are with us.
         </h2>
         <p className="mt-3 leading-relaxed text-muted-foreground">
-          We&apos;ll reply by email, usually within one business day, with questions or a suggested next step. A
+          We&apos;ll reply by email within 1 business day with questions or a suggested next step. A
           confirmation is on its way to your inbox.
         </p>
       </div>

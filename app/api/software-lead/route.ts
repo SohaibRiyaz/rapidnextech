@@ -97,7 +97,7 @@ function buildNotification(data: SoftwareLeadSubmission, submittedAt: Date, refe
     if (value) rows.push([key, value])
   }
 
-  const subject = `[Software lead] ${data.company} (${data.country}): ${data.projectType}`.replace(/\s+/g, " ")
+  const subject = `[Software lead] ${data.company}, ${data.projectType} (${data.country})`.replace(/\s+/g, " ")
 
   const html = `<!doctype html><html><body style="font-family:Arial,Helvetica,sans-serif;color:#111827">
 <h2 style="margin:0 0 12px">New software project enquiry</h2>
@@ -129,11 +129,9 @@ function buildConfirmation(data: SoftwareLeadSubmission) {
   const subject = "We received your project details | RapidNexTech"
   const summary = `${data.projectType} · ${industryLabel(data.industry)}`
   const text = [
-    `Hello ${data.name},`,
+    `Thanks ${data.name}, we received your project details for ${data.company} and will reply within 1 business day.`,
     "",
-    `Thank you for contacting RapidNexTech about ${data.company}. We've received your project details (${summary}).`,
-    "",
-    "We'll reply by email, usually within one business day, with questions or a suggested next step.",
+    `Your enquiry: ${summary}.`,
     "",
     "If you'd like to add anything, simply reply to this email.",
     "",
@@ -143,9 +141,8 @@ function buildConfirmation(data: SoftwareLeadSubmission) {
   const html = `<!doctype html><html><body style="font-family:Arial,Helvetica,sans-serif;color:#111827;line-height:1.6">
 <div style="max-width:560px">
 <p style="font-size:18px;font-weight:bold;color:#1d4ed8;margin:0 0 16px">RapidNexTech</p>
-<p>Hello ${escapeHtml(data.name)},</p>
-<p>Thank you for contacting RapidNexTech about <strong>${escapeHtml(data.company)}</strong>. We've received your project details (${escapeHtml(summary)}).</p>
-<p>We'll reply by email, usually within one business day, with questions or a suggested next step.</p>
+<p>Thanks ${escapeHtml(data.name)}, we received your project details for <strong>${escapeHtml(data.company)}</strong> and will reply within 1 business day.</p>
+<p>Your enquiry: ${escapeHtml(summary)}.</p>
 <p>If you'd like to add anything, simply reply to this email.</p>
 <p style="color:#6b7280;font-size:13px;margin-top:24px">RapidNexTech · The speed you need, the technology you trust.<br><a href="${siteConfig.url}" style="color:#6b7280">${siteConfig.url.replace("https://", "")}</a></p>
 </div></body></html>`

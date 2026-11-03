@@ -10,7 +10,7 @@ export function HostingPartnerLine({ className = "" }: { className?: string }) {
     <a
       href={partner.url}
       target="_blank"
-      rel="noopener"
+      rel="noopener noreferrer"
       className={`inline-flex min-h-[32px] items-center gap-2 text-xs theme-text opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded ${className}`}
     >
       {/* The logo has a white background, so it sits on a white tile to stay legible in dark mode. */}
