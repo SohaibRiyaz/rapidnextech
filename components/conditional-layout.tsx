@@ -6,6 +6,12 @@ import Header from "@/components/Header"
 import { Footer } from "@/components/Footer"
 import { FloatingWhatsAppWidget } from "@/components/whatsapp/floating-whatsapp-widget"
 import { siteConfig } from "@/lib/site-config"
+import dynamic from "next/dynamic"
+
+// Separate chunks: only downloaded on the software sales routes, so other pages' bundles don't grow.
+const SoftwareAttribution = dynamic(() => import("@/components/software/attribution").then((m) => m.SoftwareAttribution))
+const SoftwareHeader = dynamic(() => import("@/components/software/software-header").then((m) => m.SoftwareHeader))
+const SoftwareFooter = dynamic(() => import("@/components/software/software-footer").then((m) => m.SoftwareFooter))
 
 interface ConditionalLayoutProps {
     children: React.ReactNode
@@ -21,6 +27,24 @@ export function ConditionalLayout({ children }: ConditionalLayoutProps) {
 
     if (isAdminRoute) {
         return <>{children}</>
+    }
+
+    // Custom-software sales pages (shared by outreach emails) get software-only navigation.
+    // Every other route keeps the main header and footer below, unchanged.
+    const isSoftwareSalesRoute =
+        pathname?.startsWith("/software/industries") || pathname?.startsWith("/software/start-a-project")
+
+    if (isSoftwareSalesRoute) {
+        return (
+            <>
+                <SoftwareAttribution />
+                <SoftwareHeader />
+                <main className="flex-grow" role="main">
+                    {children}
+                </main>
+                <SoftwareFooter />
+            </>
+        )
     }
 
     return (

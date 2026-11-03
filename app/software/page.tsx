@@ -4,6 +4,7 @@ import Link from "next/link"
 import { ArrowRight, PhoneCall } from "lucide-react"
 import { HeroSection } from "@/components/hero-section"
 import { siteConfig } from "@/lib/site-config"
+import { IndustriesCallout } from "@/components/software/industries-callout"
 
 // The former homepage (custom software / SaaS / automation), moved here unchanged apart from
 // the vertical-solutions block, which now points only to the dental AI receptionist.
@@ -85,6 +86,7 @@ export default function SoftwarePage() {
       <CompanyCarousel />
       <StatsSection />
       <ServicesBento />
+      <IndustriesCallout />
       <ScrollSection />
       <FeaturedWorkSection />
       <TestimonialsSection />
