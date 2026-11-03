@@ -2,119 +2,141 @@ import type { IndustryContent } from "../types"
 
 export const businessWebsites: IndustryContent = {
   slug: "business-websites",
-  // Draft: published in Patch 3 once copy and the starting price are confirmed.
-  published: false,
+  published: true,
   index: true,
 
-  name: "Business websites",
+  name: "Business websites & web apps",
   formLabel: "Business website",
   icon: "globe",
   hubSummary:
-    "A professional website your team can update, that loads fast on mobile and turns visitors into enquiries.",
+    "Professional websites, booking systems, customer portals and simple internal tools for small and growing businesses.",
 
   seo: {
-    title: "Business Website Design & Development | RapidNexTech",
+    title: "Business Websites & Web Apps | RapidNexTech",
     description:
-      "Professional websites for growing businesses: fast on mobile, easy to update, built to bring in enquiries. WordPress or custom. Free consultation.",
-    serviceType: "Business website design and development",
+      "Websites, booking systems, customer portals and internal tools for growing businesses. Fast on mobile, easy to update, and you own everything.",
+    serviceType: "Business website and web application development",
   },
 
   hero: {
-    eyebrow: "Business websites",
-    title: "A website that wins you customers, not one you apologise for.",
+    eyebrow: "Websites & web apps",
+    title: "Websites and web apps for growing businesses",
     intro:
-      "We design and build professional websites for growing businesses: fast on mobile, easy for your team to update, and set up so every enquiry reaches the right person.",
-    primaryCta: "Plan my new website",
-    secondaryCta: { label: "What's included", href: "#solutions" },
-    chips: ["You own the site and the domain", "Works with your existing hosting", "Clear fixed quote before we start"],
+      "A professional website that brings in enquiries, and the simple online tools around it: bookings, a customer portal, or an internal system that replaces the spreadsheet. Built on your existing hosting, easy for your team to update.",
+    primaryCta: "Plan my project",
+    secondaryCta: { label: "What we build", href: "#what-we-build" },
+    chips: ["You own the site, code and domain", "Works with your existing hosting", "Written fixed quote before we start"],
   },
 
+  // Placeholder price: to be confirmed with Dr. Nimr.
   startingFrom: { amount: 4500, currency: "SAR", note: "Final price depends on pages, features and content." },
 
   audience: {
-    title: "Built for businesses like yours",
+    title: "Who this is for",
+    intro: "Small and mid-sized businesses that have outgrown a basic web presence.",
     items: [
       {
+        icon: "globe",
+        title: "You already pay for hosting",
+        description:
+          "You have a domain and a hosting plan, but the website on it is old, half-finished or a placeholder page.",
+      },
+      {
         icon: "store",
-        title: "Owner-led businesses",
-        description: "Clinics, contractors, trading companies and service firms whose website no longer reflects the business.",
+        title: "You run on WhatsApp and referrals",
+        description:
+          "Work comes in through people you know, and you need a credible place to send new prospects before they call.",
       },
       {
         icon: "building",
-        title: "Growing companies",
-        description: "Teams adding branches, services or markets who need a site that grows with them instead of a rebuild every year.",
-      },
-      {
-        icon: "globe",
-        title: "Businesses with no website yet",
-        description: "You run on WhatsApp and referrals today and want a credible place to send new customers.",
+        title: "You're adding branches or services",
+        description:
+          "The business has grown and the website, booking process and paperwork haven't kept up.",
       },
     ],
   },
 
   problems: {
-    title: "Sound familiar?",
-    intro: "Most of the businesses we speak to have at least one of these.",
+    title: "What usually goes wrong",
+    intro: "Most of the businesses we speak to recognise at least two of these.",
     items: [
       {
         icon: "clock",
-        title: "It looks out of date",
-        description: "Prospects compare you with competitors in seconds. An old design quietly tells them to look elsewhere.",
+        title: "The site no longer reflects the business",
+        description:
+          "Services, prices and photos are years out of date, and prospects compare you with competitors in seconds.",
       },
       {
         icon: "pen",
-        title: "Nobody can update it",
-        description: "Every change waits for a developer, so prices, services and team pages stay wrong for months.",
+        title: "Every change needs a developer",
+        description: "Small edits wait weeks, so the website stays wrong and nobody wants to send customers to it.",
       },
       {
         icon: "phone",
-        title: "It's slow on mobile",
-        description: "Most visitors arrive on a phone. If pages take too long to load, they leave before seeing what you offer.",
+        title: "Bookings happen by phone and chat",
+        description:
+          "Staff spend hours confirming appointments and chasing details that a simple online form could collect.",
       },
       {
-        icon: "mail",
-        title: "Enquiries go missing",
-        description: "A generic contact form sends messages to an inbox no one checks, and leads go cold.",
+        icon: "file",
+        title: "Customers keep asking for the same documents",
+        description:
+          "Quotes, invoices and project files are sent one email at a time because there's nowhere for clients to log in.",
+      },
+      {
+        icon: "clipboard",
+        title: "The office runs on spreadsheets",
+        description:
+          "Orders, jobs or stock are tracked in shared sheets that break, get overwritten, and only one person understands.",
       },
     ],
   },
 
   solutions: {
     title: "What we build for you",
-    intro: "Every project is quoted on what you actually need. These are the building blocks most businesses choose from.",
+    intro: "Start with what you need now. Each piece can be added later without rebuilding the rest.",
     items: [
       {
         icon: "globe",
         title: "Company website",
-        description: "Clear pages for your services, team and locations, designed for mobile first and written around how customers buy.",
-        deliverables: ["Page structure and wireframes", "Mobile and desktop design", "Launch on your hosting"],
+        description:
+          "Clear pages for your services, team and locations, designed mobile-first and written around how your customers decide.",
+        deliverables: ["Page plan and design", "Copywriting support", "Launch on your hosting"],
       },
       {
         icon: "pen",
-        title: "Easy editing",
-        description: "Built on WordPress or a custom editor, so your team can change text, prices and photos without calling us.",
-        deliverables: ["Simple admin panel", "Short training video"],
-      },
-      {
-        icon: "message",
-        title: "Enquiries that reach the right person",
-        description: "Quote and contact forms routed by service or branch, with optional WhatsApp and email notifications.",
-        deliverables: ["Smart enquiry forms", "Spam protection", "Notification routing"],
+        title: "Editable by your team",
+        description:
+          "Built on WordPress or a custom admin panel, so staff can change text, prices and photos themselves.",
+        deliverables: ["Simple admin panel", "Recorded training session"],
       },
       {
         icon: "calendar",
-        title: "Bookings and appointments",
-        description: "Let customers request or book a time online, with confirmations sent automatically.",
+        title: "Online booking",
+        description:
+          "Customers choose a service and time, get an automatic confirmation, and your team sees every booking in one place.",
+        deliverables: ["Booking form and calendar", "Email confirmations", "Staff view of bookings"],
+      },
+      {
+        icon: "users",
+        title: "Customer portal",
+        description:
+          "A secure login where clients see their quotes, invoices, documents or project status without emailing you.",
+        deliverables: ["Client accounts and login", "Document and status pages", "Admin to manage clients"],
+      },
+      {
+        icon: "dashboard",
+        title: "Simple internal tool",
+        description:
+          "Replace the shared spreadsheet with a small web app for jobs, orders or stock, with the right access for each person.",
+        deliverables: ["Data entry screens", "Search and export", "User roles"],
       },
       {
         icon: "search",
         title: "Found on Google",
-        description: "Technical SEO foundations, page titles, Google Business Profile setup and analytics from day one.",
-      },
-      {
-        icon: "refresh",
-        title: "Redesign or migration",
-        description: "Already have a site? We can redesign it and move your content without losing what already ranks.",
+        description:
+          "Page titles, site structure, speed and Google Business Profile set up properly from day one, plus analytics.",
+        deliverables: ["Technical SEO setup", "Analytics and enquiry tracking"],
       },
     ],
   },
@@ -124,51 +146,92 @@ export const businessWebsites: IndustryContent = {
     intro: "Illustrative examples of typical projects, not client results.",
     items: [
       {
-        title: "Service company with three branches",
-        before: "A 2015 website, one contact form for everyone, and price lists only the developer could change.",
-        after: "An editable website with a page per branch and quote requests routed to the right branch manager.",
+        title: "Maintenance company with two branches",
+        before: "A one-page site, bookings by phone, and a shared spreadsheet of jobs that two people edited at once.",
+        after: "A full website with online booking per branch, and a small job tracker the office and technicians both use.",
       },
       {
-        title: "Consultancy without a website",
-        before: "New clients came only through referrals and WhatsApp, with nowhere credible to send them.",
-        after: "A focused five-page site with case examples and a consultation form, live in a few weeks.",
+        title: "Consultancy sending files by email",
+        before: "Proposals, reports and invoices were emailed back and forth, and clients kept asking for the latest version.",
+        after: "A professional website plus a client portal where each client logs in to see their own documents.",
+      },
+      {
+        title: "Training provider with a placeholder site",
+        before: "A domain and hosting plan paid for every year, showing only a 'coming soon' page.",
+        after: "A course website with a registration form that sends each enquiry to the right coordinator.",
       },
     ],
   },
 
+  proof: {
+    title: "Projects we've delivered",
+    intro: "Live systems built by our team. Each case study links to the working product.",
+    items: [
+      {
+        title: "Lumière restaurant system",
+        summary: "Online reservations, ordering and an admin area where staff manage bookings and orders in one place.",
+        href: "/case-studies/lumiere-restaurant-management-system",
+      },
+      {
+        title: "EduPlatform learning portal",
+        summary: "A members-only portal with separate logins and views for instructors and students.",
+        href: "/case-studies/eduplatform-fullstack-elearning-management-system",
+      },
+    ],
+  },
+
+  testimonialId: 2,
+
   faqs: [
+    {
+      question: "How much does a business website cost?",
+      answer:
+        "It depends on the number of pages, whether we write the content, and features such as booking or a client login. A focused company website is at the lower end; portals and internal tools are quoted on their scope. You get a written, fixed quote before any work starts.",
+    },
+    {
+      question: "How long does it take?",
+      answer:
+        "A focused company website typically takes three to five weeks from approved plan to launch. Booking systems, portals and internal tools take longer, depending on scope. The timeline is agreed in writing in the proposal, and we show you progress at each checkpoint.",
+    },
     {
       question: "Can you use my existing hosting and domain?",
       answer:
-        "Yes. We build on your current hosting where it meets the site's needs, or advise on what to change. You keep ownership of the domain, hosting account and website.",
+        "Yes, in most cases. We check that your hosting plan suits the site and tell you if anything needs upgrading. The domain and hosting account stay in your name.",
+    },
+    {
+      question: "Who owns the website and the code?",
+      answer:
+        "You do. At handover you receive the admin access, source code and documentation. There is no lock-in, so you can keep working with us or move to another developer.",
     },
     {
       question: "Do I need to write all the content?",
       answer:
-        "No. You give us the facts about your business and we structure the pages and draft the copy for you to review. You can also supply your own text.",
-    },
-    {
-      question: "Can my team update the website themselves?",
-      answer:
-        "Yes. Everyday changes like text, images, prices and team members are done from a simple admin panel. We include a short training video at handover.",
-    },
-    {
-      question: "How long does a website take?",
-      answer:
-        "It depends on the number of pages and features. We agree a timeline in the written proposal before work starts and keep you updated at each stage.",
+        "No. You give us the facts about your business, and we plan the pages and draft the copy for you to review. If you already have text, we can edit it for the web.",
     },
     {
       question: "What happens after launch?",
       answer:
-        "You can manage the site yourself, or choose an optional monthly care plan for updates, backup checks and small changes.",
+        "Your team can manage everyday changes themselves. If you prefer, an optional monthly support plan covers updates, backup checks, fixes and small improvements.",
+    },
+    {
+      question: "How does working remotely across time zones work?",
+      answer:
+        "We work with clients in the Gulf, the UK and the US by video call, email and shared progress links. We agree call times that suit your working day, and you see working progress at every checkpoint, not just at the end.",
+    },
+    {
+      question: "Can the website be in Arabic?",
+      answer:
+        "Yes, on request. We can build an Arabic version or a bilingual English and Arabic site with a right-to-left layout. Tell us at the start so it is planned into the design and the quote.",
     },
   ],
 
   finalCta: {
-    title: "Tell us about your business",
-    body: "Share what you have today and what you need. We'll reply with questions or a suggested approach and a clear quote.",
-    button: "Plan my new website",
+    title: "Tell us what your business needs",
+    body: "Share what you have today and what you'd like to fix. We'll reply with questions or a suggested approach, and a clear quote.",
+    button: "Plan my project",
   },
 
-  sections: ["audience", "problems", "solutions", "scenarios", "process", "faq"],
+  relatedIndustries: ["ecommerce-retail", "enterprise-it", "nonprofits"],
+
+  sections: ["audience", "problems", "solutions", "scenarios", "proof", "testimonial", "process", "faq", "related"],
 }

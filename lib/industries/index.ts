@@ -1,10 +1,14 @@
 import { businessWebsites } from "./content/business-websites"
+import { ecommerceRetail } from "./content/ecommerce-retail"
+import { enterpriseIt } from "./content/enterprise-it"
+import { financialServices } from "./content/financial-services"
+import { nonprofits } from "./content/nonprofits"
 import type { IndustryContent } from "./types"
 
 export type { IndustryContent } from "./types"
 
 /** Every industry content file, in hub order. Add new pages here. */
-export const allIndustries: IndustryContent[] = [businessWebsites]
+export const allIndustries: IndustryContent[] = [businessWebsites, ecommerceRetail, enterpriseIt, nonprofits, financialServices]
 
 export const publishedIndustries = allIndustries.filter((i) => i.published)
 
