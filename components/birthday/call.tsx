@@ -82,6 +82,7 @@ export function IncomingCall({
 }) {
   const [shaking, setShaking] = useState(false)
   const stopRing = useRef<(() => void) | null>(null)
+  const accepted = useRef(false)
   const vibeTimer = useRef<ReturnType<typeof setInterval> | null>(null)
   const [elapsed, setElapsed] = useState(0)
 
@@ -91,7 +92,10 @@ export function IncomingCall({
   }, [])
 
   // First tap anywhere (not Accept) unlocks audio and starts the ringtone + vibration.
+  // onClick, not onPointerDown: iOS only allows audio to start from a completed tap.
   function wake() {
+    // Accept's click bubbles up here too: don't restart the ringtone after answering.
+    if (accepted.current) return
     unlockAudio()
     if (!stopRing.current && !reduced) {
       stopRing.current = startRingtone()
@@ -129,6 +133,7 @@ export function IncomingCall({
   }
 
   function accept() {
+    accepted.current = true
     unlockAudio()
     stopAll()
     onAccept()
@@ -140,7 +145,7 @@ export function IncomingCall({
   return (
     <div
       className={`fixed inset-0 z-40 flex flex-col items-center overflow-hidden ${shaking ? s.screenShake : ""}`}
-      onPointerDown={wake}
+      onClick={wake}
       onAnimationEnd={() => setShaking(false)}
       role="dialog"
       aria-label={`Incoming call from Everyone who loves you`}
@@ -184,6 +189,7 @@ export function IncomingCall({
         </div>
 
         <p className="mt-8 text-center text-base text-white/70">🎂 Incoming: something special for {data.displayName.split(" ")[0]}</p>
+        <p className="mt-3 text-center text-sm text-white/55">🔊 Sound on? Tap anywhere to hear it ring.</p>
 
         <div className="mt-auto flex w-full items-end justify-between px-4">
           <div className="flex flex-col items-center gap-2">
