@@ -19,8 +19,11 @@ export const siteConfig = {
   /** Public US contact number: header, footer, contact page, JSON-LD. */
   publicPhone: { display: "+1 (813) 214-2552", e164: "+18132142552" } as PhoneNumber,
 
-  /** Demo line: callers talk to the dental AI receptionist. Set to null to hide every demo-call CTA. */
-  demoPhone: { display: "+1 (469) 786-3061", e164: "+14697863061" } as PhoneNumber | null,
+  /**
+   * Demo line: callers talk to the dental AI receptionist. Set to null to hide every demo-call CTA.
+   * null until the new Retell number is set up (the old 469 number is no longer in service).
+   */
+  demoPhone: null as PhoneNumber | null,
 
   ukPhone: { display: "+44 7311 133668", e164: "+447311133668" } as PhoneNumber,
 
@@ -46,6 +49,21 @@ export const siteConfig = {
 
   /** Browser voice demo (existing try.rapidnextech.com embed persona). */
   voiceDemoPageKey: "dental" as const,
+
+  /**
+   * Retell browser demo in the dental #live-demo section. All values are public (NEXT_PUBLIC_*):
+   * the public key only works from the domains allow-listed in the Retell dashboard.
+   * RETELL_API_KEY is server-only and is never read here. If a required value is missing, the demo
+   * card shows "Demo temporarily unavailable" instead of a start button.
+   */
+  retellDemo: {
+    publicKey: process.env.NEXT_PUBLIC_RETELL_PUBLIC_KEY || null,
+    agentId: process.env.NEXT_PUBLIC_RETELL_AGENT_ID || null,
+    /** Pinned published version, so draft edits in the Retell dashboard never reach the live site. */
+    agentVersion: Number(process.env.NEXT_PUBLIC_RETELL_AGENT_VERSION) || null,
+    /** reCAPTCHA v3 site key. Optional: when unset, calls start without a token. */
+    recaptchaSiteKey: process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || null,
+  },
 
   /** Exact, approved copy blocks. Do not paraphrase elsewhere: import these. */
   copy: {
