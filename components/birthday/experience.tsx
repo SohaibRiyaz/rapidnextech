@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic"
 import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent } from "react"
 import type { BirthdayContent } from "@/content/birthdays/types"
-import { playBoom, playConnect, playCrackle, playPop, setSoundEnabled, unlockAudio } from "./audio"
+import { playBoom, playConnect, playCrackle, playPop, setAutoSoundsEnabled, setSoundEnabled, unlockAudio } from "./audio"
 import { CountdownGate, IncomingCall } from "./call"
 import { BirthdayContext, useReducedMotion, vibrate, type BirthdayCtx } from "./context"
 import type { ParticleEngine } from "./particles"
@@ -41,12 +41,9 @@ export function BirthdayExperience({ data }: { data: BirthdayContent }) {
     setStage(locked && !preview ? "gate" : "call")
   }, [data.unlockAt])
 
-  // Reduced motion: no automatic sounds until the visitor turns sound on.
+  // Reduced motion: no automatic sounds (ringtone, boom, shutter…); sounds from the visitor's own taps still play.
   useEffect(() => {
-    if (reduced) {
-      setSoundOn(false)
-      setSoundEnabled(false)
-    }
+    setAutoSoundsEnabled(!reduced)
   }, [reduced])
 
   useEffect(() => () => fxRef.current?.destroy(), [])

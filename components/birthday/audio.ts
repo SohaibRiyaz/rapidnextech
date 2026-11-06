@@ -6,6 +6,37 @@
 let ctx: AudioContext | null = null
 let master: GainNode | null = null
 let enabled = true
+/** Sounds nobody tapped for (ringtone, boom, shutter, stamp, fireworks). Off for prefers-reduced-motion. */
+let autoSounds = true
+let keepAlive: HTMLAudioElement | null = null
+
+export function setAutoSoundsEnabled(on: boolean) {
+  autoSounds = on
+}
+
+/** A short silent WAV, looped through an <audio> element (see unlockAudio). */
+function silentWavUrl() {
+  const rate = 8000
+  const samples = rate / 2
+  const buf = new ArrayBuffer(44 + samples)
+  const v = new DataView(buf)
+  const str = (o: number, t: string) => [...t].forEach((c, i) => v.setUint8(o + i, c.charCodeAt(0)))
+  str(0, "RIFF")
+  v.setUint32(4, 36 + samples, true)
+  str(8, "WAVE")
+  str(12, "fmt ")
+  v.setUint32(16, 16, true)
+  v.setUint16(20, 1, true)
+  v.setUint16(22, 1, true)
+  v.setUint32(24, rate, true)
+  v.setUint32(28, rate, true)
+  v.setUint16(32, 1, true)
+  v.setUint16(34, 8, true)
+  str(36, "data")
+  v.setUint32(40, samples, true)
+  for (let i = 0; i < samples; i++) v.setUint8(44 + i, 128)
+  return URL.createObjectURL(new Blob([buf], { type: "audio/wav" }))
+}
 
 export function setSoundEnabled(on: boolean) {
   enabled = on
@@ -16,8 +47,29 @@ export function isSoundEnabled() {
   return enabled
 }
 
-/** Call from a click/tap handler. Safe to call repeatedly. */
+/**
+ * Call from a click handler (iOS only unlocks audio on click/touchend, not touchstart). Safe to call repeatedly.
+ * On iPhones, Web Audio is muted by the silent switch unless the page's audio session is "playback":
+ * Safari 17+ exposes navigator.audioSession for that; older versions switch when an <audio> element plays,
+ * so a silent looping one is started from the same tap.
+ */
 export function unlockAudio() {
+  try {
+    const nav = navigator as Navigator & { audioSession?: { type: string } }
+    if (nav.audioSession) nav.audioSession.type = "playback"
+  } catch {
+    /* not supported */
+  }
+  try {
+    if (!keepAlive) {
+      keepAlive = new Audio(silentWavUrl())
+      keepAlive.loop = true
+      keepAlive.setAttribute("playsinline", "")
+    }
+    if (keepAlive.paused) void keepAlive.play().catch(() => {})
+  } catch {
+    /* ignore */
+  }
   try {
     if (!ctx) {
       const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
@@ -27,7 +79,12 @@ export function unlockAudio() {
       master.gain.value = enabled ? 0.9 : 0
       master.connect(ctx.destination)
     }
-    if (ctx.state === "suspended") void ctx.resume()
+    if (ctx.state !== "running") void ctx.resume().catch(() => {})
+    // Classic iOS unlock: play one silent sample inside the gesture.
+    const src = ctx.createBufferSource()
+    src.buffer = ctx.createBuffer(1, 1, 22050)
+    src.connect(ctx.destination)
+    src.start(0)
   } catch {
     /* audio unavailable: the page works silently */
   }
@@ -37,8 +94,15 @@ export function getAudioContext() {
   return ctx
 }
 
-function ready() {
-  return Boolean(ctx && master && enabled && ctx.state === "running")
+/**
+ * Sounds are scheduled even while the context is still resuming (resume() is async, and the first
+ * sounds after a tap used to be dropped); they play as soon as it is running.
+ */
+function ready(auto = false) {
+  if (!ctx || !master || !enabled) return false
+  if (auto && !autoSounds) return false
+  if (ctx.state !== "running") void ctx.resume().catch(() => {})
+  return ctx.state !== "closed"
 }
 
 function note(freq: number, start: number, dur: number, opts: { type?: OscillatorType; gain?: number; attack?: number } = {}) {
@@ -82,7 +146,7 @@ export function startRingtone(): () => void {
   const phrase = [1318.5, 987.8, 1318.5, 1568, 1318.5, 987.8] // E6 B5 E6 G6 E6 B5
   const ring = () => {
     if (stopped) return
-    if (ready() && ctx) {
+    if (ready(true) && ctx) {
       const t = ctx.currentTime + 0.02
       phrase.forEach((f, i) => {
         note(f, t + i * 0.13, 0.32, { type: "triangle", gain: 0.12 })
@@ -108,7 +172,7 @@ export function playConnect() {
 
 /** Deep cinematic bass boom for the reveal. */
 export function playBoom() {
-  if (!ready() || !ctx || !master) return
+  if (!ready(true) || !ctx || !master) return
   const t = ctx.currentTime
   const osc = ctx.createOscillator()
   const g = ctx.createGain()
@@ -126,7 +190,7 @@ export function playBoom() {
 
 /** Camera shutter click. */
 export function playShutter() {
-  if (!ready() || !ctx) return
+  if (!ready(true) || !ctx) return
   const t = ctx.currentTime
   noise(t, 0.05, { gain: 0.45, freq: 3500, q: 0.8 })
   noise(t + 0.07, 0.06, { gain: 0.35, freq: 2500, q: 0.8 })
@@ -134,7 +198,7 @@ export function playShutter() {
 
 /** Rubber-stamp thud. */
 export function playThud() {
-  if (!ready() || !ctx || !master) return
+  if (!ready(true) || !ctx || !master) return
   const t = ctx.currentTime
   const osc = ctx.createOscillator()
   const g = ctx.createGain()
@@ -163,7 +227,7 @@ export function playWhoosh() {
 
 /** Firework crackle. */
 export function playCrackle() {
-  if (!ready() || !ctx) return
+  if (!ready(true) || !ctx) return
   const t = ctx.currentTime
   noise(t, 0.25, { gain: 0.2, freq: 140, type: "lowpass" })
   for (let i = 0; i < 6; i++) noise(t + 0.1 + Math.random() * 0.4, 0.02, { gain: 0.15, freq: 4000 })
