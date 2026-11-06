@@ -48,18 +48,26 @@ export function isSoundEnabled() {
 }
 
 /**
+ * iOS (Safari 17+) audio session. "playback" lets sound play through the silent switch but blocks the
+ * microphone; "play-and-record" is needed while the cake listens for a blow.
+ */
+export function setAudioSessionType(type: "playback" | "play-and-record") {
+  try {
+    const nav = navigator as Navigator & { audioSession?: { type: string } }
+    if (nav.audioSession) nav.audioSession.type = type
+  } catch {
+    /* not supported */
+  }
+}
+
+/**
  * Call from a click handler (iOS only unlocks audio on click/touchend, not touchstart). Safe to call repeatedly.
  * On iPhones, Web Audio is muted by the silent switch unless the page's audio session is "playback":
  * Safari 17+ exposes navigator.audioSession for that; older versions switch when an <audio> element plays,
  * so a silent looping one is started from the same tap.
  */
 export function unlockAudio() {
-  try {
-    const nav = navigator as Navigator & { audioSession?: { type: string } }
-    if (nav.audioSession) nav.audioSession.type = "playback"
-  } catch {
-    /* not supported */
-  }
+  setAudioSessionType("playback")
   try {
     if (!keepAlive) {
       keepAlive = new Audio(silentWavUrl())
