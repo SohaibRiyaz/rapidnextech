@@ -32,6 +32,9 @@ const nextConfig = {
         destination: "/contact?bookingSource=aesthetic&fromBook=1",
         permanent: true,
       },
+      // Short links for the birthday page. Temporary (307) on purpose: they can be removed later.
+      { source: "/treat-pending/hammad", destination: "/birthday/hammad", permanent: false },
+      { source: "/hbd/hammad", destination: "/birthday/hammad", permanent: false },
       {
         source: "/book/medspa",
         destination: "/contact?bookingSource=medspa&fromBook=1",

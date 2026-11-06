@@ -29,6 +29,11 @@ export function ConditionalLayout({ children }: ConditionalLayoutProps) {
         return <>{children}</>
     }
 
+    // One-off birthday pages are full-screen experiences: no site header, footer or floating badges.
+    if (pathname?.startsWith("/birthday/")) {
+        return <>{children}</>
+    }
+
     // Custom-software sales pages (shared by outreach emails) get software-only navigation.
     // Every other route keeps the main header and footer below, unchanged.
     const isSoftwareSalesRoute =
