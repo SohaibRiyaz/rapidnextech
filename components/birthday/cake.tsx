@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import type { BirthdayContent } from "@/content/birthdays/types"
-import { getAudioContext, playHappyBirthday, playWhoosh, unlockAudio } from "./audio"
+import { getAudioContext, playHappyBirthday, playWhoosh, setAudioSessionType, unlockAudio } from "./audio"
 import { useBirthday, useInView, vibrate } from "./context"
 import s from "./birthday.module.css"
 
@@ -68,8 +68,11 @@ export function Cake({ data }: { data: BirthdayContent }) {
 
   function stopMic() {
     cancelAnimationFrame(rafRef.current)
+    const hadStream = Boolean(streamRef.current)
     streamRef.current?.getTracks().forEach((t) => t.stop())
     streamRef.current = null
+    // Back to "playback" so sound keeps working with the iPhone silent switch on.
+    if (hadStream) setAudioSessionType("playback")
   }
   useEffect(() => stopMic, [])
 
@@ -110,6 +113,9 @@ export function Cake({ data }: { data: BirthdayContent }) {
 
   async function startMic() {
     unlockAudio()
+    // iPhone: the "playback" session set by unlockAudio refuses the mic without asking. Switch first,
+    // inside this tap, so Safari shows the permission prompt.
+    setAudioSessionType("play-and-record")
     setMic("starting")
     try {
       if (!navigator.mediaDevices?.getUserMedia) throw new Error("unsupported")
@@ -150,6 +156,7 @@ export function Cake({ data }: { data: BirthdayContent }) {
     } catch {
       // Common in WhatsApp / Instagram in-app browsers: switch to tapping.
       stopMic()
+      setAudioSessionType("playback")
       setMic("blocked")
     }
   }
