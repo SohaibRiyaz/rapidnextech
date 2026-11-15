@@ -15,7 +15,7 @@ export function ConversationTip() {
       >
         <Info className="h-4 w-4" aria-hidden="true" />
       </PopoverTrigger>
-      <PopoverContent side="top" className="w-64 text-sm leading-relaxed">
+      <PopoverContent side="top" collisionPadding={16} className="w-64 text-sm leading-relaxed">
         {CONVERSATION_DEFINITION} If the same patient messages again the next day, that is a new conversation.
       </PopoverContent>
     </Popover>

@@ -83,6 +83,9 @@ function PlanCard({ plan }: { plan: ClinicPlan }) {
 }
 
 export function ClinicsPricing() {
+  // "no card · no contract" → "No card, no contract"
+  const rest = PILOT.split(" · ").slice(1).join(", ")
+  const pilotTerms = rest.charAt(0).toUpperCase() + rest.slice(1)
   return (
     <section id="pricing" aria-labelledby="clinics-pricing-title" className={`${sectionY} ${sectionAnchor} bg-muted/40`}>
       <div className="container mx-auto px-4 sm:px-6">
@@ -150,7 +153,7 @@ export function ClinicsPricing() {
           <div className="flex-1">
             <h3 className="text-xl font-bold">{PILOT.split(" · ")[0]}</h3>
             <p className="mt-1 text-muted-foreground">
-              {PILOT.split(" · ").slice(1).join(" · ")}. We set it up with your clinic&apos;s details, then you decide.{" "}
+              {pilotTerms}. We set it up with your clinic&apos;s details, then you decide.{" "}
               {SETUP_WAIVED_NOTE}.
             </p>
           </div>
