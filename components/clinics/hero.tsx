@@ -25,7 +25,7 @@ export function ClinicsHero() {
               id="clinics-title"
               // Below 400px the web font needs 4 lines but the fallback font only 3: reserve 4 lines so the page
               // doesn't jump when the font loads.
-              className="text-4xl font-bold leading-[1.1] tracking-tight text-foreground max-[399px]:min-h-[4.4em] sm:text-5xl lg:text-[clamp(2.25rem,min(calc(10vh-1.25rem),3.6vw),3.75rem)]"
+              className="text-4xl font-bold leading-[1.1] tracking-tight text-foreground [@media(max-width:399px)]:min-h-[4.4em] sm:text-5xl lg:text-[clamp(2.25rem,min(calc(10vh-1.25rem),3.6vw),3.75rem)]"
             >
               Never lose a patient enquiry on{" "}
               <span className="bg-clip-text text-transparent theme-gradient-text">WhatsApp or the phone</span> again
