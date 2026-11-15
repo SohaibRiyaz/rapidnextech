@@ -33,6 +33,7 @@ export type AnalyticsEvent =
   | "clinics_hero_demo_click"
   | "clinics_hero_pricing_click"
   | "clinics_products_calling_demo_click"
+  | "clinics_sticky_cta_click"
 
 type EventParams = Record<string, string | number | boolean | undefined>
 

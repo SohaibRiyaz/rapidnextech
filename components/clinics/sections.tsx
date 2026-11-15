@@ -38,7 +38,6 @@ import {
   SETUP_WAIVED_NOTE,
   WHATSAPP_CONTACT_URL,
   WHATSAPP_DEMO_PREFILLED_URL,
-  WHATSAPP_DEMO_URL,
 } from "@/lib/clinics-config"
 import { ScrollLink } from "./scroll-link"
 import { TrackedLink } from "./tracked-link"
@@ -351,7 +350,7 @@ export function ClinicsFinalCta() {
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <TrackedLink
-                href={WHATSAPP_DEMO_URL}
+                href={WHATSAPP_DEMO_PREFILLED_URL}
                 event="clinics_whatsapp_demo_click"
                 params={{ location: "final_cta" }}
                 className={primaryCta}

@@ -11,7 +11,7 @@ import {
   CLINIC_RETELL_AGENT_ID,
   CLINIC_RETELL_AGENT_VERSION,
   WHATSAPP_CONTACT_URL,
-  WHATSAPP_DEMO_URL,
+  WHATSAPP_DEMO_PREFILLED_URL,
 } from "@/lib/clinics-config"
 import { ClinicsShowcase } from "./showcase"
 import { TrackedLink } from "./tracked-link"
@@ -62,13 +62,13 @@ export function ClinicsDemoSection() {
             }}
             placeholder={
               CLINIC_DEMO_PLACEHOLDER
-                ? { message: CLINIC_DEMO_PLACEHOLDER_MESSAGE, ctaLabel: "Try the WhatsApp demo", ctaHref: WHATSAPP_DEMO_URL }
+                ? { message: CLINIC_DEMO_PLACEHOLDER_MESSAGE, ctaLabel: "Try the WhatsApp demo", ctaHref: WHATSAPP_DEMO_PREFILLED_URL }
                 : null
             }
           />
           <p className="mt-6 text-center">
             <TrackedLink
-              href={WHATSAPP_DEMO_URL}
+              href={WHATSAPP_DEMO_PREFILLED_URL}
               event="clinics_whatsapp_demo_click"
               params={{ location: "demo" }}
               className={textLink}

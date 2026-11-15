@@ -3,6 +3,7 @@ import { getClinicsFaqs } from "@/components/clinics/faq-data"
 import { ClinicsDemoSection } from "@/components/clinics/demo-section"
 import { ClinicsFaq } from "@/components/clinics/faq"
 import { ClinicsHero } from "@/components/clinics/hero"
+import { ClinicsMobileCtaBar } from "@/components/clinics/mobile-cta-bar"
 import { ClinicsPageView } from "@/components/clinics/page-view"
 import { ClinicsPricing } from "@/components/clinics/pricing"
 import {
@@ -119,6 +120,7 @@ export default function ClinicsPage() {
       <ClinicsPricing />
       <ClinicsFaq />
       <ClinicsFinalCta />
+      <ClinicsMobileCtaBar />
     </div>
   )
 }
