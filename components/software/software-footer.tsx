@@ -4,7 +4,6 @@ import Link from "next/link"
 import Image from "next/image"
 import { Mail, Phone } from "lucide-react"
 import { useThemeContext } from "@/context/theme-context"
-import { HostingPartnerLine } from "@/components/hosting-partner-line"
 import { INDUSTRIES_HUB_PATH, START_PROJECT_PATH, industryPath, publishedIndustries } from "@/lib/industries"
 import { siteConfig, telHref } from "@/lib/site-config"
 
@@ -98,7 +97,6 @@ export function SoftwareFooter() {
         <div className="flex flex-col items-center justify-between gap-4 border-t border-primary/10 pt-8 md:flex-row">
           <div className="flex flex-col items-center gap-2 md:flex-row md:gap-6">
             <p className="text-sm theme-text opacity-70">© {year} RapidNexTech. All rights reserved.</p>
-            <HostingPartnerLine />
           </div>
           <div className="flex gap-6">
             <Link href="/privacy-policy" className={linkClass}>Privacy Policy</Link>

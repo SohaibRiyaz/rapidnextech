@@ -7,7 +7,6 @@ import { useThemeContext } from "@/context/theme-context"
 import { servicesData } from "@/lib/services-data"
 import { siteConfig, telHref } from "@/lib/site-config"
 import { trackEvent } from "@/lib/analytics"
-import { HostingPartnerLine } from "@/components/hosting-partner-line"
 
 const linkClass =
   "theme-text opacity-80 hover:opacity-100 hover:text-primary transition-colors text-sm inline-flex min-h-[32px] items-center"
@@ -142,7 +141,6 @@ export function Footer() {
             <p className="theme-text opacity-70 text-sm">
               © {currentYear} RapidNexTech. All rights reserved.
             </p>
-            <HostingPartnerLine />
           </div>
           <div className="flex gap-6">
             <Link href="/privacy-policy" className={linkClass}>
