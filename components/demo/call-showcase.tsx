@@ -251,21 +251,25 @@ export function CallShowcase({
                 {playing ? <Pause className="h-4 w-4" aria-hidden="true" /> : finished ? <RotateCcw className="h-4 w-4" aria-hidden="true" /> : <Play className="h-4 w-4" aria-hidden="true" />}
                 {playing ? "Pause" : finished ? "Replay" : t > 0 ? "Resume" : "Play"}
               </button>
-              {started && !finished ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    reset()
-                    callbacks.current.onPlay?.(scenario.id)
-                    setPlaying(true)
-                    void audioRef.current?.play().catch(() => {})
-                  }}
-                  className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl border-2 border-primary/70 bg-background/60 px-4 font-semibold text-foreground transition-colors hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  <RotateCcw className="h-4 w-4" aria-hidden="true" />
-                  Replay
-                </button>
-              ) : null}
+              {/* Always laid out (hidden when not needed) so the Play button never moves. */}
+              <button
+                type="button"
+                onClick={() => {
+                  reset()
+                  callbacks.current.onPlay?.(scenario.id)
+                  setPlaying(true)
+                  void audioRef.current?.play().catch(() => {})
+                }}
+                aria-hidden={!(started && !finished)}
+                tabIndex={started && !finished ? 0 : -1}
+                className={cn(
+                  "inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl border-2 border-primary/70 bg-background/60 px-4 font-semibold text-foreground transition-colors hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                  started && !finished ? "" : "invisible",
+                )}
+              >
+                <RotateCcw className="h-4 w-4" aria-hidden="true" />
+                Replay
+              </button>
               <div className="h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-muted sm:w-48" aria-hidden="true">
                 <div className="h-full origin-left rounded-full bg-primary" style={{ transform: `scaleX(${Math.min(1, time / scenario.duration)})` }} />
               </div>
@@ -328,9 +332,18 @@ export function CallShowcase({
                             agent ? "rounded-tl-sm bg-primary/10 text-foreground" : "rounded-tr-sm bg-muted text-foreground",
                           )}
                         >
-                          <p lang={lang} dir={lang === "ar" ? "rtl" : "ltr"}>
-                            <span aria-hidden={typing}>{shown}</span>
-                            {typing ? <span className="sr-only">{line.text}</span> : null}
+                          <p lang={lang} dir={lang === "ar" ? "rtl" : "ltr"} className="relative">
+                            {typing ? (
+                              <>
+                                {/* The full line holds the bubble at its final size while it types, so nothing moves. */}
+                                <span className="invisible">{line.text}</span>
+                                <span className="absolute inset-0" aria-hidden="true">
+                                  {shown}
+                                </span>
+                              </>
+                            ) : (
+                              line.text
+                            )}
                           </p>
                           {showEnglish && line.translation && !typing ? (
                             <p lang="en" dir="ltr" className="mt-1.5 border-t border-border/60 pt-1.5 text-xs text-muted-foreground">
