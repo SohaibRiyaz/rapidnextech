@@ -89,7 +89,7 @@ function MedSpaRelatedContent() {
           Capture more consult calls before they call another clinic.
         </h2>
         <div className="mt-6 grid gap-3 md:grid-cols-3">
-          <Link href="/solutions/aesthetic-clinics" className="rounded-xl border border-[var(--medspa-border)] p-4 text-sm text-[var(--medspa-text-secondary)] hover:border-[var(--medspa-accent-gold)] hover:text-[var(--medspa-accent-gold)]">
+          <Link href="/clinics" className="rounded-xl border border-[var(--medspa-border)] p-4 text-sm text-[var(--medspa-text-secondary)] hover:border-[var(--medspa-accent-gold)] hover:text-[var(--medspa-accent-gold)]">
             WhatsApp and DM automation for aesthetic clinics
           </Link>
           <Link href="/blog/ai-receptionist-medical-spa" className="rounded-xl border border-[var(--medspa-border)] p-4 text-sm text-[var(--medspa-text-secondary)] hover:border-[var(--medspa-accent-gold)] hover:text-[var(--medspa-accent-gold)]">
