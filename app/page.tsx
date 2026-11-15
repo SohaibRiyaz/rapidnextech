@@ -11,6 +11,7 @@ import { DentalPricing } from "@/components/dental/pricing"
 import { DentalProblem } from "@/components/dental/problem"
 import { RevenueCalculator } from "@/components/dental/revenue-calculator"
 import { DentalTryItNow } from "@/components/dental/try-it-now"
+import { GeoBanner } from "@/components/geo-banner"
 import { dentalReceptionistServiceSchema, faqSchema, jsonLd } from "@/lib/seo"
 
 const TITLE = "24/7 AI Receptionist for Dental Practices"
@@ -51,6 +52,7 @@ export default function Home() {
   return (
     <div className="bg-transparent">
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(structuredData)} />
+      <GeoBanner />
       <DentalHero />
       <DentalProblem />
       <RevenueCalculator />
