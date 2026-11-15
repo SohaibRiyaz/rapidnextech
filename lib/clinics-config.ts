@@ -172,6 +172,10 @@ export function whatsappWithText(text: string) {
   return `${WHATSAPP_DEMO_URL}?text=${encodeURIComponent(text)}`
 }
 
+/** WhatsApp demo with a first message already typed (used on the "Two products" card). */
+export const WHATSAPP_DEMO_PREFILL = "Hi! I'd like to try your AI receptionist demo."
+export const WHATSAPP_DEMO_PREFILLED_URL = whatsappWithText(WHATSAPP_DEMO_PREFILL)
+
 export function formatUsdPrice(value: number) {
   return `$${value.toLocaleString("en-US", { minimumFractionDigits: value % 1 ? 2 : 0 })}`
 }

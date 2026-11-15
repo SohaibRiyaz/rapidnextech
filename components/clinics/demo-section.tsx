@@ -34,11 +34,15 @@ export function ClinicsDemoSection() {
         />
 
         {/* A) Watch a real call */}
-        <h3 className="mb-6 text-center text-2xl font-bold tracking-tight text-foreground">Watch a real call</h3>
+        {/* Landing spot for the hero's "Watch it handle a call" (just under the fixed header). */}
+        <h3 id="watch-call" className="mb-6 scroll-mt-24 text-center text-2xl font-bold tracking-tight text-foreground focus:outline-none">
+          Watch a real call
+        </h3>
         <ClinicsShowcase />
 
         {/* B) Talk to it yourself */}
-        <div className="mx-auto mt-16 max-w-3xl">
+        {/* Landing spot for "Try the AI calling demo" on the Two products card. */}
+        <div id="voice-demo" className="mx-auto mt-16 max-w-3xl scroll-mt-24 focus:outline-none">
           <h3 className="mb-6 text-center text-2xl font-bold tracking-tight text-foreground">Talk to it yourself</h3>
           <DemoLauncher
             location="clinics-demo"
