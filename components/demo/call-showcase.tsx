@@ -184,8 +184,11 @@ export function CallShowcase({
 
   function onTabKeyDown(e: KeyboardEvent<HTMLDivElement>) {
     const n = scenarios.length
+    // Move from the focused tab (normally the selected one).
+    const focused = tabRefs.current.findIndex((el) => el === document.activeElement)
+    const from = focused >= 0 ? focused : active
     const next =
-      e.key === "ArrowRight" ? (active + 1) % n : e.key === "ArrowLeft" ? (active - 1 + n) % n : e.key === "Home" ? 0 : e.key === "End" ? n - 1 : -1
+      e.key === "ArrowRight" ? (from + 1) % n : e.key === "ArrowLeft" ? (from - 1 + n) % n : e.key === "Home" ? 0 : e.key === "End" ? n - 1 : -1
     if (next < 0) return
     e.preventDefault()
     selectTab(next)
