@@ -17,6 +17,13 @@ export type AnalyticsEvent =
   | "pilot_form_submit"
   | "software_lead_submit"
   | "industry_page_view"
+  | "clinics_page_view"
+  | "clinics_whatsapp_demo_click"
+  | "clinics_contact_click"
+  | "clinics_plan_click"
+  | "clinics_phone_demo_click"
+  | "geo_banner_view"
+  | "geo_banner_click"
 
 type EventParams = Record<string, string | number | boolean | undefined>
 
