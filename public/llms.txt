@@ -26,10 +26,22 @@ AI receptionist demo line (call it like a patient): +1 (469) 786-3061
 - Multi-Location: from $897/month, up to 3 locations, 3,000 minutes.
 - All plans: month-to-month, overage $0.39/minute, setup fee $497 (waived for practices that start with the free pilot), annual billing gives 2 months free.
 
+## AI Receptionist for Clinics in the Gulf and Egypt (separate offer)
+
+This is a separate offer from the US dental receptionist above, for private clinics in the UAE, Qatar, Saudi Arabia and Egypt: aesthetic & cosmetic, dental, dermatology, physiotherapy, fertility/IVF and multi-specialty medical centres. Page: https://rapidnextech.com/clinics
+
+- WhatsApp AI receptionist (in every plan): replies instantly 24/7 on the clinic's WhatsApp Business number; answers treatment, price-range, location and hours questions from the clinic's own information; understands text and voice notes in English and Arabic; qualifies the enquiry (treatment, timing, budget), captures booking requests and hands them to the clinic team; follows up with enquiries that went quiet; escalates urgent or sensitive cases to a person. Staff can take over any conversation from the dashboard or the WhatsApp Business app on their phone and hand it back with one tap.
+- AI calling receptionist (add-on): answers missed calls (busy, after hours, Fridays/weekends) on a local number the clinic forwards to; the clinic keeps its existing number. Answers common questions, captures booking requests and sends the team a summary after every call.
+- Languages: English and Arabic, fine-tuned with the clinic's team during setup.
+- Pricing (USD, monthly): Starter $149 (up to 500 conversations/month); Growth $299 (up to 1,500; adds per-treatment flows, appointment reminders, follow-ups, monthly fine-tuning); Clinic Group from $599 (up to 4,000; up to 3 WhatsApp numbers or branches, multi-user dashboard). AI calling add-on +$199/month with 500 call minutes, then $0.30/min. Extra conversations $0.15 each; WhatsApp template fees billed at cost; setup $399 per location (waived for the first 3 clinics); month-to-month. A conversation is one patient's chat thread within a day. Clinics in Egypt: local pricing available on request.
+- 7-day free pilot, no card, no contract. Contact on WhatsApp: https://wa.me/18132142552
+- It does not collect medical records or give diagnoses over WhatsApp.
+
 ## Key Pages
 
 - AI receptionist for dental practices (homepage): https://rapidnextech.com/
 - How it works for dental practices: https://rapidnextech.com/solutions/dental-clinics
+- AI receptionist for clinics in the Gulf and Egypt (WhatsApp + AI calling): https://rapidnextech.com/clinics
 - Start a free pilot / contact: https://rapidnextech.com/contact
 
 ## Custom Software (secondary)

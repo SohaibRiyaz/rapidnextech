@@ -158,8 +158,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.9,
   }))
 
-  // Only the dental solution page is listed. The other vertical pages (aesthetic clinics,
-  // never-miss-a-call incl. /texas, med spa, real estate, diet & nutrition) are noindexed.
+  // Only the dental solution page is listed. The other vertical pages (never-miss-a-call incl.
+  // /texas, med spa, real estate, diet & nutrition) are noindexed.
+
+  // Gulf & Egypt clinics offer (WhatsApp + AI calling).
+  const clinicsPage: MetadataRoute.Sitemap = [
+    { url: absoluteSiteUrl("/clinics"), lastModified: currentDate, changeFrequency: "monthly" as const, priority: 0.9 },
+  ]
 
   // Custom-software industry pages: only published pages with index: true. The hub is listed once
   // at least one is live; the inquiry page is always listed.
@@ -180,6 +185,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...staticPages,
     ...servicePages,
     ...solutionPages,
+    ...clinicsPage,
     ...industryPages,
     ...blogPages,
     ...portfolioPages,
