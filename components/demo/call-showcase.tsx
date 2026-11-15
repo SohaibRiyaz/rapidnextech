@@ -238,39 +238,41 @@ export function CallShowcase({
 
       <div id={panelId} role="tabpanel" aria-labelledby={tabId(active)}>
         {/* Controls */}
-        <div className="mb-5 flex flex-wrap items-center justify-center gap-3">
+        <div className="mb-5 flex flex-col items-center gap-3">
           {reduced ? (
             <p className="text-sm text-muted-foreground">Showing the whole example call.</p>
           ) : (
             <>
-              <button
-                type="button"
-                onClick={playing ? pause : play}
-                className="inline-flex min-h-[48px] min-w-[8.5rem] items-center justify-center gap-2 rounded-xl bg-primary px-5 font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-              >
-                {playing ? <Pause className="h-4 w-4" aria-hidden="true" /> : finished ? <RotateCcw className="h-4 w-4" aria-hidden="true" /> : <Play className="h-4 w-4" aria-hidden="true" />}
-                {playing ? "Pause" : finished ? "Replay" : t > 0 ? "Resume" : "Play"}
-              </button>
-              {/* Always laid out (hidden when not needed) so the Play button never moves. */}
-              <button
-                type="button"
-                onClick={() => {
-                  reset()
-                  callbacks.current.onPlay?.(scenario.id)
-                  setPlaying(true)
-                  void audioRef.current?.play().catch(() => {})
-                }}
-                aria-hidden={!(started && !finished)}
-                tabIndex={started && !finished ? 0 : -1}
-                className={cn(
-                  "inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl border-2 border-primary/70 bg-background/60 px-4 font-semibold text-foreground transition-colors hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                  started && !finished ? "" : "invisible",
-                )}
-              >
-                <RotateCcw className="h-4 w-4" aria-hidden="true" />
-                Replay
-              </button>
-              <div className="h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-muted sm:w-48" aria-hidden="true">
+              {/* Play stays centred; Replay floats beside it (absolute), so nothing moves when it appears. */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={playing ? pause : play}
+                  className="inline-flex min-h-[48px] min-w-[8.5rem] items-center justify-center gap-2 rounded-xl bg-primary px-5 font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                >
+                  {playing ? <Pause className="h-4 w-4" aria-hidden="true" /> : finished ? <RotateCcw className="h-4 w-4" aria-hidden="true" /> : <Play className="h-4 w-4" aria-hidden="true" />}
+                  {playing ? "Pause" : finished ? "Replay" : t > 0 ? "Resume" : "Play"}
+                </button>
+                {started && !finished ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      reset()
+                      callbacks.current.onPlay?.(scenario.id)
+                      setPlaying(true)
+                      void audioRef.current?.play().catch(() => {})
+                    }}
+                    aria-label="Replay from the start"
+                    className="absolute left-full top-0 ml-3 inline-flex min-h-[48px] min-w-[48px] items-center justify-center gap-2 whitespace-nowrap rounded-xl border-2 border-primary/70 bg-background/60 font-semibold text-foreground transition-colors hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-4"
+                  >
+                    <RotateCcw className="h-4 w-4" aria-hidden="true" />
+                    <span className="hidden sm:inline" aria-hidden="true">
+                      Replay
+                    </span>
+                  </button>
+                ) : null}
+              </div>
+              <div className="h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-muted" aria-hidden="true">
                 <div className="h-full origin-left rounded-full bg-primary" style={{ transform: `scaleX(${Math.min(1, time / scenario.duration)})` }} />
               </div>
             </>
