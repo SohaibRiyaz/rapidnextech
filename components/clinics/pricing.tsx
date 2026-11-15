@@ -87,7 +87,7 @@ export function ClinicsPricing() {
   const rest = PILOT.split(" · ").slice(1).join(", ")
   const pilotTerms = rest.charAt(0).toUpperCase() + rest.slice(1)
   return (
-    <section id="pricing" aria-labelledby="clinics-pricing-title" className={`${sectionY} ${sectionAnchor} bg-muted/40`}>
+    <section id="pricing" aria-labelledby="clinics-pricing-title" className={`${sectionY} ${sectionAnchor} bg-muted/40 focus:outline-none`}>
       <div className="container mx-auto px-4 sm:px-6">
         <SectionHeading
           id="clinics-pricing-title"

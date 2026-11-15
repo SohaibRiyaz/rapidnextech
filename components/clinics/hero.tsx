@@ -1,7 +1,8 @@
-import { ArrowRight, Check, MessageCircle, Mic } from "lucide-react"
+import { ArrowDown, Check, MessageCircle, Mic } from "lucide-react"
 import { MeshGradient } from "@/components/mesh-gradient"
-import { primaryCta, secondaryCta } from "@/components/dental/styles"
-import { PILOT, SETUP_WAIVED_NOTE, WHATSAPP_CONTACT_URL, WHATSAPP_DEMO_URL } from "@/lib/clinics-config"
+import { primaryCta, secondaryCta, textLink } from "@/components/dental/styles"
+import { PILOT, SETUP_WAIVED_NOTE, WHATSAPP_CONTACT_URL } from "@/lib/clinics-config"
+import { ScrollLink } from "./scroll-link"
 import { TrackedLink } from "./tracked-link"
 
 export function ClinicsHero() {
@@ -36,25 +37,28 @@ export function ClinicsHero() {
               calls 24/7 in English and Arabic.
             </p>
 
+            {/* In-page first (cold LinkedIn traffic): see it work, see the price, then WhatsApp. */}
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap short:mt-4">
-              <TrackedLink
-                href={WHATSAPP_DEMO_URL}
-                event="clinics_whatsapp_demo_click"
-                params={{ location: "hero" }}
-                className={primaryCta}
-              >
-                Try the WhatsApp demo
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </TrackedLink>
+              <ScrollLink targetId="watch-call" event="clinics_hero_demo_click" className={primaryCta}>
+                Watch it handle a call
+                <ArrowDown className="h-4 w-4" aria-hidden="true" />
+              </ScrollLink>
+              <ScrollLink targetId="pricing" event="clinics_hero_pricing_click" className={secondaryCta}>
+                See pricing
+                <ArrowDown className="h-4 w-4" aria-hidden="true" />
+              </ScrollLink>
+            </div>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Prefer to chat?{" "}
               <TrackedLink
                 href={WHATSAPP_CONTACT_URL}
                 event="clinics_contact_click"
                 params={{ location: "hero" }}
-                className={secondaryCta}
+                className={`${textLink} min-h-[48px]`}
               >
-                Talk to us on WhatsApp
+                Message us on WhatsApp
               </TrackedLink>
-            </div>
+            </p>
 
             <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-foreground/80 short:mt-2" aria-label="Pilot terms">
               {[...PILOT.split(" · "), SETUP_WAIVED_NOTE].map((chip) => (

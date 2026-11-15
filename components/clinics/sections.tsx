@@ -1,5 +1,6 @@
 import {
   Activity,
+  ArrowDown,
   ArrowRight,
   Baby,
   BellRing,
@@ -36,8 +37,9 @@ import {
   PILOT,
   SETUP_WAIVED_NOTE,
   WHATSAPP_CONTACT_URL,
-  WHATSAPP_DEMO_URL,
+  WHATSAPP_DEMO_PREFILLED_URL,
 } from "@/lib/clinics-config"
+import { ScrollLink } from "./scroll-link"
 import { TrackedLink } from "./tracked-link"
 
 const container = "container mx-auto px-4 sm:px-6"
@@ -169,7 +171,7 @@ export function ClinicsProducts() {
           intro={LANGUAGES_NOTE}
         />
         <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-2">
-          <article aria-labelledby="product-whatsapp" className={`${card} border-2 border-primary/40 p-6 md:p-8`}>
+          <article aria-labelledby="product-whatsapp" className={`${card} flex flex-col border-2 border-primary/40 p-6 md:p-8`}>
             <div className="flex items-start justify-between gap-3">
               <IconBadge icon={MessageCircle} />
               <span className="rounded-full bg-primary px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary-foreground">
@@ -179,10 +181,19 @@ export function ClinicsProducts() {
             <h3 id="product-whatsapp" className="mb-4 text-2xl font-bold">
               WhatsApp AI receptionist
             </h3>
-            <CheckList items={whatsapp} className="text-foreground" />
+            <CheckList items={whatsapp} className="flex-1 text-foreground" />
+            <TrackedLink
+              href={WHATSAPP_DEMO_PREFILLED_URL}
+              event="clinics_whatsapp_demo_click"
+              params={{ location: "products" }}
+              className={`${primaryCta} mt-6 w-full sm:w-auto sm:self-start`}
+            >
+              <MessageCircle className="h-4 w-4" aria-hidden="true" />
+              Try the WhatsApp demo
+            </TrackedLink>
           </article>
 
-          <article aria-labelledby="product-calling" className={`${card} p-6 md:p-8`}>
+          <article aria-labelledby="product-calling" className={`${card} flex flex-col p-6 md:p-8`}>
             <div className="flex items-start justify-between gap-3">
               <IconBadge icon={PhoneCall} />
               <span className="rounded-full border border-border px-3 py-1 text-xs font-bold uppercase tracking-wider text-foreground">
@@ -192,7 +203,16 @@ export function ClinicsProducts() {
             <h3 id="product-calling" className="mb-4 text-2xl font-bold">
               AI calling receptionist
             </h3>
-            <CheckList items={calling} className="text-foreground" />
+            <CheckList items={calling} className="flex-1 text-foreground" />
+            <ScrollLink
+              targetId="voice-demo"
+              event="clinics_products_calling_demo_click"
+              className={`${secondaryCta} mt-6 w-full sm:w-auto sm:self-start`}
+            >
+              <PhoneCall className="h-4 w-4" aria-hidden="true" />
+              Try the AI calling demo
+              <ArrowDown className="h-4 w-4" aria-hidden="true" />
+            </ScrollLink>
           </article>
         </div>
       </div>
@@ -330,7 +350,7 @@ export function ClinicsFinalCta() {
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <TrackedLink
-                href={WHATSAPP_DEMO_URL}
+                href={WHATSAPP_DEMO_PREFILLED_URL}
                 event="clinics_whatsapp_demo_click"
                 params={{ location: "final_cta" }}
                 className={primaryCta}

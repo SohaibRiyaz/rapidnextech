@@ -11,7 +11,7 @@ import {
   CLINIC_RETELL_AGENT_ID,
   CLINIC_RETELL_AGENT_VERSION,
   WHATSAPP_CONTACT_URL,
-  WHATSAPP_DEMO_URL,
+  WHATSAPP_DEMO_PREFILLED_URL,
 } from "@/lib/clinics-config"
 import { ClinicsShowcase } from "./showcase"
 import { TrackedLink } from "./tracked-link"
@@ -34,11 +34,15 @@ export function ClinicsDemoSection() {
         />
 
         {/* A) Watch a real call */}
-        <h3 className="mb-6 text-center text-2xl font-bold tracking-tight text-foreground">Watch a real call</h3>
+        {/* Landing spot for the hero's "Watch it handle a call" (just under the fixed header). */}
+        <h3 id="watch-call" className="mb-6 scroll-mt-24 text-center text-2xl font-bold tracking-tight text-foreground focus:outline-none">
+          Watch a real call
+        </h3>
         <ClinicsShowcase />
 
         {/* B) Talk to it yourself */}
-        <div className="mx-auto mt-16 max-w-3xl">
+        {/* Landing spot for "Try the AI calling demo" on the Two products card. */}
+        <div id="voice-demo" className="mx-auto mt-16 max-w-3xl scroll-mt-24 focus:outline-none">
           <h3 className="mb-6 text-center text-2xl font-bold tracking-tight text-foreground">Talk to it yourself</h3>
           <DemoLauncher
             location="clinics-demo"
@@ -58,13 +62,13 @@ export function ClinicsDemoSection() {
             }}
             placeholder={
               CLINIC_DEMO_PLACEHOLDER
-                ? { message: CLINIC_DEMO_PLACEHOLDER_MESSAGE, ctaLabel: "Try the WhatsApp demo", ctaHref: WHATSAPP_DEMO_URL }
+                ? { message: CLINIC_DEMO_PLACEHOLDER_MESSAGE, ctaLabel: "Try the WhatsApp demo", ctaHref: WHATSAPP_DEMO_PREFILLED_URL }
                 : null
             }
           />
           <p className="mt-6 text-center">
             <TrackedLink
-              href={WHATSAPP_DEMO_URL}
+              href={WHATSAPP_DEMO_PREFILLED_URL}
               event="clinics_whatsapp_demo_click"
               params={{ location: "demo" }}
               className={textLink}

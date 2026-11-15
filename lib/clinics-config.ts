@@ -172,6 +172,13 @@ export function whatsappWithText(text: string) {
   return `${WHATSAPP_DEMO_URL}?text=${encodeURIComponent(text)}`
 }
 
+/** WhatsApp demo with a first message already typed (used on the "Two products" card). */
+export const WHATSAPP_DEMO_PREFILL = "Hi! I'd like to try your AI receptionist demo."
+export const WHATSAPP_DEMO_PREFILLED_URL = whatsappWithText(WHATSAPP_DEMO_PREFILL)
+
+/** Mobile bottom bar ("Start free pilot on WhatsApp"): chat with a pre-filled pilot request. */
+export const PILOT_WHATSAPP_URL = whatsappWithText("Hi, I'd like to start the 7-day free pilot for my clinic")
+
 export function formatUsdPrice(value: number) {
   return `$${value.toLocaleString("en-US", { minimumFractionDigits: value % 1 ? 2 : 0 })}`
 }
