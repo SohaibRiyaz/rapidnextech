@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { ArrowRight, Loader2, Mic, MicOff, PhoneOff, Play, RotateCcw } from "lucide-react"
 import type { WebCallSession } from "retell-client-js-sdk"
-import { trackEvent } from "@/lib/analytics"
+import { trackEvent, type AnalyticsEvent } from "@/lib/analytics"
 import { siteConfig } from "@/lib/site-config"
 import { primaryCta, secondaryCta } from "./styles"
 
@@ -16,8 +16,39 @@ import { primaryCta, secondaryCta } from "./styles"
 type Status = "idle" | "connecting" | "live" | "ended" | "error"
 type ErrorType = "mic_denied" | "mic_missing" | "recaptcha" | "connect"
 
-const { publicKey, agentId, agentVersion, recaptchaSiteKey } = siteConfig.retellDemo
-const configured = Boolean(publicKey && agentId && agentVersion)
+// Shared by every page that uses this demo. The agent itself can be overridden per page (see DemoLauncherProps).
+const { publicKey, recaptchaSiteKey } = siteConfig.retellDemo
+
+const DENTAL_NOTES = [
+  "Live transfer to the dentist works on the phone line only.",
+  "Your browser will ask for microphone permission. Use headphones for best results.",
+]
+
+/**
+ * Every setting is optional. Leave them all out (as the homepage and /solutions/dental-clinics do) and the
+ * demo behaves exactly as the dental demo always has. Other pages (e.g. /clinics) pass their own values.
+ */
+export type DemoLauncherProps = {
+  location: string
+  /** Retell agent + pinned published version. Default: the dental agent from site-config / env. */
+  agentId?: string | null
+  agentVersion?: number | null
+  /** Name used in the live/ended states ("You're talking to Maya"). Default: "Maya". */
+  agentName?: string
+  /** Line under the title before a call starts. */
+  intro?: string
+  /** Small notes under the button. Default: the two dental notes. */
+  notes?: string[]
+  /** "Thanks for trying" state. Default: dental copy + link to the pilot form. */
+  ended?: { text: string; ctaLabel: string; ctaHref: string; external?: boolean }
+  /**
+   * Placeholder mode: full UI, but Start only shows this message + button. No Retell code is loaded,
+   * no microphone or reCAPTCHA request, no network call.
+   */
+  placeholder?: { message: string; ctaLabel: string; ctaHref: string } | null
+  /** Extra analytics event fired when Start is pressed, with { placeholder: true | false }. */
+  clickEvent?: AnalyticsEvent
+}
 
 const errorCopy: Record<ErrorType, string> = {
   mic_denied:
@@ -71,8 +102,20 @@ async function checkMicrophone(): Promise<ErrorType | null> {
   }
 }
 
-export function DemoLauncher({ location }: { location: string }) {
+export function DemoLauncher({
+  location,
+  agentId = siteConfig.retellDemo.agentId,
+  agentVersion = siteConfig.retellDemo.agentVersion,
+  agentName = "Maya",
+  intro = "Play the role of a new patient or a patient with a toothache. No signup.",
+  notes: noteLines = DENTAL_NOTES,
+  ended,
+  placeholder = null,
+  clickEvent,
+}: DemoLauncherProps) {
+  const configured = Boolean(publicKey && agentId && agentVersion)
   const [status, setStatus] = useState<Status>("idle")
+  const [placeholderOpen, setPlaceholderOpen] = useState(false)
   const [errorType, setErrorType] = useState<ErrorType | null>(null)
   const [muted, setMuted] = useState(false)
   const [agentTalking, setAgentTalking] = useState(false)
@@ -110,6 +153,12 @@ export function DemoLauncher({ location }: { location: string }) {
   }
 
   async function start() {
+    if (clickEvent) trackEvent(clickEvent, { location, placeholder: Boolean(placeholder) })
+    // Placeholder mode: stop here, before any mic, reCAPTCHA or Retell request.
+    if (placeholder) {
+      setPlaceholderOpen(true)
+      return
+    }
     if (!configured || status === "connecting" || status === "live") return
     trackEvent("demo_start", { location })
     setStatus("connecting")
@@ -181,12 +230,13 @@ export function DemoLauncher({ location }: { location: string }) {
 
   const notes = (
     <div className="space-y-1 text-xs text-muted-foreground">
-      <p>Live transfer to the dentist works on the phone line only.</p>
-      <p>Your browser will ask for microphone permission. Use headphones for best results.</p>
+      {noteLines.map((line) => (
+        <p key={line}>{line}</p>
+      ))}
     </div>
   )
 
-  if (!configured) {
+  if (!configured && !placeholder) {
     return (
       <div className={cardClass}>
         <span className="flex h-16 w-16 items-center justify-center rounded-full bg-muted text-muted-foreground">
@@ -218,9 +268,9 @@ export function DemoLauncher({ location }: { location: string }) {
           <Mic className="relative h-9 w-9" aria-hidden="true" />
         </span>
         <div>
-          <h3 className="text-2xl font-semibold text-card-foreground">You&apos;re talking to Maya</h3>
+          <h3 className="text-2xl font-semibold text-card-foreground">You&apos;re talking to {agentName}</h3>
           <p className="mt-2 text-muted-foreground" aria-live="polite">
-            {agentTalking ? "Maya is speaking…" : muted ? "You're muted." : "Listening. Go ahead and speak."}
+            {agentTalking ? `${agentName} is speaking…` : muted ? "You're muted." : "Listening. Go ahead and speak."}
           </p>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row">
@@ -246,15 +296,25 @@ export function DemoLauncher({ location }: { location: string }) {
     return (
       <div className={cardClass}>
         <div>
-          <h3 className="text-2xl font-semibold text-card-foreground">Thanks for trying Maya</h3>
+          <h3 className="text-2xl font-semibold text-card-foreground">Thanks for trying {agentName}</h3>
           <p className="mx-auto mt-2 max-w-md text-muted-foreground">
-            That&apos;s how your patients would be greeted, day or night. Try it on your own practice&apos;s calls for{" "}
-            {siteConfig.pilot.days} days, free.
+            {ended ? (
+              ended.text
+            ) : (
+              <>
+                That&apos;s how your patients would be greeted, day or night. Try it on your own practice&apos;s calls
+                for {siteConfig.pilot.days} days, free.
+              </>
+            )}
           </p>
         </div>
         <div className="flex flex-col gap-3 sm:flex-row">
-          <a href={pilotHref} className={primaryCta}>
-            Start the {siteConfig.pilot.days}-day pilot
+          <a
+            href={ended ? ended.ctaHref : pilotHref}
+            className={primaryCta}
+            {...(ended?.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+          >
+            {ended ? ended.ctaLabel : `Start the ${siteConfig.pilot.days}-day pilot`}
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </a>
           <button type="button" className={secondaryCta} onClick={start}>
@@ -279,11 +339,18 @@ export function DemoLauncher({ location }: { location: string }) {
             {errorCopy[errorType]}
           </p>
         ) : (
-          <p className="mx-auto mt-2 max-w-md text-muted-foreground">
-            Play the role of a new patient or a patient with a toothache. No signup.
-          </p>
+          <p className="mx-auto mt-2 max-w-md text-muted-foreground">{intro}</p>
         )}
       </div>
+      {placeholder && placeholderOpen ? (
+        <div className="mx-auto flex max-w-md flex-col items-center gap-3 rounded-2xl border border-primary/30 bg-primary/5 p-4" role="status">
+          <p className="text-sm text-foreground">{placeholder.message}</p>
+          <a href={placeholder.ctaHref} target="_blank" rel="noopener noreferrer" className={secondaryCta}>
+            {placeholder.ctaLabel}
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </a>
+        </div>
+      ) : null}
       <button type="button" className={primaryCta} onClick={start} disabled={connecting} aria-busy={connecting}>
         {connecting ? (
           <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />

@@ -27,6 +27,9 @@ export type AnalyticsEvent =
   | "clinics_phone_demo_click"
   | "geo_banner_view"
   | "geo_banner_click"
+  | "clinics_showcase_play"
+  | "clinics_showcase_complete"
+  | "clinics_voice_demo_click"
 
 type EventParams = Record<string, string | number | boolean | undefined>
 

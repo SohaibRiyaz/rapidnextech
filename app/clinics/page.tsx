@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { getClinicsFaqs } from "@/components/clinics/faq-data"
+import { ClinicsDemoSection } from "@/components/clinics/demo-section"
 import { ClinicsFaq } from "@/components/clinics/faq"
 import { ClinicsHero } from "@/components/clinics/hero"
 import { ClinicsPageView } from "@/components/clinics/page-view"
@@ -7,7 +8,6 @@ import { ClinicsPricing } from "@/components/clinics/pricing"
 import {
   ClinicsBuiltFor,
   ClinicsControl,
-  ClinicsDemo,
   ClinicsFinalCta,
   ClinicsHandles,
   ClinicsHowItWorks,
@@ -115,7 +115,7 @@ export default function ClinicsPage() {
       <ClinicsControl />
       <ClinicsHowItWorks />
       <ClinicsHandles />
-      <ClinicsDemo />
+      <ClinicsDemoSection />
       <ClinicsPricing />
       <ClinicsFaq />
       <ClinicsFinalCta />

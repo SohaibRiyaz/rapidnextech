@@ -1,3 +1,5 @@
+import { siteConfig } from "@/lib/site-config"
+
 /**
  * Single source of truth for the /clinics page (Gulf & Egypt clinics offer).
  * Components only read from here. Blocks tied to a null value are hidden.
@@ -10,8 +12,69 @@ export const WHATSAPP_DEMO_URL = "https://wa.me/18132142552"
 export const WHATSAPP_CONTACT_URL =
   "https://wa.me/18132142552?text=Hi%2C%20I%27d%20like%20to%20know%20more%20about%20the%20AI%20receptionist%20for%20my%20clinic"
 
-/** Phone number for the AI calling demo, e.g. "+971 4 123 4567". Every phone-demo element is hidden while null. */
+/**
+ * Phone number for the AI calling demo, e.g. "+971 4 123 4567". Every phone-demo element is hidden while null.
+ * There is no UAE number yet, so this stays null.
+ */
 export const PHONE_DEMO_NUMBER = null as string | null
+
+/** How the "What your team receives" panel of the example calls looks: an email or a WhatsApp message. */
+export const SUMMARY_CHANNEL = "email" as "email" | "whatsapp"
+
+/* ------------------------------------------------------------------------------------------------
+ * "Talk to it yourself": the browser voice demo (Retell) on /clinics
+ *
+ * TEMP-DENTAL-AGENT
+ * Until a dedicated clinics agent exists, /clinics reuses the DENTAL Retell agent (an English-only
+ * dental receptionist called "Maya"). Every temporary value is tagged TEMP-DENTAL-AGENT, here and in
+ * components/clinics/demo-section.tsx. Search the code for "TEMP-DENTAL-AGENT" to find them all.
+ *
+ * To switch to the dedicated clinics agent:
+ *   1. CLINIC_RETELL_AGENT_ID      → the clinics agent id ("agent_…"), ideally from a new env var
+ *   2. CLINIC_RETELL_AGENT_VERSION → that agent's published version number
+ *   3. CLINIC_AGENT_NAME           → the clinics agent's name
+ *   4. CLINIC_DEMO_INTRO, CLINIC_DEMO_NOTES → swap in the commented "dedicated agent" versions below
+ *      (they bring back "Speaks English and Arabic" and "Example clinic: Lumière Aesthetic Clinic, Dubai")
+ *   5. Remove every TEMP-DENTAL-AGENT comment, including this block.
+ * The Retell public key, reCAPTCHA key and webhook are shared: keep the clinics agent in the same
+ * Retell workspace and point its webhook at the same URL.
+ * ---------------------------------------------------------------------------------------------- */
+
+// TEMP-DENTAL-AGENT: the same agent + version as the dental demo (NEXT_PUBLIC_RETELL_AGENT_ID / _VERSION).
+export const CLINIC_RETELL_AGENT_ID: string | null = siteConfig.retellDemo.agentId
+export const CLINIC_RETELL_AGENT_VERSION: number | null = siteConfig.retellDemo.agentVersion
+
+/**
+ * true: the voice demo shows its full UI, but Start only shows CLINIC_DEMO_PLACEHOLDER_MESSAGE
+ * (no Retell, no microphone, no network call). false: a real browser call to the agent above.
+ */
+export const CLINIC_DEMO_PLACEHOLDER = false as boolean
+export const CLINIC_DEMO_PLACEHOLDER_MESSAGE =
+  "The live voice demo opens soon. Meanwhile, watch the example calls above or try the WhatsApp demo."
+
+// TEMP-DENTAL-AGENT: the dental agent is called Maya. Change to the clinics agent's name.
+export const CLINIC_AGENT_NAME = "Maya"
+
+// TEMP-DENTAL-AGENT: describes the dental agent. Swap in the dedicated version below when switching.
+export const CLINIC_DEMO_INTRO = "Play the role of a patient calling a dental clinic. No signup."
+// Dedicated clinics agent:
+// export const CLINIC_DEMO_INTRO = "Play the role of a patient asking about a treatment, a price or an appointment. No signup."
+
+export const CLINIC_DEMO_MIC_NOTE = "Your browser will ask for microphone permission. Use headphones for best results."
+
+// TEMP-DENTAL-AGENT: the first two notes describe the shared dental agent. Swap in the dedicated
+// version below when switching.
+export const CLINIC_DEMO_NOTES = [
+  "Example receptionist: a dental clinic (English demo)",
+  "Your clinic's version is set up with your own treatments and prices, in English and Arabic.",
+  CLINIC_DEMO_MIC_NOTE,
+]
+// Dedicated clinics agent:
+// export const CLINIC_DEMO_NOTES = [
+//   "Speaks English and Arabic",
+//   "Example clinic: Lumière Aesthetic Clinic, Dubai",
+//   CLINIC_DEMO_MIC_NOTE,
+// ]
 
 /** Staff can reply from the WhatsApp Business app on their phone. When false, every mention of it is removed. */
 export const COEXISTENCE_ENABLED = true as boolean

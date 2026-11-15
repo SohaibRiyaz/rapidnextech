@@ -313,59 +313,6 @@ export function ClinicsHandles() {
   )
 }
 
-/* 8. Live demo -------------------------------------------------------------------------------- */
-
-export function ClinicsDemo() {
-  return (
-    <section id="demo" aria-labelledby="demo-title" className={`${sectionY} ${sectionAnchor}`}>
-      <div className={container}>
-        <SectionHeading
-          id="demo-title"
-          eyebrow="Live demo"
-          title="Try it yourself, as a patient"
-          intro="Message our demo receptionist on WhatsApp. Ask about a treatment, a price or our hours, or send a voice note in Arabic."
-        />
-        <div className={`mx-auto grid max-w-4xl gap-6 ${PHONE_DEMO_NUMBER ? "md:grid-cols-2" : ""}`}>
-          <div className={`${card} flex flex-col items-start p-6 md:p-8`}>
-            <IconBadge icon={MessageCircle} />
-            <h3 className="text-xl font-semibold">WhatsApp demo</h3>
-            <p className="mt-2 flex-1 leading-relaxed text-muted-foreground">
-              Opens WhatsApp with our demo number. It replies instantly, in English or Arabic.
-            </p>
-            <TrackedLink
-              href={WHATSAPP_DEMO_URL}
-              event="clinics_whatsapp_demo_click"
-              params={{ location: "demo" }}
-              className={`${primaryCta} mt-6 w-full sm:w-auto`}
-            >
-              Try the WhatsApp demo <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </TrackedLink>
-          </div>
-
-          {PHONE_DEMO_NUMBER ? (
-            <div className={`${card} flex flex-col items-start p-6 md:p-8`}>
-              <IconBadge icon={PhoneCall} />
-              <h3 className="text-xl font-semibold">Phone demo</h3>
-              <p className="mt-2 flex-1 leading-relaxed text-muted-foreground">
-                Call our AI receptionist and play the role of a patient.
-              </p>
-              <TrackedLink
-                href={`tel:${PHONE_DEMO_NUMBER.replace(/[^\d+]/g, "")}`}
-                event="clinics_phone_demo_click"
-                params={{ location: "demo" }}
-                external={false}
-                className={`${secondaryCta} mt-6 w-full sm:w-auto`}
-              >
-                Call {PHONE_DEMO_NUMBER}
-              </TrackedLink>
-            </div>
-          ) : null}
-        </div>
-      </div>
-    </section>
-  )
-}
-
 /* 11. Final CTA ------------------------------------------------------------------------------- */
 
 export function ClinicsFinalCta() {
