@@ -35,7 +35,7 @@ export function HeaderNav() {
     return (
         <NavigationMenu>
             <NavigationMenuList className="gap-1">
-                <TopLink href="/">AI Receptionist for Dentists</TopLink>
+                <TopLink href="/">AI Receptionist for HVAC</TopLink>
                 <TopLink href="/#pricing">Pricing</TopLink>
 
                 {/* Mega Menu: custom software services (former "What We Do") */}

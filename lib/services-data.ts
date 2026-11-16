@@ -381,13 +381,12 @@ export const serviceCategories = [
     },
 ]
 
-// Dental is the only vertical shown in navigation, /services and the sitemap.
-// The other solution pages (aesthetic clinics, home-service, med spa, real estate, diet & nutrition)
-// remain live but are noindexed and unlinked.
+// /dental is listed here (navigation, /services, sitemap). HVAC is the homepage ("/").
+// The other solution pages (med spa, real estate, diet & nutrition) remain live but are noindexed and unlinked.
 export const industrySolutions = [
     {
         title: "AI Receptionist for Dental Practices",
-        href: "/solutions/dental-clinics",
+        href: "/dental",
         description: "24/7 call answering for US dental practices: new patients, emergencies, insurance questions and appointment requests.",
     },
 ]

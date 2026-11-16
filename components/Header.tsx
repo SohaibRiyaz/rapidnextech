@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/accordion"
 
 const primaryNavigation = [
-  { name: "AI Receptionist for Dentists", href: "/" },
+  { name: "AI Receptionist for HVAC", href: "/" },
   { name: "Pricing", href: "/#pricing" },
 ]
 
@@ -53,7 +53,9 @@ export default function Header() {
   }, [pathname])
 
   const isDark = mode === "dark" || color === "black"
-  const isMedspaVoiceLP = pathname === "/solutions/never-miss-a-medspa-call" || pathname === "/solutions/never-miss-a-call"
+  const isMedspaVoiceLP = pathname === "/solutions/never-miss-a-medspa-call"
+  // Free Pilot goes to the form for the offer the visitor is looking at (HVAC on "/" and everywhere else).
+  const pilotHref = pathname === "/dental" ? "/dental#pilot" : "/#pilot"
   const effectiveDark = isDark || isMedspaVoiceLP
 
   const headerBgClass = isMedspaVoiceLP
@@ -125,7 +127,7 @@ export default function Header() {
             {siteConfig.publicPhone.display}
           </a>
           <ThemeSwitcher />
-          <Link href="/#pilot" className={pilotButtonClass}>
+          <Link href={pilotHref} className={pilotButtonClass}>
             Free Pilot
           </Link>
         </div>
@@ -157,7 +159,7 @@ export default function Header() {
               } border-t border-border overflow-hidden`}
           >
             <div className="container mx-auto px-6 pt-6 pb-40 flex flex-col gap-4 h-full overflow-y-auto">
-              <Link href="/#pilot" className={`${pilotButtonClass} min-h-[48px] w-full text-base`} onClick={() => setIsOpen(false)}>
+              <Link href={pilotHref} className={`${pilotButtonClass} min-h-[48px] w-full text-base`} onClick={() => setIsOpen(false)}>
                 Start your free pilot
               </Link>
 
