@@ -158,8 +158,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.9,
   }))
 
-  // Only the dental solution page is listed. The other vertical pages (never-miss-a-call incl.
-  // /texas, med spa, real estate, diet & nutrition) are noindexed.
+  // "/" (HVAC) is in staticPages; /dental comes from industrySolutions. The old HVAC pages and
+  // /solutions/dental-clinics are redirects now. Med spa, real estate and diet & nutrition stay noindexed.
 
   // Gulf & Egypt clinics offer (WhatsApp + AI calling).
   const clinicsPage: MetadataRoute.Sitemap = [

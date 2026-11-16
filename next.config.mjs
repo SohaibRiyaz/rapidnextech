@@ -38,6 +38,11 @@ const nextConfig = {
       // Old aesthetic clinics page (Lahore) replaced by the Gulf & Egypt clinics page.
       { source: "/solutions/aesthetic-clinics", destination: "/clinics", permanent: true },
       { source: "/aesthetic-clinics", destination: "/clinics", permanent: true },
+      // Old HVAC pages (unsourced stats, conflicting offers): the HVAC offer is now the homepage.
+      { source: "/solutions/never-miss-a-call", destination: "/", permanent: true },
+      { source: "/solutions/never-miss-a-call/texas", destination: "/", permanent: true },
+      // The dental details page was merged into /dental.
+      { source: "/solutions/dental-clinics", destination: "/dental", permanent: true },
       // LinkedIn profile vanity link. Temporary (307) so the UTM tags can change later.
       { source: "/gcc", destination: "/clinics?utm_source=linkedin&utm_medium=profile", permanent: false },
       {

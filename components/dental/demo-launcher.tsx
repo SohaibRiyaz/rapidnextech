@@ -25,7 +25,7 @@ const DENTAL_NOTES = [
 ]
 
 /**
- * Every setting is optional. Leave them all out (as the homepage and /solutions/dental-clinics do) and the
+ * Every setting is optional. Leave them all out (as /dental does) and the
  * demo behaves exactly as the dental demo always has. Other pages (e.g. /clinics) pass their own values.
  */
 export type DemoLauncherProps = {
@@ -45,9 +45,11 @@ export type DemoLauncherProps = {
    * Placeholder mode: full UI, but Start only shows this message + button. No Retell code is loaded,
    * no microphone or reCAPTCHA request, no network call.
    */
-  placeholder?: { message: string; ctaLabel: string; ctaHref: string } | null
+  placeholder?: { message: string; ctaLabel: string; ctaHref: string; /** Default true: opens in a new tab. false: in-page link (e.g. #pilot). */ external?: boolean } | null
   /** Extra analytics event fired when Start is pressed, with { placeholder: true | false }. */
   clickEvent?: AnalyticsEvent
+  /** Extra params added to every demo_* event, e.g. { vertical: "hvac" }. */
+  analyticsParams?: Record<string, string>
 }
 
 const errorCopy: Record<ErrorType, string> = {
@@ -112,6 +114,7 @@ export function DemoLauncher({
   ended,
   placeholder = null,
   clickEvent,
+  analyticsParams,
 }: DemoLauncherProps) {
   const configured = Boolean(publicKey && agentId && agentVersion)
   const [status, setStatus] = useState<Status>("idle")
@@ -125,7 +128,7 @@ export function DemoLauncher({
   const endedRef = useRef(false)
 
   useEffect(() => {
-    // The section is also used on /solutions/dental-clinics, which has no #pilot form of its own.
+    // Pages without their own #pilot form send visitors to the homepage form.
     if (!document.getElementById("pilot")) setPilotHref("/#pilot")
     return () => {
       // Leaving the page mid-call: hang up so the call (and its minutes) stop.
@@ -134,7 +137,7 @@ export function DemoLauncher({
   }, [])
 
   function fail(type: ErrorType) {
-    trackEvent("demo_error", { location, type })
+    trackEvent("demo_error", { location, type, ...analyticsParams })
     setErrorType(type)
     setStatus("error")
     setAgentTalking(false)
@@ -148,19 +151,19 @@ export function DemoLauncher({
     callRef.current = null
     // A call that never went live ended because it failed to connect.
     if (liveAtRef.current === null) return fail("connect")
-    trackEvent("demo_end", { location, duration: Math.round((Date.now() - liveAtRef.current) / 1000) })
+    trackEvent("demo_end", { location, duration: Math.round((Date.now() - liveAtRef.current) / 1000), ...analyticsParams })
     setStatus("ended")
   }
 
   async function start() {
-    if (clickEvent) trackEvent(clickEvent, { location, placeholder: Boolean(placeholder) })
+    if (clickEvent) trackEvent(clickEvent, { location, placeholder: Boolean(placeholder), ...analyticsParams })
     // Placeholder mode: stop here, before any mic, reCAPTCHA or Retell request.
     if (placeholder) {
       setPlaceholderOpen(true)
       return
     }
     if (!configured || status === "connecting" || status === "live") return
-    trackEvent("demo_start", { location })
+    trackEvent("demo_start", { location, ...analyticsParams })
     setStatus("connecting")
     setErrorType(null)
     setMuted(false)
@@ -193,7 +196,7 @@ export function DemoLauncher({
             if (s === "live" && liveAtRef.current === null) {
               liveAtRef.current = Date.now()
               setStatus("live")
-              trackEvent("demo_live", { location })
+              trackEvent("demo_live", { location, ...analyticsParams })
               call.startAudioPlayback().catch(() => {})
             }
           },
@@ -345,7 +348,11 @@ export function DemoLauncher({
       {placeholder && placeholderOpen ? (
         <div className="mx-auto flex max-w-md flex-col items-center gap-3 rounded-2xl border border-primary/30 bg-primary/5 p-4" role="status">
           <p className="text-sm text-foreground">{placeholder.message}</p>
-          <a href={placeholder.ctaHref} target="_blank" rel="noopener noreferrer" className={secondaryCta}>
+          <a
+            href={placeholder.ctaHref}
+            {...(placeholder.external === false ? {} : { target: "_blank", rel: "noopener noreferrer" })}
+            className={secondaryCta}
+          >
             {placeholder.ctaLabel}
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </a>

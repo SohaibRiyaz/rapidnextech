@@ -41,8 +41,8 @@ export function Footer() {
               </div>
             </Link>
             <p className="theme-text opacity-80 text-sm leading-relaxed mb-6">
-              AI receptionist for US dental practices. Every after-hours, weekend and overflow call answered, and every
-              request sent to your front desk.
+              AI receptionist for US HVAC companies and dental practices. Every missed and after-hours call answered,
+              and every job or request sent to you.
             </p>
             <div className="flex gap-2">
               {[
@@ -70,8 +70,9 @@ export function Footer() {
           <div className="lg:col-span-3">
             <h3 className="font-bold theme-text mb-4">AI Receptionist</h3>
             <ul className="space-y-2">
-              <li><Link href="/" className={linkClass}>AI Receptionist for Dentists</Link></li>
-              <li><Link href="/solutions/dental-clinics" className={linkClass}>How it works for dental practices</Link></li>
+              <li><Link href="/" className={linkClass}>AI Receptionist for HVAC</Link></li>
+              <li><Link href="/dental" className={linkClass}>Dental practices</Link></li>
+              <li><Link href="/clinics" className={linkClass}>Clinics in the Gulf &amp; Egypt</Link></li>
               <li><Link href="/#pricing" className={linkClass}>Pricing</Link></li>
               <li><Link href="/#pilot" className={linkClass}>14-day free pilot</Link></li>
             </ul>

@@ -2,9 +2,9 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowRight, Code2, Mail, Phone, PhoneCall } from "lucide-react"
 import { PhoneLink } from "@/components/dental/phone-link"
-import { PilotForm } from "@/components/dental/pilot-form"
 import { SecurityNote } from "@/components/dental/security-note"
 import { card, textLink } from "@/components/dental/styles"
+import { ContactPilotForm } from "@/components/landing/contact-pilot-form"
 import { siteConfig } from "@/lib/site-config"
 import { breadcrumbSchema, jsonLd, salesEmail, salesPhoneE164, ukAddress } from "@/lib/seo"
 
@@ -12,22 +12,22 @@ import { breadcrumbSchema, jsonLd, salesEmail, salesPhoneE164, ukAddress } from 
 // the codebase but no longer rendered here.
 
 const DESCRIPTION =
-  "Start a 14-day free pilot of RapidNexTech's AI receptionist for your dental practice, or call +1 (813) 214-2552. No credit card, no contract, keep your number."
+  "Start a 14-day free pilot of RapidNexTech's AI receptionist for your HVAC company or dental practice, or call +1 (813) 214-2552. No credit card, no contract, keep your number."
 
 export const metadata: Metadata = {
-  title: { absolute: "Contact RapidNexTech | Free Dental AI Receptionist Pilot" },
+  title: { absolute: "Contact RapidNexTech | Free AI Receptionist Pilot" },
   description: DESCRIPTION,
   alternates: { canonical: "https://rapidnextech.com/contact" },
   openGraph: {
-    title: "Contact RapidNexTech | Free Dental AI Receptionist Pilot",
+    title: "Contact RapidNexTech | Free AI Receptionist Pilot",
     description: DESCRIPTION,
     url: "https://rapidnextech.com/contact",
     type: "website",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Contact RapidNexTech, AI receptionist for dental practices" }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Contact RapidNexTech, AI receptionist for HVAC companies and dental practices" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Contact RapidNexTech | Free Dental AI Receptionist Pilot",
+    title: "Contact RapidNexTech | Free AI Receptionist Pilot",
     description: DESCRIPTION,
     images: ["/og-image.png"],
   },
@@ -65,13 +65,13 @@ export default function ContactPage() {
               Start your free pilot, or just talk to us
             </h1>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-              Tell us about your dental practice and we&apos;ll email you {siteConfig.copy.pilotResponseTime} to book a
+              Tell us about your HVAC company or dental practice and we&apos;ll email you {siteConfig.copy.pilotResponseTime} to book a
               30-min onboarding call. {siteConfig.pilot.chips.join(" · ")}.
             </p>
           </div>
 
           <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-start">
-            <PilotForm location="contact" />
+            <ContactPilotForm />
 
             <div className="space-y-6">
               <div className={`${card} p-6`}>

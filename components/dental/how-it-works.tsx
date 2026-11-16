@@ -1,35 +1,17 @@
-import { ClipboardList, PhoneForwarded, Send } from "lucide-react"
-import { siteConfig } from "@/lib/site-config"
+import type { VerticalContent } from "@/content/verticals/types"
 import { SectionHeading } from "./section-heading"
 import { sectionAnchor, sectionY } from "./styles"
 
-const steps = [
-  {
-    icon: PhoneForwarded,
-    title: "Keep your number",
-    text: "We give your practice a dedicated AI line and set up call forwarding with you: after hours, on weekends, or when nobody picks up.",
-  },
-  {
-    icon: ClipboardList,
-    title: "We set it up with your practice",
-    text: "Your hours, services, accepted-insurance list and emergency rules. We test it live together on a short screen-share.",
-  },
-  {
-    icon: Send,
-    title: "It answers every forwarded call",
-    text: "Each new patient, emergency and appointment request goes to your front desk instantly, with a clear summary.",
-  },
-]
-
-export function DentalHowItWorks() {
-  const systems = siteConfig.copy.phoneSystems.join(", ")
+/** Landing template: "How it works". Copy comes from content/verticals/*. */
+export function LandingHowItWorks({ content }: { content: VerticalContent }) {
+  const { howItWorks } = content
   return (
     <section id="how-it-works" aria-labelledby="how-title" className={`${sectionY} ${sectionAnchor} bg-muted/40`}>
       <div className="container mx-auto px-4 sm:px-6">
-        <SectionHeading id="how-title" eyebrow="How it works" title="Three steps. Your patients keep dialing the same number." />
+        <SectionHeading id="how-title" eyebrow="How it works" title={howItWorks.title} />
 
         <ol className="grid gap-6 md:grid-cols-3">
-          {steps.map(({ icon: Icon, title, text }, i) => (
+          {howItWorks.steps.map(({ icon: Icon, title, text }, i) => (
             <li key={title} className="relative rounded-2xl border border-border bg-card p-6 md:p-8">
               <div className="mb-5 flex items-center gap-3">
                 <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
@@ -43,9 +25,7 @@ export function DentalHowItWorks() {
           ))}
         </ol>
 
-        <p className="mt-8 text-center text-sm text-muted-foreground">
-          Works with {systems} and standard phone lines. Caller ID passes through. Turn it off anytime.
-        </p>
+        <p className="mt-8 text-center text-sm text-muted-foreground">{howItWorks.footnote}</p>
       </div>
     </section>
   )

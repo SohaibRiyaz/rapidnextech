@@ -22,8 +22,7 @@ export function ConditionalLayout({ children }: ConditionalLayoutProps) {
 
     // Define routes where the main header and footer should NOT be displayed
     const isAdminRoute = pathname?.startsWith("/admin") || pathname === "/admin-login"
-    const isHomeServiceDemoRoute =
-        pathname === "/solutions/never-miss-a-call" || pathname === "/solutions/never-miss-a-medspa-call"
+    const isHomeServiceDemoRoute = pathname === "/solutions/never-miss-a-medspa-call"
 
     if (isAdminRoute) {
         return <>{children}</>

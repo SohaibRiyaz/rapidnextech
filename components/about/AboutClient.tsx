@@ -90,8 +90,8 @@ export default function AboutClient() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-[1.1]"
             >
-              <span className="theme-text opacity-90">We build the</span>{" "}
-              <span className="bg-clip-text text-transparent theme-gradient-text">AI receptionist for dental practices.</span>
+              <span className="theme-text opacity-90">We build</span>{" "}
+              <span className="bg-clip-text text-transparent theme-gradient-text">AI receptionists that never miss a call.</span>
             </motion.h1>
 
             <motion.p
@@ -100,9 +100,9 @@ export default function AboutClient() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-xl md:text-2xl theme-text opacity-70 max-w-3xl mx-auto mb-8 font-light leading-relaxed"
             >
-              RapidNexTech is a software engineering company. Our product answers after-hours, weekend and overflow
-              calls for US dental practices, captures new patients and emergencies, and sends every request to the
-              front desk. We also build custom software for businesses.
+              RapidNexTech is a software engineering company. We build AI receptionists for US HVAC companies and
+              dental practices, WhatsApp and AI calling receptionists for clinics in the Gulf and Egypt, and custom
+              software for businesses.
             </motion.p>
 
             <motion.div
