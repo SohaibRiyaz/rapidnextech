@@ -1,70 +1,83 @@
 "use client"
 
 import Link from "next/link"
-import { useCallback, useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react"
+import { Fragment, useCallback, useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from "react"
 import { AlertCircle, CalendarCheck, CheckCircle2, Loader2 } from "lucide-react"
 import { trackEvent } from "@/lib/analytics"
 import {
   ANSWER_WHEN,
   CALLS_PER_WEEK,
+  HVAC_ANSWER_WHEN,
+  HVAC_FIELD_SOFTWARE_OPTIONS,
+  HVAC_PHONE_SYSTEMS,
+  HVAC_TRUCKS,
   PHONE_SYSTEMS,
   PLAN_ID_TO_INTEREST,
   PLAN_INTEREST,
   PRACTICE_SOFTWARE,
   UTM_KEYS,
+  hvacPilotRequestSchema,
   pilotRequestSchema,
-  type PilotFieldErrors,
-  type PilotRequest,
 } from "@/lib/pilot-request"
 import { siteConfig, telHref } from "@/lib/site-config"
 import { primaryCta } from "./styles"
 
 import { SELECT_PLAN_EVENT } from "./events"
 
-type Values = {
-  practiceName: string
-  ownerName: string
-  email: string
-  phone: string
-  cityState: string
-  callsPerWeek: string
-  phoneSystem: string
-  practiceSoftware: string
-  answerWhen: string
-  planInterest: string
-  message: string
-  consent: boolean
+export type PilotVertical = "dental" | "hvac"
+
+type TextField = {
+  kind: "text"
+  name: string
+  label: string
+  type: string
+  autoComplete: string
+  placeholder: string
+  full?: boolean
+}
+type SelectField = { kind: "select"; name: string; label: string; options: readonly string[]; full?: boolean }
+type FieldDef = TextField | SelectField
+
+/**
+ * Fields per vertical, in display order. The dental list is the original form, unchanged (it is also
+ * used by /contact). Validation lives in lib/pilot-request.ts (pilotRequestSchema / hvacPilotRequestSchema).
+ */
+const FORMS: Record<PilotVertical, { fields: FieldDef[]; messagePlaceholder: string }> = {
+  dental: {
+    fields: [
+      { kind: "text", name: "practiceName", label: "Practice name", type: "text", autoComplete: "organization", placeholder: "e.g. Bright Smile Family Dentistry", full: true },
+      { kind: "text", name: "ownerName", label: "Owner / decision-maker name", type: "text", autoComplete: "name", placeholder: "e.g. Dr. Jane Smith" },
+      { kind: "text", name: "email", label: "Email", type: "email", autoComplete: "email", placeholder: "you@yourpractice.com" },
+      { kind: "text", name: "phone", label: "Phone", type: "tel", autoComplete: "tel", placeholder: "(555) 123-4567" },
+      { kind: "text", name: "cityState", label: "Practice city / state", type: "text", autoComplete: "address-level2", placeholder: "e.g. Tampa, FL" },
+      { kind: "select", name: "callsPerWeek", label: "Approx. after-hours calls per week", options: CALLS_PER_WEEK },
+      { kind: "select", name: "phoneSystem", label: "Phone system", options: PHONE_SYSTEMS },
+      { kind: "select", name: "practiceSoftware", label: "Practice management software", options: PRACTICE_SOFTWARE },
+      { kind: "select", name: "answerWhen", label: "When should the AI answer?", options: ANSWER_WHEN },
+      { kind: "select", name: "planInterest", label: "Plan interest", options: PLAN_INTEREST, full: true },
+    ],
+    messagePlaceholder: "Anything we should know: your hours, services, how you handle emergencies, or questions for us.",
+  },
+  hvac: {
+    fields: [
+      { kind: "text", name: "companyName", label: "Company name", type: "text", autoComplete: "organization", placeholder: "e.g. Sunrise Heating & Air", full: true },
+      { kind: "text", name: "ownerName", label: "Owner / decision-maker name", type: "text", autoComplete: "name", placeholder: "e.g. Mike Johnson" },
+      { kind: "text", name: "email", label: "Email", type: "email", autoComplete: "email", placeholder: "you@yourcompany.com" },
+      { kind: "text", name: "phone", label: "Phone", type: "tel", autoComplete: "tel", placeholder: "(555) 123-4567" },
+      { kind: "text", name: "cityState", label: "Service area city / state", type: "text", autoComplete: "address-level2", placeholder: "e.g. Tampa, FL" },
+      { kind: "select", name: "trucks", label: "Number of trucks / techs", options: HVAC_TRUCKS },
+      { kind: "select", name: "callsPerWeek", label: "Approx. missed calls per week", options: CALLS_PER_WEEK },
+      { kind: "select", name: "phoneSystem", label: "Phone system", options: HVAC_PHONE_SYSTEMS },
+      { kind: "select", name: "fieldSoftware", label: "Field service software", options: HVAC_FIELD_SOFTWARE_OPTIONS },
+      { kind: "select", name: "answerWhen", label: "When should the AI answer?", options: HVAC_ANSWER_WHEN, full: true },
+      { kind: "select", name: "planInterest", label: "Plan interest", options: PLAN_INTEREST, full: true },
+    ],
+    messagePlaceholder: "Anything we should know: your service area, hours, how you handle emergencies, or questions for us.",
+  },
 }
 
-const EMPTY: Values = {
-  practiceName: "",
-  ownerName: "",
-  email: "",
-  phone: "",
-  cityState: "",
-  callsPerWeek: "",
-  phoneSystem: "",
-  practiceSoftware: "",
-  answerWhen: "",
-  planInterest: "",
-  message: "",
-  consent: false,
-}
-
-const FIELD_ORDER: (keyof PilotRequest)[] = [
-  "practiceName",
-  "ownerName",
-  "email",
-  "phone",
-  "cityState",
-  "callsPerWeek",
-  "phoneSystem",
-  "practiceSoftware",
-  "answerWhen",
-  "planInterest",
-  "message",
-  "consent",
-]
+type Values = Record<string, string>
+type FieldErrors = Record<string, string | undefined>
 
 const UTM_STORAGE_KEY = "rnt-utm"
 
@@ -92,15 +105,28 @@ const inputClass =
 
 type Status = "idle" | "submitting" | "success" | "error"
 
-export function PilotForm({ location, initialPlanId }: { location: string; initialPlanId?: string }) {
+export function PilotForm({
+  location,
+  initialPlanId,
+  vertical = "dental",
+}: {
+  location: string
+  initialPlanId?: string
+  /** Which form to show. Default "dental": the original form, also used on /contact. */
+  vertical?: PilotVertical
+}) {
   const uid = useId()
   const id = (name: string) => `${uid}-${name}`
+  const form = FORMS[vertical]
+  const fieldOrder = [...form.fields.map((f) => f.name), "message", "consent"]
 
   const [values, setValues] = useState<Values>(() => ({
-    ...EMPTY,
+    ...Object.fromEntries(form.fields.map((f) => [f.name, ""])),
+    message: "",
     planInterest: (initialPlanId && PLAN_ID_TO_INTEREST[initialPlanId]) || "",
   }))
-  const [errors, setErrors] = useState<PilotFieldErrors>({})
+  const [consent, setConsent] = useState(false)
+  const [errors, setErrors] = useState<FieldErrors>({})
   const [status, setStatus] = useState<Status>("idle")
   const [serverError, setServerError] = useState("")
   const [honeypot, setHoneypot] = useState("")
@@ -130,13 +156,13 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
     if (status === "success") successRef.current?.focus()
   }, [status])
 
-  const set = <K extends keyof Values>(key: K, value: Values[K]) => {
+  const set = (key: string, value: string) => {
     setValues((v) => ({ ...v, [key]: value }))
-    if (errors[key as keyof PilotFieldErrors]) setErrors((e) => ({ ...e, [key]: undefined }))
+    if (errors[key]) setErrors((e) => ({ ...e, [key]: undefined }))
   }
 
-  const focusFirstError = (errs: PilotFieldErrors) => {
-    const first = FIELD_ORDER.find((k) => errs[k])
+  const focusFirstError = (errs: FieldErrors) => {
+    const first = fieldOrder.find((k) => errs[k])
     if (first) formRef.current?.querySelector<HTMLElement>(`[name="${first}"]`)?.focus()
   }
 
@@ -144,11 +170,12 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
     e.preventDefault()
     setServerError("")
 
-    const parsed = pilotRequestSchema.safeParse(values)
+    const input = { ...values, consent }
+    const parsed = (vertical === "hvac" ? hvacPilotRequestSchema : pilotRequestSchema).safeParse(input)
     if (!parsed.success) {
-      const errs: PilotFieldErrors = {}
+      const errs: FieldErrors = {}
       for (const issue of parsed.error.issues) {
-        const key = issue.path[0] as keyof PilotFieldErrors
+        const key = issue.path[0] as string
         if (key && !errs[key]) errs[key] = issue.message
       }
       setErrors(errs)
@@ -162,16 +189,18 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...values,
+          ...input,
+          // Dental submissions carry no vertical, exactly as before.
+          ...(vertical === "hvac" ? { vertical } : {}),
           website: honeypot,
           startedAt: startedAt.current,
           pageUrl: window.location.href.split("#")[0],
           utm: readUtm(),
         }),
       })
-      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; fieldErrors?: PilotFieldErrors }
+      const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; fieldErrors?: FieldErrors }
       if (res.ok && json.ok) {
-        trackEvent("pilot_form_submit", { status: "success", location, plan: values.planInterest || "none" })
+        trackEvent("pilot_form_submit", { status: "success", location, plan: values.planInterest || "none", vertical })
         setStatus("success")
         return
       }
@@ -179,11 +208,11 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
         setErrors(json.fieldErrors)
         focusFirstError(json.fieldErrors)
       }
-      trackEvent("pilot_form_submit", { status: "error", location })
+      trackEvent("pilot_form_submit", { status: "error", location, vertical })
       setServerError(json.error || "")
       setStatus("error")
     } catch {
-      trackEvent("pilot_form_submit", { status: "error", location })
+      trackEvent("pilot_form_submit", { status: "error", location, vertical })
       setStatus("error")
     }
   }
@@ -209,7 +238,7 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
     )
   }
 
-  const err = (name: keyof PilotFieldErrors) =>
+  const err = (name: string) =>
     errors[name] ? (
       <p id={id(`${name}-error`)} className="mt-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
         <AlertCircle className="h-4 w-4 shrink-0 text-red-500" aria-hidden="true" />
@@ -217,7 +246,7 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
       </p>
     ) : null
 
-  const a11y = (name: keyof PilotFieldErrors) => ({
+  const a11y = (name: string) => ({
     id: id(name),
     name,
     "aria-invalid": errors[name] ? true : undefined,
@@ -225,7 +254,7 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
   })
 
   // Plain render helper (not a component) so inputs are never remounted while typing.
-  const field = (name: keyof PilotFieldErrors, label: string, required: boolean, children: ReactNode) => (
+  const field = (name: string, label: string, required: boolean, children: ReactNode) => (
     <div>
       <label htmlFor={id(name)} className="mb-1.5 block text-sm font-semibold text-foreground">
         {label}
@@ -243,17 +272,12 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
     </div>
   )
 
-  const select = (name: keyof Values & keyof PilotFieldErrors, options: readonly string[], label: string) => (
+  const select = (name: string, options: readonly string[], label: string) =>
     field(
       name,
       label,
       false,
-      <select
-        {...a11y(name)}
-        value={values[name] as string}
-        onChange={(e) => set(name, e.target.value as never)}
-        className={inputClass}
-      >
+      <select {...a11y(name)} value={values[name] ?? ""} onChange={(e) => set(name, e.target.value)} className={inputClass}>
         <option value="">Select one</option>
         {options.map((o) => (
           <option key={o} value={o}>
@@ -262,15 +286,8 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
         ))}
       </select>,
     )
-  )
 
-  const text = (
-    name: "practiceName" | "ownerName" | "email" | "phone" | "cityState",
-    label: string,
-    type: string,
-    autoComplete: string,
-    placeholder: string,
-  ) => (
+  const text = (name: string, label: string, type: string, autoComplete: string, placeholder: string) =>
     field(
       name,
       label,
@@ -282,12 +299,11 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
         placeholder={placeholder}
         required
         aria-required="true"
-        value={values[name]}
+        value={values[name] ?? ""}
         onChange={(e) => set(name, e.target.value)}
         className={inputClass}
       />,
     )
-  )
 
   return (
     <form
@@ -304,16 +320,19 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
       </p>
 
       <div className="grid gap-5 sm:grid-cols-2">
-        <div className="sm:col-span-2">{text("practiceName", "Practice name", "text", "organization", "e.g. Bright Smile Family Dentistry")}</div>
-        {text("ownerName", "Owner / decision-maker name", "text", "name", "e.g. Dr. Jane Smith")}
-        {text("email", "Email", "email", "email", "you@yourpractice.com")}
-        {text("phone", "Phone", "tel", "tel", "(555) 123-4567")}
-        {text("cityState", "Practice city / state", "text", "address-level2", "e.g. Tampa, FL")}
-        {select("callsPerWeek", CALLS_PER_WEEK, "Approx. after-hours calls per week")}
-        {select("phoneSystem", PHONE_SYSTEMS, "Phone system")}
-        {select("practiceSoftware", PRACTICE_SOFTWARE, "Practice management software")}
-        {select("answerWhen", ANSWER_WHEN, "When should the AI answer?")}
-        <div className="sm:col-span-2">{select("planInterest", PLAN_INTEREST, "Plan interest")}</div>
+        {form.fields.map((def) => {
+          const el =
+            def.kind === "text"
+              ? text(def.name, def.label, def.type, def.autoComplete, def.placeholder)
+              : select(def.name, def.options, def.label)
+          return def.full ? (
+            <div key={def.name} className="sm:col-span-2">
+              {el}
+            </div>
+          ) : (
+            <Fragment key={def.name}>{el}</Fragment>
+          )
+        })}
         <div className="sm:col-span-2">
           {field(
             "message",
@@ -323,7 +342,7 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
               {...a11y("message")}
               rows={4}
               maxLength={2000}
-              placeholder="Anything we should know: your hours, services, how you handle emergencies, or questions for us."
+              placeholder={form.messagePlaceholder}
               value={values.message}
               onChange={(e) => set("message", e.target.value)}
               className={`${inputClass} h-auto min-h-[112px] py-3`}
@@ -353,8 +372,11 @@ export function PilotForm({ location, initialPlanId }: { location: string; initi
             type="checkbox"
             required
             aria-required="true"
-            checked={values.consent}
-            onChange={(e) => set("consent", e.target.checked)}
+            checked={consent}
+            onChange={(e) => {
+              setConsent(e.target.checked)
+              if (errors.consent) setErrors((er) => ({ ...er, consent: undefined }))
+            }}
             className="mt-0.5 h-6 w-6 shrink-0 rounded border-input accent-[hsl(var(--primary))]"
           />
           <label htmlFor={id("consent")} className="text-sm leading-relaxed text-foreground">

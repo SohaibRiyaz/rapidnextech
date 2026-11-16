@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server"
 import { Resend } from "resend"
-import { pilotSubmissionSchema, type PilotFieldErrors, type PilotSubmission } from "@/lib/pilot-request"
+import {
+  hvacPilotSubmissionSchema,
+  pilotSubmissionSchema,
+  type HvacPilotSubmission,
+  type PilotSubmission,
+} from "@/lib/pilot-request"
 import { siteConfig } from "@/lib/site-config"
 
 // Same sender as the existing /api/contact and /api/stripe-intent routes (verified domain).
@@ -67,6 +72,7 @@ function logError(stage: string, error: unknown) {
 
 function buildNotification(data: PilotSubmission, submittedAt: Date) {
   const rows: [string, string][] = [
+    ["Vertical", "Dental"],
     ["Practice name", data.practiceName],
     ["Owner / decision-maker", data.ownerName],
     ["Email", data.email],
@@ -88,9 +94,39 @@ function buildNotification(data: PilotSubmission, submittedAt: Date) {
   }
 
   const subject = `New dental pilot request: ${data.practiceName} (${data.cityState})`
+  return renderNotification(subject, "New dental pilot request", "practice", rows)
+}
 
+function buildHvacNotification(data: HvacPilotSubmission, submittedAt: Date) {
+  const rows: [string, string][] = [
+    ["Vertical", "HVAC"],
+    ["Company name", data.companyName],
+    ["Owner / decision-maker", data.ownerName],
+    ["Email", data.email],
+    ["Phone", data.phone],
+    ["Service area city / state", data.cityState],
+    ["Trucks / techs", data.trucks ?? "—"],
+    ["Missed calls per week", data.callsPerWeek ?? "—"],
+    ["Phone system", data.phoneSystem ?? "—"],
+    ["Field service software", data.fieldSoftware ?? "—"],
+    ["When should the AI answer?", data.answerWhen ?? "—"],
+    ["Plan interest", data.planInterest ?? "—"],
+    ["Message", data.message || "—"],
+    ["Consent", data.consent ? "Yes" : "No"],
+    ["Submitted (US Eastern)", formatIn(submittedAt, "America/New_York")],
+    ["Submitted (Pakistan)", formatIn(submittedAt, "Asia/Karachi")],
+    ["Page URL", data.pageUrl || "—"],
+  ]
+  for (const [key, value] of Object.entries(data.utm || {})) {
+    if (value) rows.push([key, value])
+  }
+  const subject = `[HVAC pilot] ${data.companyName} (${data.cityState})`
+  return renderNotification(subject, "New HVAC pilot request", "company", rows)
+}
+
+function renderNotification(subject: string, heading: string, who: string, rows: [string, string][]) {
   const html = `<!doctype html><html><body style="font-family:Arial,Helvetica,sans-serif;color:#111827">
-<h2 style="margin:0 0 12px">New dental pilot request</h2>
+<h2 style="margin:0 0 12px">${heading}</h2>
 <table cellpadding="8" cellspacing="0" border="0" style="border-collapse:collapse;max-width:640px;width:100%">
 ${rows
   .map(
@@ -101,35 +137,35 @@ ${rows
   )
   .join("\n")}
 </table>
-<p style="color:#6b7280;font-size:12px">Reply to this email to respond directly to the practice.</p>
+<p style="color:#6b7280;font-size:12px">Reply to this email to respond directly to the ${who}.</p>
 </body></html>`
 
-  const text = ["New dental pilot request", "", ...rows.map(([k, v]) => `${k}: ${v}`), "", "Reply to this email to respond directly to the practice."].join("\n")
+  const text = [heading, "", ...rows.map(([k, v]) => `${k}: ${v}`), "", `Reply to this email to respond directly to the ${who}.`].join("\n")
 
   return { subject, html, text }
 }
 
-function buildConfirmation(data: PilotSubmission) {
+function buildConfirmation(data: { ownerName: string; name: string; offer: string }) {
   const phone = siteConfig.publicPhone.display
-  const subject = `We received your pilot request for ${data.practiceName}`
+  const subject = `We received your pilot request for ${data.name}`
   const text = [
     `Thanks, ${data.ownerName}.`,
     "",
-    `We received your pilot request for ${data.practiceName}. We'll email you ${siteConfig.copy.pilotResponseTime} to schedule your 30-min onboarding call.`,
+    `We received your pilot request for ${data.name}. We'll email you ${siteConfig.copy.pilotResponseTime} to schedule your 30-min onboarding call.`,
     "",
     `Questions? Reply to this email or call ${phone}.`,
     "",
-    "RapidNexTech · AI receptionist for dental practices",
+    `RapidNexTech · ${data.offer}`,
   ].join("\n")
   const html = `<!doctype html><html><body style="font-family:Arial,Helvetica,sans-serif;color:#111827;line-height:1.6">
 <div style="max-width:560px">
 <p style="font-size:18px;font-weight:bold;color:#1d4ed8;margin:0 0 16px">RapidNexTech</p>
 <p>Thanks, ${escapeHtml(data.ownerName)}.</p>
-<p>We received your pilot request for <strong>${escapeHtml(data.practiceName)}</strong>. We'll email you ${escapeHtml(
+<p>We received your pilot request for <strong>${escapeHtml(data.name)}</strong>. We'll email you ${escapeHtml(
     siteConfig.copy.pilotResponseTime,
   )} to schedule your 30-min onboarding call.</p>
 <p>Questions? Reply to this email or call <a href="tel:${siteConfig.publicPhone.e164}">${escapeHtml(phone)}</a>.</p>
-<p style="color:#6b7280;font-size:13px;margin-top:24px">RapidNexTech · AI receptionist for dental practices</p>
+<p style="color:#6b7280;font-size:13px;margin-top:24px">RapidNexTech · ${escapeHtml(data.offer)}</p>
 </div></body></html>`
   return { subject, html, text }
 }
@@ -153,11 +189,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: "Invalid request." }, { status: 400 })
     }
 
-    const parsed = pilotSubmissionSchema.safeParse(body)
+    // HVAC (homepage) submissions send vertical: "hvac"; anything else is a dental submission, as before.
+    const isHvac = typeof body === "object" && body !== null && (body as { vertical?: unknown }).vertical === "hvac"
+    const parsed = isHvac ? hvacPilotSubmissionSchema.safeParse(body) : pilotSubmissionSchema.safeParse(body)
     if (!parsed.success) {
-      const fieldErrors: PilotFieldErrors = {}
+      const fieldErrors: Record<string, string> = {}
       for (const issue of parsed.error.issues) {
-        const key = issue.path[0] as keyof PilotFieldErrors
+        const key = issue.path[0] as string
         if (key && !fieldErrors[key]) fieldErrors[key] = issue.message
       }
       return NextResponse.json({ ok: false, error: "Please check the highlighted fields.", fieldErrors }, { status: 400 })
@@ -187,7 +225,9 @@ export async function POST(req: Request) {
     const resend = new Resend(apiKey)
     const submittedAt = new Date()
 
-    const notification = buildNotification(data, submittedAt)
+    const notification = isHvac
+      ? buildHvacNotification(data as HvacPilotSubmission, submittedAt)
+      : buildNotification(data as PilotSubmission, submittedAt)
     const sent = await resend.emails.send({
       from: FROM,
       to: [notifyTo],
@@ -204,7 +244,17 @@ export async function POST(req: Request) {
     // Confirmation to the practice: only after the notification succeeded. A failure here
     // doesn't fail the request, because the lead has already been delivered.
     try {
-      const confirmation = buildConfirmation(data)
+      const confirmation = isHvac
+        ? buildConfirmation({
+            ownerName: data.ownerName,
+            name: (data as HvacPilotSubmission).companyName,
+            offer: "AI receptionist for HVAC companies",
+          })
+        : buildConfirmation({
+            ownerName: data.ownerName,
+            name: (data as PilotSubmission).practiceName,
+            offer: "AI receptionist for dental practices",
+          })
       const confirmed = await resend.emails.send({
         from: FROM,
         to: [data.email],

@@ -59,4 +59,43 @@ export type PilotRequest = z.infer<typeof pilotRequestSchema>
 export type PilotSubmission = z.infer<typeof pilotSubmissionSchema>
 export type PilotFieldErrors = Partial<Record<keyof PilotRequest, string>>
 
+/* ------------------------------------------------------------------ */
+/* HVAC variant (homepage). Sent with vertical: "hvac". A submission   */
+/* without a vertical is a dental one (above), exactly as before.      */
+/* ------------------------------------------------------------------ */
+
+export const HVAC_TRUCKS = ["1", "2–5", "6–10", "11–20", "20+"] as const
+export const HVAC_PHONE_SYSTEMS = ["RingCentral", "Google Voice", "Grasshopper", "Nextiva", "Standard landline/cell", "Other", "Not sure"] as const
+export const HVAC_FIELD_SOFTWARE_OPTIONS = ["ServiceTitan", "Housecall Pro", "Jobber", "FieldEdge", "None", "Other"] as const
+export const HVAC_ANSWER_WHEN = ["After hours & weekends", "When nobody picks up", "Both", "Not sure"] as const
+
+export const hvacPilotRequestSchema = z.object({
+  companyName: trimmed("Company name", 120),
+  ownerName: trimmed("Owner / decision-maker name", 120),
+  email: z.string().trim().min(1, "Email is required").max(200).email("Enter a valid email address"),
+  phone: z
+    .string()
+    .trim()
+    .min(1, "Phone is required")
+    .max(40, "Phone is too long")
+    .refine((v) => v.replace(/\D/g, "").length >= 10, "Enter a valid phone number"),
+  cityState: trimmed("Service area city / state", 120),
+  trucks: optionalSelect(HVAC_TRUCKS),
+  callsPerWeek: optionalSelect(CALLS_PER_WEEK),
+  phoneSystem: optionalSelect(HVAC_PHONE_SYSTEMS),
+  fieldSoftware: optionalSelect(HVAC_FIELD_SOFTWARE_OPTIONS),
+  answerWhen: optionalSelect(HVAC_ANSWER_WHEN),
+  planInterest: optionalSelect(PLAN_INTEREST),
+  message: z.string().trim().max(2000, "Message is too long (2,000 characters max)").optional().default(""),
+  consent: z.literal(true, { errorMap: () => ({ message: "Please confirm you agree to be contacted" }) }),
+})
+
+export const hvacPilotSubmissionSchema = hvacPilotRequestSchema
+  .merge(pilotMetaSchema)
+  .extend({ vertical: z.literal("hvac") })
+
+export type HvacPilotRequest = z.infer<typeof hvacPilotRequestSchema>
+export type HvacPilotSubmission = z.infer<typeof hvacPilotSubmissionSchema>
+export type HvacPilotFieldErrors = Partial<Record<keyof HvacPilotRequest, string>>
+
 export const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid"] as const
