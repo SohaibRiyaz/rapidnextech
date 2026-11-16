@@ -50,12 +50,12 @@ export function getClinicsFaqs(): FaqItem[] {
     },
     {
       question: "How long does setup take?",
-      answer: `We configure it with your treatments, prices, hours and rules, then test and refine it with your team before it goes live. Setup is $${SETUP_FEE_USD} per location, waived for our first 3 clinics, and the 7-day pilot is free.`,
+      answer: `We configure it with your treatments, prices, hours and rules, then test and refine it with your team before it goes live. Setup is $${SETUP_FEE_USD} per location, waived for our first 3 clinics, and the 14-day pilot is free.`,
     },
     {
       question: "How do we cancel?",
       answer:
-        "Plans are month-to-month with no contract. You can cancel anytime by messaging us on WhatsApp. The 7-day pilot needs no card, so there is nothing to cancel if you decide not to continue.",
+        "Plans are month-to-month with no contract. You can cancel anytime by messaging us on WhatsApp. The 14-day pilot needs no card, so there is nothing to cancel if you decide not to continue.",
     },
   ]
 }

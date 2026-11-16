@@ -346,7 +346,7 @@ export function ClinicsFinalCta() {
               Answer every patient, even when your team can&apos;t.
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-              Try the demo on WhatsApp now, then run it on your own clinic&apos;s number for 7 days, free.
+              Try the demo on WhatsApp now, then run it on your own clinic&apos;s number for 14 days, free.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <TrackedLink

@@ -48,7 +48,7 @@ This is a separate offer from the US offers above, for private clinics in the UA
 - AI calling receptionist (add-on): answers missed calls (busy, after hours, Fridays/weekends) on a local number the clinic forwards to; the clinic keeps its existing number. Answers common questions, captures booking requests and sends the team a summary after every call.
 - Languages: English and Arabic, fine-tuned with the clinic's team during setup.
 - Pricing (USD, monthly): Starter $149 (up to 500 conversations/month); Growth $299 (up to 1,500; adds per-treatment flows, appointment reminders, follow-ups, monthly fine-tuning); Clinic Group from $599 (up to 4,000; up to 3 WhatsApp numbers or branches, multi-user dashboard). AI calling add-on +$199/month with 500 call minutes, then $0.30/min. Extra conversations $0.15 each; WhatsApp template fees billed at cost; setup $399 per location (waived for the first 3 clinics); month-to-month. A conversation is one patient's chat thread within a day. Clinics in Egypt: local pricing available on request.
-- 7-day free pilot, no card, no contract. Contact on WhatsApp: https://wa.me/18132142552
+- 14-day free pilot, no card, no contract. Contact on WhatsApp: https://wa.me/18132142552
 - It does not collect medical records or give diagnoses over WhatsApp.
 
 ## Key Pages

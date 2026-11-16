@@ -79,7 +79,7 @@ export const CLINIC_DEMO_NOTES = [
 /** Staff can reply from the WhatsApp Business app on their phone. When false, every mention of it is removed. */
 export const COEXISTENCE_ENABLED = true as boolean
 
-export const PILOT = "7-day free pilot · no card · no contract"
+export const PILOT = "14-day free pilot · no card · no contract"
 export const SETUP_FEE_USD = 399
 export const SETUP_WAIVED_NOTE = "Setup fee waived for our first 3 clinics"
 
@@ -177,7 +177,7 @@ export const WHATSAPP_DEMO_PREFILL = "Hi! I'd like to try your AI receptionist d
 export const WHATSAPP_DEMO_PREFILLED_URL = whatsappWithText(WHATSAPP_DEMO_PREFILL)
 
 /** Mobile bottom bar ("Start free pilot on WhatsApp"): chat with a pre-filled pilot request. */
-export const PILOT_WHATSAPP_URL = whatsappWithText("Hi, I'd like to start the 7-day free pilot for my clinic")
+export const PILOT_WHATSAPP_URL = whatsappWithText("Hi, I'd like to start the 14-day free pilot for my clinic")
 
 export function formatUsdPrice(value: number) {
   return `$${value.toLocaleString("en-US", { minimumFractionDigits: value % 1 ? 2 : 0 })}`
