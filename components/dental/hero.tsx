@@ -1,11 +1,15 @@
 import Link from "next/link"
-import { ArrowRight, Check, Mail, PhoneIncoming } from "lucide-react"
+import { ArrowDown, ArrowRight, Check, Mail, PhoneIncoming } from "lucide-react"
+import { ScrollLink } from "@/components/clinics/scroll-link"
 import { MeshGradient } from "@/components/mesh-gradient"
+import type { VerticalContent } from "@/content/verticals/types"
 import { siteConfig } from "@/lib/site-config"
 import { PhoneLink } from "./phone-link"
 import { primaryCta, secondaryCta, textLink } from "./styles"
 
-export function DentalHero() {
+/** Landing template hero (US verticals). Copy comes from content/verticals/*. */
+export function LandingHero({ content }: { content: VerticalContent }) {
+  const { hero } = content
   return (
     <section aria-labelledby="hero-title" className="relative overflow-hidden pt-28 pb-16 md:pt-32 md:pb-20 short:pt-24 short:pb-10">
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
@@ -19,33 +23,38 @@ export function DentalHero() {
           <div className="motion-safe:animate-fade-in-up">
             <p className="mb-5 short:mb-3 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary">
               <PhoneIncoming className="h-4 w-4" aria-hidden="true" />
-              AI receptionist for US dental practices
+              {hero.badge}
             </p>
 
             <h1
               id="hero-title"
               className="text-4xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-[clamp(2.25rem,min(calc(10vh-1.25rem),3.6vw),3.75rem)]"
             >
-              Your dental practice never loses another after-hours or weekend call to{" "}
-              <span className="bg-clip-text text-transparent theme-gradient-text">voicemail or a competitor</span>.
+              {hero.titleStart}
+              <span className="bg-clip-text text-transparent theme-gradient-text">{hero.titleHighlight}</span>
+              {hero.titleEnd}
             </h1>
 
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl short:mt-3 short:text-lg">
-              AI receptionist for dental practices that answers 24/7, captures new patients, handles emergencies, and
-              sends every request to your front desk.
-            </p>
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground md:text-xl short:mt-3 short:text-lg">{hero.sub}</p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap short:mt-4">
-              <a href="#live-demo" className={primaryCta}>
-                Talk to our AI receptionist
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </a>
+              {hero.primaryCta.scroll ? (
+                <ScrollLink targetId={hero.primaryCta.targetId} className={primaryCta}>
+                  {hero.primaryCta.label}
+                  <ArrowDown className="h-4 w-4" aria-hidden="true" />
+                </ScrollLink>
+              ) : (
+                <a href={`#${hero.primaryCta.targetId}`} className={primaryCta}>
+                  {hero.primaryCta.label}
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </a>
+              )}
               <a href="#pilot" className={secondaryCta}>
                 Start your {siteConfig.pilot.days}-day free pilot
               </a>
             </div>
 
-            {siteConfig.demoPhone ? (
+            {content.vertical === "dental" && siteConfig.demoPhone ? (
               <p className="mt-3 text-sm text-muted-foreground">
                 or call the demo line{" "}
                 <PhoneLink
@@ -65,29 +74,24 @@ export function DentalHero() {
               ))}
             </ul>
 
-            <Link href="/solutions/dental-clinics" className={`${textLink} mt-4 text-sm short:mt-1`}>
-              How it works for dental practices <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
+            {hero.deepLink ? (
+              <Link href={hero.deepLink.href} className={`${textLink} mt-4 text-sm short:mt-1`}>
+                {hero.deepLink.label} <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            ) : null}
           </div>
 
-          <ExampleSummary />
+          <ExampleSummary example={hero.example} />
         </div>
       </div>
     </section>
   )
 }
 
-/** Illustrative example of the front-desk email summary (clearly labeled, not real patient data). */
-function ExampleSummary() {
-  const rows: [string, string][] = [
-    ["Caller", "New patient"],
-    ["Reason for visit", "Toothache, lower left"],
-    ["Pain level", "7 / 10"],
-    ["Insurance", "PPO (on your accepted list)"],
-    ["Preferred times", "Weekday mornings"],
-  ]
+/** Illustrative example of the summary email (clearly labeled, not real customer data). */
+function ExampleSummary({ example }: { example: VerticalContent["hero"]["example"] }) {
   return (
-    <figure className="relative mx-auto w-full max-w-md lg:max-w-none" aria-label="Example front-desk call summary">
+    <figure className="relative mx-auto w-full max-w-md lg:max-w-none" aria-label={example.ariaLabel}>
       <div className="absolute -inset-4 rounded-[2rem] theme-glow blur-2xl opacity-60" aria-hidden="true" />
       <div className="relative rounded-2xl border border-border bg-card p-5 shadow-2xl sm:p-6">
         <div className="mb-4 flex items-center justify-between gap-3 border-b border-border pb-4">
@@ -96,14 +100,14 @@ function ExampleSummary() {
               <Mail className="h-5 w-5" aria-hidden="true" />
             </span>
             <div>
-              <p className="text-sm font-semibold text-card-foreground">New call summary</p>
-              <p className="text-xs text-muted-foreground">Saturday, 7:42 PM · after hours</p>
+              <p className="text-sm font-semibold text-card-foreground">{example.title}</p>
+              <p className="text-xs text-muted-foreground">{example.meta}</p>
             </div>
           </div>
           <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">Example</span>
         </div>
         <dl className="space-y-2.5 text-sm">
-          {rows.map(([k, v]) => (
+          {example.rows.map(([k, v]) => (
             <div key={k} className="flex justify-between gap-4">
               <dt className="text-muted-foreground">{k}</dt>
               <dd className="text-right font-medium text-card-foreground">{v}</dd>
@@ -111,12 +115,10 @@ function ExampleSummary() {
           ))}
         </dl>
         <p className="mt-4 rounded-xl bg-muted px-3 py-2.5 text-sm text-foreground">
-          <span className="font-semibold">Next step:</span> caller was told the front desk will call to confirm a time.
+          <span className="font-semibold">Next step:</span> {example.next}
         </p>
       </div>
-      <figcaption className="mt-3 text-center text-xs text-muted-foreground">
-        Example summary. Your front desk gets one by email after every call.
-      </figcaption>
+      <figcaption className="mt-3 text-center text-xs text-muted-foreground">{example.caption}</figcaption>
     </figure>
   )
 }

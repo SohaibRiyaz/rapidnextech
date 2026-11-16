@@ -2,12 +2,11 @@
 
 import { useId, useState } from "react"
 import { Calculator } from "lucide-react"
+import type { VerticalContent } from "@/content/verticals/types"
 import { formatUsd, siteConfig } from "@/lib/site-config"
 import { SectionHeading } from "./section-heading"
 import { card, sectionY } from "./styles"
 
-// Starting values are placeholders for the visitor to replace, not industry data.
-const DEFAULTS = { missedPerWeek: "8", bookRate: "25", patientValue: "400" }
 const WEEKS_PER_YEAR = 52
 
 type FieldProps = {
@@ -59,10 +58,14 @@ function clamp(raw: string, min: number, max: number) {
   return Math.min(max, Math.max(min, n))
 }
 
-export function RevenueCalculator() {
-  const [missedPerWeek, setMissedPerWeek] = useState(DEFAULTS.missedPerWeek)
-  const [bookRate, setBookRate] = useState(DEFAULTS.bookRate)
-  const [patientValue, setPatientValue] = useState(DEFAULTS.patientValue)
+/**
+ * Landing template: missed-revenue calculator. Copy and starting values come from content/verticals/*
+ * (starting values are placeholders for the visitor to replace, not industry data).
+ */
+export function RevenueCalculator({ copy }: { copy: VerticalContent["calculator"] }) {
+  const [missedPerWeek, setMissedPerWeek] = useState(copy.defaults.missedPerWeek)
+  const [bookRate, setBookRate] = useState(copy.defaults.bookRate)
+  const [patientValue, setPatientValue] = useState(copy.defaults.jobValue)
 
   const yearly =
     clamp(missedPerWeek, 0, 1000) * WEEKS_PER_YEAR * (clamp(bookRate, 0, 100) / 100) * clamp(patientValue, 0, 100000)
@@ -75,7 +78,7 @@ export function RevenueCalculator() {
         <SectionHeading
           id="calculator-title"
           eyebrow="Missed-revenue calculator"
-          title="What are unanswered calls costing your practice?"
+          title={copy.title}
           intro="Plug in your own numbers. The starting values are editable examples, not industry data."
         />
 
@@ -83,7 +86,7 @@ export function RevenueCalculator() {
           <form className="space-y-6" onSubmit={(e) => e.preventDefault()} aria-label="Calculator inputs">
             <NumberField
               label="Missed calls per week"
-              hint="After hours, weekends and calls nobody picked up. Example value, change it."
+              hint={copy.missedHint}
               value={missedPerWeek}
               onChange={setMissedPerWeek}
               min={0}
@@ -101,8 +104,8 @@ export function RevenueCalculator() {
               suffix="%"
             />
             <NumberField
-              label="Average new-patient value"
-              hint="What a new patient is worth to your practice. Example value, change it."
+              label={copy.valueLabel}
+              hint={copy.valueHint}
               value={patientValue}
               onChange={setPatientValue}
               min={0}
@@ -131,7 +134,7 @@ export function RevenueCalculator() {
               </p>
             ) : null}
             <p className="mt-2 text-xs text-muted-foreground">
-              Estimate only: missed calls × 52 weeks × booking rate × patient value.
+              {copy.formula}
             </p>
           </div>
         </div>

@@ -1,6 +1,7 @@
 "use client"
 
 import { Check, Sparkles } from "lucide-react"
+import type { Vertical, VerticalContent } from "@/content/verticals/types"
 import { trackEvent } from "@/lib/analytics"
 import { approxCalls, formatUsd, siteConfig, type Plan } from "@/lib/site-config"
 import { cn } from "@/lib/utils"
@@ -9,7 +10,9 @@ import { InfoTip } from "./info-tip"
 import { SectionHeading } from "./section-heading"
 import { sectionAnchor, primaryCta, secondaryCta, sectionY } from "./styles"
 
-function PlanCard({ plan, crossPage }: { plan: Plan; crossPage: boolean }) {
+type Copy = VerticalContent["pricing"]
+
+function PlanCard({ plan, crossPage, copy, vertical }: { plan: Plan; crossPage: boolean; copy: Copy; vertical: Vertical }) {
   const href = crossPage ? `/?plan=${plan.id}#pilot` : "#pilot"
   const headingId = `plan-${plan.id}`
   return (
@@ -37,11 +40,11 @@ function PlanCard({ plan, crossPage }: { plan: Plan; crossPage: boolean }) {
       <p className="mt-2 text-sm text-muted-foreground">
         <span className="font-semibold text-foreground">{plan.includedMinutes.toLocaleString("en-US")} minutes</span>{" "}
         included (~{approxCalls(plan.includedMinutes).toLocaleString("en-US")} calls)
-        {plan.locations > 1 ? ` · up to ${plan.locations} locations` : ""}
+        {plan.locations > 1 ? ` · up to ${plan.locations} ${copy.locationsNoun}` : ""}
       </p>
 
       <ul className="mt-6 flex-1 space-y-3 border-t border-border pt-6">
-        {plan.features.map((f) => {
+        {copy.features[plan.id].map((f) => {
           const comingSoon = "comingSoon" in f && f.comingSoon
           return (
             <li key={f.text} className="flex items-start gap-2.5 text-sm leading-relaxed">
@@ -57,7 +60,7 @@ function PlanCard({ plan, crossPage }: { plan: Plan; crossPage: boolean }) {
                     <span className="rounded-full border border-border px-2 py-0.5 text-xs font-semibold text-foreground">
                       Coming soon
                     </span>
-                    <InfoTip label={`About ${f.text}`} text={siteConfig.copy.smsComingSoonTooltip} />
+                    <InfoTip label={`About ${f.text}`} text={copy.comingSoonTooltip} />
                   </>
                 ) : null}
               </span>
@@ -70,7 +73,7 @@ function PlanCard({ plan, crossPage }: { plan: Plan; crossPage: boolean }) {
         href={href}
         className={cn(plan.popular ? primaryCta : secondaryCta, "mt-8 w-full")}
         onClick={() => {
-          trackEvent("pricing_cta_click", { plan: plan.id })
+          trackEvent("pricing_cta_click", { plan: plan.id, vertical })
           if (!crossPage) window.dispatchEvent(new CustomEvent(SELECT_PLAN_EVENT, { detail: plan.id }))
         }}
       >
@@ -81,7 +84,11 @@ function PlanCard({ plan, crossPage }: { plan: Plan; crossPage: boolean }) {
   )
 }
 
-export function DentalPricing({ crossPage = false }: { crossPage?: boolean }) {
+/**
+ * Landing template: pricing. Prices, minutes and plans come only from siteConfig.pricing (shared by
+ * every vertical); the wording (features, terms, notes) comes from content/verticals/*.
+ */
+export function LandingPricing({ copy, vertical, crossPage = false }: { copy: Copy; vertical: Vertical; crossPage?: boolean }) {
   const { pricing } = siteConfig
   const founding = pricing.founding
   return (
@@ -91,14 +98,14 @@ export function DentalPricing({ crossPage = false }: { crossPage?: boolean }) {
           id="pricing-title"
           eyebrow="Pricing"
           title="Simple monthly plans. Start with a free pilot."
-          intro={`Month-to-month. Average dental call is about ${pricing.avgCallMinutes} minutes.`}
+          intro={copy.intro}
         />
 
         {founding.enabled && founding.spotsRemaining > 0 ? (
           <div className="mx-auto mb-12 flex max-w-3xl flex-col items-center gap-3 rounded-2xl border-2 border-primary/40 bg-primary/5 p-5 text-center sm:flex-row sm:text-left">
             <Sparkles className="h-6 w-6 shrink-0 text-primary" aria-hidden="true" />
             <p className="flex-1 text-foreground">
-              <span className="font-semibold">Founding Practice offer:</span> {founding.text}
+              <span className="font-semibold">{vertical === "dental" ? "Founding Practice offer:" : "Founding offer:"}</span> {copy.foundingText}
             </p>
             <p className="shrink-0 rounded-full bg-primary px-3 py-1 text-sm font-semibold text-primary-foreground">
               {founding.spotsRemaining} {founding.spotsRemaining === 1 ? "spot" : "spots"} remaining
@@ -108,24 +115,21 @@ export function DentalPricing({ crossPage = false }: { crossPage?: boolean }) {
 
         <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-3 lg:items-stretch">
           {pricing.plans.map((plan) => (
-            <PlanCard key={plan.id} plan={plan} crossPage={crossPage} />
+            <PlanCard key={plan.id} plan={plan} crossPage={crossPage} copy={copy} vertical={vertical} />
           ))}
         </div>
 
         <div className="mx-auto mt-12 max-w-4xl rounded-2xl border border-border bg-background p-5">
           <h3 className="sr-only">Terms for all plans</h3>
           <ul className="grid gap-3 text-sm text-foreground sm:grid-cols-2">
-            {pricing.allPlansTerms.map((term) => (
+            {copy.allPlansTerms.map((term) => (
               <li key={term} className="flex gap-2">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
                 {term}
               </li>
             ))}
           </ul>
-          <p className="mt-4 border-t border-border pt-4 text-sm text-muted-foreground">
-            Minutes are the actual limit; call counts are approximate. Average dental call is about{" "}
-            {pricing.avgCallMinutes} minutes. Features marked &ldquo;coming soon&rdquo; aren&apos;t available yet.
-          </p>
+          <p className="mt-4 border-t border-border pt-4 text-sm text-muted-foreground">{copy.footnote}</p>
         </div>
       </div>
     </section>

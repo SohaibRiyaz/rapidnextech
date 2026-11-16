@@ -1,10 +1,14 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import { ScrollLink } from "@/components/clinics/scroll-link"
+import type { VerticalContent } from "@/content/verticals/types"
 import { siteConfig } from "@/lib/site-config"
 import { PhoneLink } from "./phone-link"
 import { primaryCta, secondaryCta, sectionY } from "./styles"
 
-export function DentalFinalCta({ pilotHref = "#pilot" }: { pilotHref?: string }) {
+/** Landing template: final call-to-action. Copy comes from content/verticals/*. */
+export function LandingFinalCta({ content, pilotHref = "#pilot" }: { content: VerticalContent; pilotHref?: string }) {
+  const { finalCta } = content
   return (
     <section aria-labelledby="final-cta-title" className={sectionY}>
       <div className="container mx-auto px-4 sm:px-6">
@@ -12,20 +16,20 @@ export function DentalFinalCta({ pilotHref = "#pilot" }: { pilotHref?: string })
           <div className="pointer-events-none absolute inset-0 theme-glow opacity-40 blur-3xl" aria-hidden="true" />
           <div className="relative">
             <h2 id="final-cta-title" className="text-3xl font-bold tracking-tight text-card-foreground md:text-5xl">
-              Stop sending after-hours patients to voicemail.
+              {finalCta.title}
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-              Hear it answer a call, then try it on your own phone line for {siteConfig.pilot.days} days.
+              {finalCta.text}
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-              <a href="#live-demo" className={primaryCta}>
-                Talk to our AI receptionist <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </a>
+              <ScrollLink targetId={finalCta.primaryTargetId} className={primaryCta}>
+                {finalCta.primaryLabel} <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </ScrollLink>
               <a href={pilotHref} className={secondaryCta}>
                 Start your {siteConfig.pilot.days}-day free pilot
               </a>
             </div>
-            {siteConfig.demoPhone ? (
+            {content.vertical === "dental" && siteConfig.demoPhone ? (
               <p className="mt-3 text-sm text-muted-foreground">
                 or call the demo line{" "}
                 <PhoneLink
@@ -36,8 +40,7 @@ export function DentalFinalCta({ pilotHref = "#pilot" }: { pilotHref?: string })
               </p>
             ) : null}
             <p className="mt-6 text-sm font-medium text-foreground/80">
-              Free for {siteConfig.pilot.days} days · No credit card · Keep your number · Cancel anytime by turning off
-              forwarding
+              {finalCta.footer}
             </p>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import { formatUsd, siteConfig } from "@/lib/site-config"
 import type { FaqItem } from "@/lib/seo"
 
-// Single source for the dental FAQ: rendered on / and /solutions/dental-clinics, and emitted as FAQPage JSON-LD.
+// Single source for the dental FAQ: rendered on /dental (via content/verticals/dental.ts) and emitted as FAQPage JSON-LD.
 // Every answer is built from site-config facts. Keep it that way.
 
 const { copy, pricing, pilot } = siteConfig

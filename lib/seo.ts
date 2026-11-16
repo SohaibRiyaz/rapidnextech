@@ -1,3 +1,4 @@
+import type { VerticalContent } from "@/content/verticals/types"
 import { absoluteSiteUrl, getSiteOrigin } from "@/lib/site-url"
 import { approxCalls, siteConfig } from "@/lib/site-config"
 
@@ -16,6 +17,10 @@ export const ukAddress = {
 
 export const DENTAL_DESCRIPTION =
   "AI receptionist for US dental practices: answers after-hours, weekend and overflow calls 24/7, captures new patients, handles dental emergencies, and sends every request to your front desk."
+
+/** Company-wide description (Organization JSON-LD on every page). */
+export const COMPANY_DESCRIPTION =
+  "RapidNexTech builds AI receptionists for US HVAC companies and dental practices, WhatsApp and AI calling receptionists for clinics in the Gulf and Egypt, and custom software."
 
 export type FaqItem = {
   question: string
@@ -42,7 +47,7 @@ export function organizationSchema() {
       width: 512,
       height: 512,
     },
-    description: DENTAL_DESCRIPTION,
+    description: COMPANY_DESCRIPTION,
     telephone: salesPhoneE164,
     email: salesEmail,
     address: {
@@ -72,7 +77,12 @@ export function organizationSchema() {
       "https://linkedin.com/company/RapidNexTech",
       "https://twitter.com/RapidNexTech",
     ],
-    serviceType: ["AI Receptionist for Dental Practices", "Custom Software Development"],
+    serviceType: [
+      "AI Receptionist for HVAC Companies",
+      "AI Receptionist for Dental Practices",
+      "WhatsApp AI Receptionist for Clinics",
+      "Custom Software Development",
+    ],
   }
 }
 
@@ -85,7 +95,7 @@ export function websiteSchema() {
     "@id": `${siteOrigin}/#website`,
     url: siteOrigin,
     name: siteName,
-    description: "AI receptionist for US dental practices, from RapidNexTech.",
+    description: "AI receptionists for US HVAC companies and dental practices, from RapidNexTech.",
     publisher: {
       "@id": `${siteOrigin}/#organization`,
     },
@@ -183,6 +193,24 @@ export function dentalReceptionistServiceSchema(path = "/") {
     audience: { "@type": "BusinessAudience", audienceType: "Dental practices" },
     availableLanguage: siteConfig.supportsSpanish ? ["English", "Spanish"] : ["English"],
     offers: planOffers(),
+  }
+}
+
+/** Service schema for a US vertical landing page ("/" HVAC, "/dental"), with the shared plans as offers. */
+export function landingServiceSchema(content: VerticalContent) {
+  const { seo, path } = content
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: seo.serviceName,
+    serviceType: seo.serviceType,
+    description: seo.serviceDescription,
+    url: absoluteSiteUrl(path),
+    provider: { "@id": `${getSiteOrigin()}/#organization` },
+    areaServed: { "@type": "Country", name: "United States" },
+    audience: { "@type": "BusinessAudience", audienceType: seo.audience },
+    availableLanguage: siteConfig.supportsSpanish ? ["English", "Spanish"] : ["English"],
+    offers: planOffers(path === "/" ? "/#pricing" : `${path}#pricing`),
   }
 }
 

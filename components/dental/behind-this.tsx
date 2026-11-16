@@ -30,7 +30,8 @@ function VideoTestimonial({ url }: { url: string }) {
   )
 }
 
-export function DentalBehindThis() {
+/** Landing template: "Who's behind this". Only the "not … customers" wording follows the page. */
+export function LandingBehindThis({ notCustomersOf }: { notCustomersOf: string }) {
   return (
     <section aria-labelledby="behind-title" className={`${sectionY} bg-muted/40`}>
       <div className="container mx-auto px-4 sm:px-6">
@@ -64,7 +65,7 @@ export function DentalBehindThis() {
           <div className="space-y-4">
             <p className="rounded-xl border border-border bg-background px-4 py-3 text-sm text-muted-foreground">
               <span className="font-semibold text-foreground">From our custom-software clients.</span> These clients
-              hired us to build software. They are not dental practices or AI receptionist customers.
+              hired us to build software. They are not {notCustomersOf} or AI receptionist customers.
             </p>
             {softwareClientTestimonials.map((t) => (
               <figure key={t.id} className={`${card} p-6`}>

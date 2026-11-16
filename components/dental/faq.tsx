@@ -1,16 +1,24 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { getDentalFaqs } from "./faq-data"
+import type { FaqItem } from "@/lib/seo"
 import { SectionHeading } from "./section-heading"
 import { sectionAnchor, sectionY, textLink } from "./styles"
 
-export function DentalFaq({ showDeepLink = true }: { showDeepLink?: boolean }) {
-  const faqs = getDentalFaqs()
+/** Landing template: FAQ (the same list feeds the page's FAQPage JSON-LD). */
+export function LandingFaq({
+  faqs,
+  title,
+  deepLink,
+}: {
+  faqs: FaqItem[]
+  title: string
+  deepLink?: { label: string; href: string }
+}) {
   return (
     <section id="faq" aria-labelledby="faq-title" className={`${sectionY} ${sectionAnchor}`}>
       <div className="container mx-auto max-w-3xl px-4 sm:px-6">
-        <SectionHeading id="faq-title" eyebrow="FAQ" title="Questions dental practices ask us" />
+        <SectionHeading id="faq-title" eyebrow="FAQ" title={title} />
 
         <Accordion type="single" collapsible className="space-y-3">
           {faqs.map((faq, i) => (
@@ -27,10 +35,10 @@ export function DentalFaq({ showDeepLink = true }: { showDeepLink?: boolean }) {
           ))}
         </Accordion>
 
-        {showDeepLink ? (
+        {deepLink ? (
           <p className="mt-8 text-center">
-            <Link href="/solutions/dental-clinics" className={textLink}>
-              More detail: how the AI receptionist works for dental practices
+            <Link href={deepLink.href} className={textLink}>
+              {deepLink.label}
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </p>
