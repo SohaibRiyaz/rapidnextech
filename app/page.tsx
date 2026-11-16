@@ -1,69 +1,39 @@
 import type { Metadata } from "next"
-import { DentalBehindThis } from "@/components/dental/behind-this"
-import { DentalCallHandling } from "@/components/dental/call-handling"
-import { getDentalFaqs } from "@/components/dental/faq-data"
-import { DentalFaq } from "@/components/dental/faq"
-import { DentalFinalCta } from "@/components/dental/final-cta"
-import { DentalHero } from "@/components/dental/hero"
-import { DentalHowItWorks } from "@/components/dental/how-it-works"
-import { DentalPilotSection } from "@/components/dental/pilot-section"
-import { DentalPricing } from "@/components/dental/pricing"
-import { DentalProblem } from "@/components/dental/problem"
-import { RevenueCalculator } from "@/components/dental/revenue-calculator"
-import { DentalTryItNow } from "@/components/dental/try-it-now"
 import { GeoBanner } from "@/components/geo-banner"
-import { dentalReceptionistServiceSchema, faqSchema, jsonLd } from "@/lib/seo"
+import { LandingComparison } from "@/components/landing/comparison"
+import { HvacDemoSection } from "@/components/landing/hvac-demo-section"
+import { VerticalLanding } from "@/components/landing/vertical-landing"
+import { hvacContent } from "@/content/verticals/hvac"
 
-const TITLE = "24/7 AI Receptionist for Dental Practices"
-const DESCRIPTION =
-  "AI receptionist for US dental practices. Answers after-hours, weekend and overflow calls, captures new patients and emergencies. 14-day free pilot, no card."
+// "/" = the US HVAC offer. The dental offer moved to /dental (app/dental/page.tsx).
+const { seo } = hvacContent
 
 export const metadata: Metadata = {
-  title: { absolute: `${TITLE} | RapidNexTech` },
-  description: DESCRIPTION,
+  title: { absolute: seo.title },
+  description: seo.description,
   alternates: { canonical: "https://rapidnextech.com" },
   openGraph: {
-    title: `${TITLE} | RapidNexTech`,
-    description: DESCRIPTION,
+    title: seo.title,
+    description: seo.description,
     url: "https://rapidnextech.com",
     siteName: "RapidNexTech",
     type: "website",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "RapidNexTech AI receptionist for dental practices",
-      },
-    ],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: seo.ogAlt }],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${TITLE} | RapidNexTech`,
-    description: DESCRIPTION,
+    title: seo.title,
+    description: seo.description,
     images: ["/og-image.png"],
   },
 }
 
 export default function Home() {
-  // Organization + WebSite JSON-LD come from the root layout.
-  const structuredData = [dentalReceptionistServiceSchema("/"), faqSchema(getDentalFaqs())]
-
   return (
-    <div className="bg-transparent">
-      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(structuredData)} />
+    <>
+      {/* Gulf / Egypt visitors: strip linking to /clinics (see components/geo-banner.tsx + middleware.ts). */}
       <GeoBanner />
-      <DentalHero />
-      <DentalProblem />
-      <RevenueCalculator />
-      <DentalHowItWorks />
-      <DentalCallHandling />
-      <DentalTryItNow />
-      <DentalPilotSection />
-      <DentalPricing />
-      <DentalBehindThis />
-      <DentalFaq />
-      <DentalFinalCta />
-    </div>
+      <VerticalLanding content={hvacContent} demo={<HvacDemoSection />} beforePricing={<LandingComparison />} />
+    </>
   )
 }
