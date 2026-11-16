@@ -1,9 +1,14 @@
 import { NextResponse } from "next/server"
 import { Resend } from "resend"
 import { verify } from "retell-sdk"
+import { HVAC_RETELL_AGENT_ID } from "@/lib/hvac-config"
 
 /**
- * Retell agent webhook for the dental demo agent ("Maya").
+ * Retell agent webhook. Routes by agent_id:
+ * - HVAC agent (HVAC_RETELL_AGENT_ID, once set): HVAC job summary.
+ * - Dental agent ("Maya", NEXT_PUBLIC_RETELL_AGENT_ID), or no dental id configured: the original dental
+ *   summary, unchanged. (/clinics currently reuses the dental agent, so its calls land here too.)
+ * - Any other agent: a generic summary of whatever the call analysis contains.
  * - Verifies x-retell-signature against the RAW body with RETELL_API_KEY (the key with the webhook badge).
  * - call_started / call_ended: acknowledged only.
  * - call_analyzed: emails one summary to LEAD_NOTIFY_EMAIL via the existing Resend sender.
@@ -16,6 +21,7 @@ export const dynamic = "force-dynamic"
 const FROM = "RapidNexTech <notifications@rapidnextech.com>"
 
 type CustomAnalysis = {
+  [key: string]: unknown
   call_summary?: unknown
   patient_name?: unknown
   callback_number?: unknown
@@ -127,6 +133,83 @@ ${rows
   return { subject, html, text: textBody }
 }
 
+type AgentKind = "dental" | "hvac" | "generic"
+
+function agentKind(agentId: string | undefined): AgentKind {
+  if (HVAC_RETELL_AGENT_ID && agentId === HVAC_RETELL_AGENT_ID) return "hvac"
+  const dentalId = process.env.NEXT_PUBLIC_RETELL_AGENT_ID
+  // Keeps the original behaviour: before routing existed, every call was treated as dental.
+  if (!dentalId || !agentId || agentId === dentalId) return "dental"
+  return "generic"
+}
+
+function emailHtml(heading: string, summary: string, rows: [string, string][]) {
+  return `<!doctype html><html><body style="font-family:Arial,Helvetica,sans-serif;color:#111827">
+<h2 style="margin:0 0 12px">${escapeHtml(heading)}</h2>
+<p style="max-width:640px;line-height:1.5;white-space:pre-wrap">${escapeHtml(summary || "No summary was generated for this call.")}</p>
+<table cellpadding="8" cellspacing="0" border="0" style="border-collapse:collapse;max-width:640px;width:100%">
+${rows
+  .map(
+    ([k, v], i) =>
+      `<tr style="background:${i % 2 ? "#ffffff" : "#f3f4f6"}"><td style="font-weight:bold;vertical-align:top;width:35%">${escapeHtml(
+        k,
+      )}</td><td style="vertical-align:top">${escapeHtml(v)}</td></tr>`,
+  )
+  .join("\n")}
+</table>
+</body></html>`
+}
+
+function callRows(call: RetellCall): [string, string][] {
+  const when = new Date(call.end_timestamp || Date.now())
+  return [
+    ["Call type", call.call_type === "web_call" ? "Web (browser demo)" : call.call_type === "phone_call" ? "Phone" : text(call.call_type) || "—"],
+    ["Duration", formatDuration(call)],
+    ["Call ID", text(call.call_id) || "—"],
+    ["Time (New York)", formatIn(when, "America/New_York")],
+    ["Time (Pakistan)", formatIn(when, "Asia/Karachi")],
+  ]
+}
+
+/** HVAC agent: customer_name, callback_number, address, zip, system_type, issue, urgency, preferred_window, in_service_area. */
+function buildHvacEmail(call: RetellCall) {
+  const data = call.call_analysis?.custom_analysis_data ?? {}
+  const summary = text(call.call_analysis?.call_summary) || text(data.call_summary)
+  const name = text(data.customer_name)
+  const issue = text(data.issue)
+  const urgency = text(data.urgency).toUpperCase() || "UNKNOWN"
+  const rows: [string, string][] = [
+    ["Urgency", urgency],
+    ["Customer name", name || "—"],
+    ["Callback number", text(data.callback_number) || "—"],
+    ["Address", text(data.address) || "—"],
+    ["ZIP", text(data.zip) || "—"],
+    ["In service area", text(data.in_service_area) || "—"],
+    ["System type", text(data.system_type) || "—"],
+    ["Issue", issue || "—"],
+    ["Preferred window", text(data.preferred_window) || "—"],
+    ...callRows(call),
+  ]
+  const subject = `[HVAC call] ${urgency} – ${name || "Unknown"} – ${issue || "No issue given"}`.slice(0, 200)
+  const textBody = ["HVAC call summary", "", summary || "No summary was generated for this call.", "", ...rows.map(([k, v]) => `${k}: ${v}`)].join("\n")
+  return { subject, html: emailHtml("HVAC call summary", summary, rows), text: textBody }
+}
+
+/** Unknown agent: every non-empty analysis field, as-is. */
+function buildGenericEmail(call: RetellCall) {
+  const data = call.call_analysis?.custom_analysis_data ?? {}
+  const summary = text(call.call_analysis?.call_summary) || text(data.call_summary)
+  const fields: [string, string][] = Object.entries(data)
+    .filter(([k]) => k !== "call_summary")
+    .map(([k, v]) => [k.replace(/_/g, " "), text(v)] as [string, string])
+    .filter(([, v]) => v)
+    .slice(0, 40)
+  const rows: [string, string][] = [["Agent ID", text(call.agent_id) || "—"], ...fields, ...callRows(call)]
+  const subject = `[Call] ${text(call.agent_id).slice(0, 40) || "Unknown agent"}`
+  const textBody = ["Call summary", "", summary || "No summary was generated for this call.", "", ...rows.map(([k, v]) => `${k}: ${v}`)].join("\n")
+  return { subject, html: emailHtml("Call summary", summary, rows), text: textBody }
+}
+
 export async function POST(req: Request) {
   const apiKey = process.env.RETELL_API_KEY
   if (!apiKey) {
@@ -160,8 +243,15 @@ export async function POST(req: Request) {
 
   const call = payload.call
   const data = call.call_analysis?.custom_analysis_data ?? {}
-  if (!text(data.patient_name) && !text(data.callback_number) && !text(data.reason)) {
-    // Test calls, hang-ups and silence: nothing worth emailing.
+  const kind = agentKind(call.agent_id)
+  // Test calls, hang-ups and silence: nothing worth emailing.
+  const empty =
+    kind === "dental"
+      ? !text(data.patient_name) && !text(data.callback_number) && !text(data.reason)
+      : kind === "hvac"
+        ? !text(data.customer_name) && !text(data.callback_number) && !text(data.issue)
+        : !text(call.call_analysis?.call_summary) && !Object.values(data).some((v) => text(v))
+  if (empty) {
     return new NextResponse(null, { status: 204 })
   }
 
@@ -180,7 +270,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const email = buildEmail(call)
+    const email = kind === "hvac" ? buildHvacEmail(call) : kind === "generic" ? buildGenericEmail(call) : buildEmail(call)
     const sent = await new Resend(resendKey).emails.send({
       from: FROM,
       to: [notifyTo],
