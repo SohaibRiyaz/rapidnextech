@@ -3,24 +3,27 @@ import Script from "next/script"
 import AboutClient from "@/components/about/AboutClient"
 import { breadcrumbSchema, jsonLd } from "@/lib/seo"
 
+const TITLE = "About RapidNexTech | AI Receptionists for HVAC & Dental"
+const DESCRIPTION =
+  "RapidNexTech builds AI receptionists for US HVAC companies and dental practices, WhatsApp + AI calling for clinics in the Gulf & Egypt, and custom software."
+const SHORT_DESCRIPTION =
+  "AI receptionists for US HVAC companies and dental practices, WhatsApp + AI calling for clinics in the Gulf & Egypt, and custom software."
+
 export const metadata: Metadata = {
-  title: { absolute: "About RapidNexTech | AI Receptionist for Dental Practices" },
-  description:
-    "Meet the team behind RapidNexTech, the 24/7 AI receptionist for US dental practices. We also build custom software and AI automation for growing businesses.",
+  title: { absolute: TITLE },
+  description: DESCRIPTION,
   alternates: { canonical: "https://rapidnextech.com/about" },
   openGraph: {
-    title: "About RapidNexTech | AI Receptionist for Dental Practices",
-    description:
-      "The team behind the AI receptionist for US dental practices. We also build custom software.",
+    title: TITLE,
+    description: SHORT_DESCRIPTION,
     url: "https://rapidnextech.com/about",
     type: "website",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "About RapidNexTech, AI receptionist for dental practices" }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "About RapidNexTech, AI receptionists for HVAC companies and dental practices" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "About RapidNexTech | AI Receptionist for Dental Practices",
-    description:
-      "The team behind the AI receptionist for US dental practices. We also build custom software.",
+    title: TITLE,
+    description: SHORT_DESCRIPTION,
     images: ["/og-image.png"],
   },
 }
@@ -31,8 +34,7 @@ export default function AboutPage() {
     "@type": "AboutPage",
     name: "About RapidNexTech",
     url: "https://rapidnextech.com/about",
-    description:
-      "RapidNexTech is a software engineering company that builds the AI receptionist for US dental practices, and also builds custom software.",
+    description: DESCRIPTION,
     breadcrumb: breadcrumbSchema([
       { name: "Home", path: "/" },
       { name: "About", path: "/about" },

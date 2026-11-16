@@ -37,7 +37,7 @@ export function GET() {
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 28 }}>
           <div style={{ display: "flex", fontWeight: 700 }}>RapidNexTech</div>
-          <div style={{ display: "flex", color: "#7dd3fc" }}>7-day free pilot · no card · no contract</div>
+          <div style={{ display: "flex", color: "#7dd3fc" }}>14-day free pilot · no card · no contract</div>
         </div>
       </div>
     ),
