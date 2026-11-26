@@ -72,9 +72,10 @@ const errorCopy: Record<ErrorType, string> = {
 const defaultCardClass =
   "flex aspect-[4/5] w-full flex-col items-center justify-center gap-5 rounded-3xl short:aspect-auto short:h-[clamp(300px,calc(100vh-340px),480px)] short:gap-4 border border-border bg-card p-6 text-center shadow-xl sm:aspect-[16/11] lg:aspect-[16/9]"
 // With the email field: one minimum height for every state (idle, live, ended), so switching states never
-// moves the page. Values = the measured height of the idle card with the field (see QA).
+// moves the page. Values = the measured height of the idle card with the field, per width (narrow phones
+// wrap more text). The "invalid email" line can add a little, but only right after the visitor's own click.
 const emailCardClass =
-  "flex min-h-[640px] w-full flex-col items-center justify-center gap-5 rounded-3xl border border-border bg-card p-6 text-center shadow-xl sm:min-h-[560px]"
+  "flex min-h-[620px] w-full flex-col items-center justify-center gap-5 rounded-3xl border border-border bg-card p-6 text-center shadow-xl [@media(max-width:359px)]:min-h-[730px] [@media(min-width:360px)_and_(max-width:374px)]:min-h-[680px] sm:min-h-[560px]"
 
 declare global {
   interface Window {
