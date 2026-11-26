@@ -65,7 +65,7 @@ export default function ContactPage() {
               Start your free pilot, or just talk to us
             </h1>
             <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-              Tell us about your HVAC company or dental practice and we&apos;ll email you {siteConfig.copy.pilotResponseTime} to book a
+              Tell us about your HVAC company, dental practice or window &amp; door company and we&apos;ll email you {siteConfig.copy.pilotResponseTime} to book a
               30-min onboarding call. {siteConfig.pilot.chips.join(" · ")}.
             </p>
           </div>

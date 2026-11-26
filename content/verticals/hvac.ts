@@ -32,7 +32,8 @@ import type { CallHandlingItem, VerticalContent } from "./types"
 const { copy, pricing, pilot } = siteConfig
 const software = HVAC_FIELD_SOFTWARE.join(", ")
 
-export const HVAC_SMS_TOOLTIP = "Instant SMS job summaries to your phone, being added to paid plans. Email summaries are included today."
+export const HVAC_SUMMARY_TIP =
+  "During the free pilot, summaries come by email. Text-message summaries are switched on when you move to a paid plan."
 
 export const HVAC_DESCRIPTION =
   "AI receptionist for US HVAC companies: answers missed and after-hours calls 24/7, routes emergencies to your on-call tech, and emails you the job details right after every call."
@@ -82,8 +83,8 @@ function callHandlingItems(): CallHandlingItem[] {
     {
       icon: FileText,
       title: "Instant job summaries",
-      text: "Every call becomes an email with the job details, right after it ends. SMS summaries are coming soon.",
-      tip: { label: "About SMS summaries", text: HVAC_SMS_TOOLTIP },
+      text: "Every call becomes a job summary by email right after it ends, and by text message too on all paid plans.",
+      tip: { label: "About text-message summaries", text: HVAC_SUMMARY_TIP },
     },
   ]
   if (siteConfig.supportsSpanish) {
@@ -291,7 +292,7 @@ export const hvacContent: VerticalContent = {
     features: {
       "after-hours": [
         { text: "Evenings, weekends and holidays" },
-        { text: "Instant email job summaries" },
+        { text: "Instant job summaries by email and text message" },
         { text: "Emergency routing to your on-call tech" },
         { text: "Service-area check and price-range answers from your list" },
       ],
@@ -299,7 +300,7 @@ export const hvacContent: VerticalContent = {
         { text: "Everything in After-Hours" },
         { text: "Daytime overflow / no-answer coverage" },
         { text: "Calls you miss while on a job" },
-        { text: "SMS job summaries", comingSoon: true },
+        { text: "Text-message job summaries" },
         { text: "Priority support" },
       ],
       "multi-location": [
@@ -307,11 +308,10 @@ export const hvacContent: VerticalContent = {
         { text: "Everything in Full Coverage" },
         { text: "Per-branch service areas and on-call routing" },
         { text: "Monthly review call" },
-        { text: "SMS job summaries", comingSoon: true },
+        { text: "Text-message job summaries" },
       ],
     },
     locationsNoun: "branches",
-    comingSoonTooltip: HVAC_SMS_TOOLTIP,
     foundingText: "First 5 HVAC companies: price locked for 12 months + setup waived, in exchange for a testimonial.",
     allPlansTerms: [
       "Month-to-month, cancel anytime",
@@ -319,7 +319,7 @@ export const hvacContent: VerticalContent = {
       `Setup fee ${formatUsd(pricing.setupFee)}, waived for companies that start with the free pilot`,
       `Annual billing: ${pricing.annualFreeMonths} months free`,
     ],
-    footnote: `Minutes are the actual limit; call counts are approximate. Average call is about ${pricing.avgCallMinutes} minutes. We'll let you know before you go over your minutes. Features marked “coming soon” aren't available yet.`,
+    footnote: `Minutes are the actual limit; call counts are approximate. Average call is about ${pricing.avgCallMinutes} minutes. We'll let you know before you go over your minutes.`,
   },
 
   behindThis: { notCustomersOf: "HVAC companies" },

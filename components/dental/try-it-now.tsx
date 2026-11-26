@@ -20,7 +20,7 @@ export function DentalTryItNow() {
 
         <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1fr_320px]">
           <div className="min-w-0">
-            <DemoLauncher location="try-it" analyticsParams={{ vertical: "dental" }} />
+            <DemoLauncher location="try-it" analyticsParams={{ vertical: "dental" }} emailSummary />
           </div>
 
           <div className="flex flex-col gap-6">

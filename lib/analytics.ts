@@ -16,6 +16,7 @@ export type AnalyticsEvent =
   | "demo_live"
   | "demo_end"
   | "demo_error"
+  | "demo_email_submit"
   | "pricing_cta_click"
   | "pilot_form_submit"
   | "software_lead_submit"
@@ -36,6 +37,8 @@ export type AnalyticsEvent =
   | "clinics_sticky_cta_click"
   | "hvac_showcase_play"
   | "hvac_showcase_complete"
+  | "windows_showcase_play"
+  | "windows_showcase_complete"
 
 type EventParams = Record<string, string | number | boolean | undefined>
 

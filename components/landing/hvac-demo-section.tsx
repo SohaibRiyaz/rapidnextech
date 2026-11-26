@@ -3,6 +3,7 @@ import { DemoLauncher } from "@/components/dental/demo-launcher"
 import { SectionHeading } from "@/components/dental/section-heading"
 import { card, sectionAnchor, sectionY } from "@/components/dental/styles"
 import {
+  HVAC_AGENT_NAME,
   HVAC_DEMO_PHONE,
   HVAC_DEMO_PLACEHOLDER,
   HVAC_DEMO_PLACEHOLDER_MESSAGE,
@@ -19,7 +20,7 @@ const TRANSFER_NOTE = "Live transfer works on the phone line only."
  * HVAC homepage demo:
  *   "Watch a real call": CallShowcase with ./hvac-showcase-scenarios (always visible)
  *   "Talk to it yourself": the shared Retell browser demo. While HVAC_RETELL_AGENT_ID is null it runs in
- *   placeholder mode (no Retell call, no mic). The phone card shows only when HVAC_DEMO_PHONE is set.
+ *   placeholder mode (no Retell call, no mic). Visitors can leave an email to get the call summary. The phone card shows only when HVAC_DEMO_PHONE is set.
  */
 export function HvacDemoSection() {
   return (
@@ -44,7 +45,8 @@ export function HvacDemoSection() {
             analyticsParams={{ vertical: "hvac" }}
             agentId={HVAC_RETELL_AGENT_ID}
             agentVersion={HVAC_RETELL_AGENT_VERSION}
-            agentName="our AI receptionist"
+            agentName={HVAC_AGENT_NAME}
+            emailSummary
             intro="Play the role of a homeowner with no AC, or one asking about a tune-up. No signup."
             notes={HVAC_DEMO_PLACEHOLDER ? [] : [TRANSFER_NOTE, MIC_NOTE]}
             ended={{

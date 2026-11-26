@@ -15,7 +15,7 @@ For US residential and light-commercial HVAC companies, from owner-operators to 
 - Emergency routing: no heat, no AC in extreme weather, gas smells and water leaks are live-transferred to the on-call tech, following the company's rules. For a gas smell, it first tells the caller to leave the building and call the gas company or 911.
 - Service area and job details: checks the caller's ZIP or area against the company's service area and captures name, callback number, address, system type (AC, furnace, heat pump and more), the problem, urgency and preferred time window.
 - Price-range answers: answers the diagnostic or service-call fee and common price-range questions from the company's own list; anything else goes to the owner.
-- Job summaries: the owner gets the job details by email right after every call. SMS summaries are coming soon.
+- Job summaries: the owner gets the job details by email right after every call, and by text message too on all paid plans.
 - It never confirms a booked time; the company confirms. It does not book directly into field-service software.
 - Works alongside ServiceTitan, Housecall Pro, Jobber, FieldEdge or no software at all (details go to the owner). Direct integration is coming soon.
 - Answers in English and Spanish. Live within 24 hours of the onboarding call.
@@ -30,7 +30,7 @@ Page: https://rapidnextech.com/dental
 - Practice management software: works alongside Dentrix, Eaglesoft, Open Dental and any other practice software, because requests go to the front desk. Direct scheduling integration is coming soon.
 - Dental emergencies: follow the practice's rules: live-transferred to the on-call dentist, or flagged instantly as urgent.
 - Insurance questions: answered from the practice's own accepted-insurance list; anything else is captured for front-desk follow-up.
-- Data handling: no call recordings are stored; summaries go only to the practice's designated email; the AI never asks for Social Security numbers or medical history; data is encrypted in transit. Full HIPAA compliance with signed BAAs is in progress. Do not describe the service as HIPAA compliant.
+- Data handling: no call recordings are stored; summaries go only to the practice's designated email (and, on paid plans, its designated phone number by text message); the AI never asks for Social Security numbers or medical history; data is encrypted in transit. Full HIPAA compliance with signed BAAs is in progress. Do not describe the service as HIPAA compliant.
 
 ## US Free Pilot and Pricing (HVAC and dental, same plans)
 
@@ -38,6 +38,7 @@ Page: https://rapidnextech.com/dental
 - After-Hours: $297/month, 750 minutes included.
 - Full Coverage (most popular): $497/month, 1,500 minutes included, adds daytime overflow / no-answer coverage.
 - Multi-Location: from $897/month, up to 3 locations (HVAC: branches or crews), 3,000 minutes.
+- Call summaries: by email after every call on every plan; text-message summaries are included on all paid plans (After-Hours, Full Coverage, Multi-Location). The free pilot is email only.
 - All plans: month-to-month, overage $0.39/minute (customers are told before they go over), setup fee $497 (waived for those who start with the free pilot), annual billing gives 2 months free.
 
 ## AI Receptionist for Clinics in the Gulf and Egypt (separate offer)

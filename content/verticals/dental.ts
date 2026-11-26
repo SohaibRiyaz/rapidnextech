@@ -70,7 +70,7 @@ function callHandlingItems(): CallHandlingItem[] {
     {
       icon: FileText,
       title: "Instant front-desk summaries",
-      text: "Every call becomes a clear email summary for your front desk: who called, why, and how urgent it is.",
+      text: "Every call becomes a clear summary for your front desk: who called, why, and how urgent it is. By email, and by text message too on all paid plans.",
     },
   ]
   if (siteConfig.supportsSpanish) {
@@ -201,7 +201,7 @@ export const dentalContent: VerticalContent = {
       {
         when: "Days 2–14",
         title: "Every call, summarized",
-        text: "An email summary after every call, plus a weekly recap: calls answered, new patients captured, emergencies handled.",
+        text: "A summary after every call by email (and by text message on all paid plans), plus a weekly recap: calls answered, new patients captured, emergencies handled.",
       },
       { when: "Day 14", title: "You decide", text: "Pick a plan, or just turn forwarding off. No card was taken, so nothing is charged." },
     ],
@@ -213,10 +213,9 @@ export const dentalContent: VerticalContent = {
     intro: `Month-to-month. Average dental call is about ${pricing.avgCallMinutes} minutes.`,
     features: featuresFromSiteConfig,
     locationsNoun: "locations",
-    comingSoonTooltip: copy.smsComingSoonTooltip,
     foundingText: pricing.founding.text,
     allPlansTerms: pricing.allPlansTerms,
-    footnote: `Minutes are the actual limit; call counts are approximate. Average dental call is about ${pricing.avgCallMinutes} minutes. Features marked “coming soon” aren't available yet.`,
+    footnote: `Minutes are the actual limit; call counts are approximate. Average dental call is about ${pricing.avgCallMinutes} minutes.`,
   },
 
   behindThis: { notCustomersOf: "dental practices" },

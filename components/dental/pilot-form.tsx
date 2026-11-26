@@ -16,15 +16,18 @@ import {
   PLAN_INTEREST,
   PRACTICE_SOFTWARE,
   UTM_KEYS,
+  WINDOWS_CREWS,
+  WINDOWS_PROJECT_FOCUS,
   hvacPilotRequestSchema,
   pilotRequestSchema,
+  windowsPilotRequestSchema,
 } from "@/lib/pilot-request"
 import { siteConfig, telHref } from "@/lib/site-config"
 import { primaryCta } from "./styles"
 
 import { SELECT_PLAN_EVENT } from "./events"
 
-export type PilotVertical = "dental" | "hvac"
+export type PilotVertical = "dental" | "hvac" | "windows"
 
 type TextField = {
   kind: "text"
@@ -40,7 +43,8 @@ type FieldDef = TextField | SelectField
 
 /**
  * Fields per vertical, in display order. The dental list is the original form, unchanged (it is also
- * used by /contact). Validation lives in lib/pilot-request.ts (pilotRequestSchema / hvacPilotRequestSchema).
+ * used by /contact). Validation lives in lib/pilot-request.ts (pilotRequestSchema / hvacPilotRequestSchema /
+ * windowsPilotRequestSchema).
  */
 const FORMS: Record<PilotVertical, { fields: FieldDef[]; messagePlaceholder: string }> = {
   dental: {
@@ -73,6 +77,21 @@ const FORMS: Record<PilotVertical, { fields: FieldDef[]; messagePlaceholder: str
       { kind: "select", name: "planInterest", label: "Plan interest", options: PLAN_INTEREST, full: true },
     ],
     messagePlaceholder: "Anything we should know: your service area, hours, how you handle emergencies, or questions for us.",
+  },
+  windows: {
+    fields: [
+      { kind: "text", name: "companyName", label: "Company name", type: "text", autoComplete: "organization", placeholder: "e.g. Sunshine Windows & Doors", full: true },
+      { kind: "text", name: "ownerName", label: "Owner / decision-maker name", type: "text", autoComplete: "name", placeholder: "e.g. Lisa Martinez" },
+      { kind: "text", name: "email", label: "Email", type: "email", autoComplete: "email", placeholder: "you@yourcompany.com" },
+      { kind: "text", name: "phone", label: "Phone", type: "tel", autoComplete: "tel", placeholder: "(555) 123-4567" },
+      { kind: "text", name: "cityState", label: "Service area city / state", type: "text", autoComplete: "address-level2", placeholder: "e.g. Orlando, FL" },
+      { kind: "select", name: "crews", label: "Number of install crews", options: WINDOWS_CREWS },
+      { kind: "select", name: "projectFocus", label: "Main type of work", options: WINDOWS_PROJECT_FOCUS },
+      { kind: "select", name: "callsPerWeek", label: "Approx. missed calls per week", options: CALLS_PER_WEEK },
+      { kind: "select", name: "phoneSystem", label: "Phone system", options: HVAC_PHONE_SYSTEMS },
+      { kind: "select", name: "answerWhen", label: "When should the AI answer?", options: HVAC_ANSWER_WHEN, full: true },
+    ],
+    messagePlaceholder: "Anything we should know: your service area, hours, how you handle quotes and measurement visits, or questions for us.",
   },
 }
 
@@ -171,7 +190,8 @@ export function PilotForm({
     setServerError("")
 
     const input = { ...values, consent }
-    const parsed = (vertical === "hvac" ? hvacPilotRequestSchema : pilotRequestSchema).safeParse(input)
+    const schema = vertical === "hvac" ? hvacPilotRequestSchema : vertical === "windows" ? windowsPilotRequestSchema : pilotRequestSchema
+    const parsed = schema.safeParse(input)
     if (!parsed.success) {
       const errs: FieldErrors = {}
       for (const issue of parsed.error.issues) {
@@ -191,7 +211,7 @@ export function PilotForm({
         body: JSON.stringify({
           ...input,
           // Dental submissions carry no vertical, exactly as before.
-          ...(vertical === "hvac" ? { vertical } : {}),
+          ...(vertical !== "dental" ? { vertical } : {}),
           website: honeypot,
           startedAt: startedAt.current,
           pageUrl: window.location.href.split("#")[0],
