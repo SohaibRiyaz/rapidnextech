@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
-import { ArrowRight, Loader2, Mic, MicOff, PhoneOff, Play, RotateCcw } from "lucide-react"
+import { useEffect, useId, useRef, useState } from "react"
+import { AlertCircle, ArrowRight, Loader2, Mic, MicOff, PhoneOff, Play, RotateCcw } from "lucide-react"
 import type { WebCallSession } from "retell-client-js-sdk"
 import { trackEvent, type AnalyticsEvent } from "@/lib/analytics"
 import { siteConfig } from "@/lib/site-config"
@@ -50,7 +50,16 @@ export type DemoLauncherProps = {
   clickEvent?: AnalyticsEvent
   /** Extra params added to every demo_* event, e.g. { vertical: "hvac" }. */
   analyticsParams?: Record<string, string>
+  /**
+   * Shows the optional "Want the call summary?" email field before a call. A valid email is sent with the
+   * call as metadata.visitor_email; /api/retell-webhook emails that visitor a copy of the summary.
+   * Off by default (e.g. /clinics).
+   */
+  emailSummary?: boolean
 }
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+const EMAIL_MAX = 200
 
 const errorCopy: Record<ErrorType, string> = {
   mic_denied:
@@ -60,8 +69,12 @@ const errorCopy: Record<ErrorType, string> = {
   connect: "The demo couldn't connect. Please check your connection and try again in a moment.",
 }
 
-const cardClass =
+const defaultCardClass =
   "flex aspect-[4/5] w-full flex-col items-center justify-center gap-5 rounded-3xl short:aspect-auto short:h-[clamp(300px,calc(100vh-340px),480px)] short:gap-4 border border-border bg-card p-6 text-center shadow-xl sm:aspect-[16/11] lg:aspect-[16/9]"
+// With the email field: one minimum height for every state (idle, live, ended), so switching states never
+// moves the page. Values = the measured height of the idle card with the field (see QA).
+const emailCardClass =
+  "flex min-h-[640px] w-full flex-col items-center justify-center gap-5 rounded-3xl border border-border bg-card p-6 text-center shadow-xl sm:min-h-[560px]"
 
 declare global {
   interface Window {
@@ -115,8 +128,15 @@ export function DemoLauncher({
   placeholder = null,
   clickEvent,
   analyticsParams,
+  emailSummary = false,
 }: DemoLauncherProps) {
-  const configured = Boolean(publicKey && agentId && agentVersion)
+  // Version 0 is a real published version, so only null/undefined count as "not set".
+  const configured = Boolean(publicKey && agentId && agentVersion !== null && agentVersion !== undefined)
+  const cardClass = emailSummary ? emailCardClass : defaultCardClass
+  const emailId = useId()
+  const [email, setEmail] = useState("")
+  const [emailError, setEmailError] = useState(false)
+  const emailRef = useRef<HTMLInputElement>(null)
   const [status, setStatus] = useState<Status>("idle")
   const [placeholderOpen, setPlaceholderOpen] = useState(false)
   const [errorType, setErrorType] = useState<ErrorType | null>(null)
@@ -163,6 +183,15 @@ export function DemoLauncher({
       return
     }
     if (!configured || status === "connecting" || status === "live") return
+    // Optional email: empty is fine; anything else must look like an email before the call starts.
+    const visitorEmail = emailSummary ? email.trim() : ""
+    if (visitorEmail && (visitorEmail.length > EMAIL_MAX || !EMAIL_RE.test(visitorEmail))) {
+      setEmailError(true)
+      emailRef.current?.focus()
+      return
+    }
+    // The address itself is never sent to analytics.
+    if (visitorEmail) trackEvent("demo_email_submit", { location, ...analyticsParams })
     trackEvent("demo_start", { location, ...analyticsParams })
     setStatus("connecting")
     setErrorType(null)
@@ -189,7 +218,7 @@ export function DemoLauncher({
       const call = client.createWebCall({
         agent_id: agentId as string,
         agent_version: agentVersion as number,
-        metadata: { source: "website_demo", location },
+        metadata: { source: "website_demo", location, ...(visitorEmail ? { visitor_email: visitorEmail } : {}) },
         recaptchaToken,
         hooks: {
           onStatus: (s) => {
@@ -356,6 +385,51 @@ export function DemoLauncher({
             {placeholder.ctaLabel}
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </a>
+        </div>
+      ) : null}
+      {emailSummary && !placeholder ? (
+        <div className="w-full max-w-md text-left" data-clarity-mask="true">
+          <label htmlFor={emailId} className="block text-sm font-semibold text-card-foreground">
+            Want the call summary? <span className="font-normal text-muted-foreground">(optional)</span>
+          </label>
+          <p id={`${emailId}-help`} className="mt-1 text-sm text-muted-foreground">
+            Enter your email and we&apos;ll send you exactly what the business owner would receive.
+          </p>
+          <input
+            ref={emailRef}
+            id={emailId}
+            name="demo-summary-email"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            placeholder="you@company.com"
+            maxLength={EMAIL_MAX}
+            value={email}
+            disabled={connecting}
+            onChange={(e) => {
+              setEmail(e.target.value)
+              if (emailError) setEmailError(false)
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault()
+                start()
+              }
+            }}
+            aria-invalid={emailError || undefined}
+            aria-describedby={`${emailId}-help ${emailError ? `${emailId}-error ` : ""}${emailId}-note`}
+            className="mt-2 h-12 w-full rounded-xl border border-input bg-background px-3 text-base text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-[invalid=true]:border-destructive"
+          />
+          {emailError ? (
+            <p id={`${emailId}-error`} role="alert" className="mt-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
+              <AlertCircle className="h-4 w-4 shrink-0 text-red-500" aria-hidden="true" />
+              Enter a valid email address, or leave it empty.
+            </p>
+          ) : null}
+          <div id={`${emailId}-note`} className="mt-2 space-y-1 text-xs text-muted-foreground">
+            <p>In a live setup, summaries go to the business owner by email, or by text message on our paid plans.</p>
+            <p>We&apos;ll email you the summary of this demo call. We won&apos;t add you to any list.</p>
+          </div>
         </div>
       ) : null}
       <button type="button" className={primaryCta} onClick={start} disabled={connecting} aria-busy={connecting}>

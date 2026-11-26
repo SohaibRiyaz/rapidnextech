@@ -98,4 +98,38 @@ export type HvacPilotRequest = z.infer<typeof hvacPilotRequestSchema>
 export type HvacPilotSubmission = z.infer<typeof hvacPilotSubmissionSchema>
 export type HvacPilotFieldErrors = Partial<Record<keyof HvacPilotRequest, string>>
 
+/* ------------------------------------------------------------------ */
+/* Window & door company variant (/contact, and the windows demo).     */
+/* Sent with vertical: "windows". No plan field: no windows pricing.   */
+/* ------------------------------------------------------------------ */
+
+export const WINDOWS_CREWS = ["1", "2–3", "4–6", "7–10", "10+"] as const
+export const WINDOWS_PROJECT_FOCUS = ["Replacement windows", "Impact / hurricane windows", "Doors", "New construction", "A mix", "Other"] as const
+
+export const windowsPilotRequestSchema = z.object({
+  companyName: trimmed("Company name", 120),
+  ownerName: trimmed("Owner / decision-maker name", 120),
+  email: z.string().trim().min(1, "Email is required").max(200).email("Enter a valid email address"),
+  phone: z
+    .string()
+    .trim()
+    .min(1, "Phone is required")
+    .max(40, "Phone is too long")
+    .refine((v) => v.replace(/\D/g, "").length >= 10, "Enter a valid phone number"),
+  cityState: trimmed("Service area city / state", 120),
+  crews: optionalSelect(WINDOWS_CREWS),
+  projectFocus: optionalSelect(WINDOWS_PROJECT_FOCUS),
+  callsPerWeek: optionalSelect(CALLS_PER_WEEK),
+  phoneSystem: optionalSelect(HVAC_PHONE_SYSTEMS),
+  answerWhen: optionalSelect(HVAC_ANSWER_WHEN),
+  message: z.string().trim().max(2000, "Message is too long (2,000 characters max)").optional().default(""),
+  consent: z.literal(true, { errorMap: () => ({ message: "Please confirm you agree to be contacted" }) }),
+})
+
+export const windowsPilotSubmissionSchema = windowsPilotRequestSchema
+  .merge(pilotMetaSchema)
+  .extend({ vertical: z.literal("windows") })
+
+export type WindowsPilotSubmission = z.infer<typeof windowsPilotSubmissionSchema>
+
 export const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid"] as const

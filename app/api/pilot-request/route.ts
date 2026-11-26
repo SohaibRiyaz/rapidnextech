@@ -3,8 +3,10 @@ import { Resend } from "resend"
 import {
   hvacPilotSubmissionSchema,
   pilotSubmissionSchema,
+  windowsPilotSubmissionSchema,
   type HvacPilotSubmission,
   type PilotSubmission,
+  type WindowsPilotSubmission,
 } from "@/lib/pilot-request"
 import { siteConfig } from "@/lib/site-config"
 
@@ -124,6 +126,32 @@ function buildHvacNotification(data: HvacPilotSubmission, submittedAt: Date) {
   return renderNotification(subject, "New HVAC pilot request", "company", rows)
 }
 
+function buildWindowsNotification(data: WindowsPilotSubmission, submittedAt: Date) {
+  const rows: [string, string][] = [
+    ["Vertical", "Windows & doors"],
+    ["Company name", data.companyName],
+    ["Owner / decision-maker", data.ownerName],
+    ["Email", data.email],
+    ["Phone", data.phone],
+    ["Service area city / state", data.cityState],
+    ["Install crews", data.crews ?? "—"],
+    ["Main type of work", data.projectFocus ?? "—"],
+    ["Missed calls per week", data.callsPerWeek ?? "—"],
+    ["Phone system", data.phoneSystem ?? "—"],
+    ["When should the AI answer?", data.answerWhen ?? "—"],
+    ["Message", data.message || "—"],
+    ["Consent", data.consent ? "Yes" : "No"],
+    ["Submitted (US Eastern)", formatIn(submittedAt, "America/New_York")],
+    ["Submitted (Pakistan)", formatIn(submittedAt, "Asia/Karachi")],
+    ["Page URL", data.pageUrl || "—"],
+  ]
+  for (const [key, value] of Object.entries(data.utm || {})) {
+    if (value) rows.push([key, value])
+  }
+  const subject = `[Windows pilot] ${data.companyName} (${data.cityState})`
+  return renderNotification(subject, "New window & door company pilot request", "company", rows)
+}
+
 function renderNotification(subject: string, heading: string, who: string, rows: [string, string][]) {
   const html = `<!doctype html><html><body style="font-family:Arial,Helvetica,sans-serif;color:#111827">
 <h2 style="margin:0 0 12px">${heading}</h2>
@@ -189,9 +217,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: "Invalid request." }, { status: 400 })
     }
 
-    // HVAC (homepage) submissions send vertical: "hvac"; anything else is a dental submission, as before.
-    const isHvac = typeof body === "object" && body !== null && (body as { vertical?: unknown }).vertical === "hvac"
-    const parsed = isHvac ? hvacPilotSubmissionSchema.safeParse(body) : pilotSubmissionSchema.safeParse(body)
+    // HVAC sends vertical: "hvac", window & door companies vertical: "windows"; anything else is a dental
+    // submission, as before.
+    const sentVertical = typeof body === "object" && body !== null ? (body as { vertical?: unknown }).vertical : undefined
+    const isHvac = sentVertical === "hvac"
+    const isWindows = sentVertical === "windows"
+    const parsed = isHvac
+      ? hvacPilotSubmissionSchema.safeParse(body)
+      : isWindows
+        ? windowsPilotSubmissionSchema.safeParse(body)
+        : pilotSubmissionSchema.safeParse(body)
     if (!parsed.success) {
       const fieldErrors: Record<string, string> = {}
       for (const issue of parsed.error.issues) {
@@ -227,7 +262,9 @@ export async function POST(req: Request) {
 
     const notification = isHvac
       ? buildHvacNotification(data as HvacPilotSubmission, submittedAt)
-      : buildNotification(data as PilotSubmission, submittedAt)
+      : isWindows
+        ? buildWindowsNotification(data as WindowsPilotSubmission, submittedAt)
+        : buildNotification(data as PilotSubmission, submittedAt)
     const sent = await resend.emails.send({
       from: FROM,
       to: [notifyTo],
@@ -250,7 +287,13 @@ export async function POST(req: Request) {
             name: (data as HvacPilotSubmission).companyName,
             offer: "AI receptionist for HVAC companies",
           })
-        : buildConfirmation({
+        : isWindows
+          ? buildConfirmation({
+              ownerName: data.ownerName,
+              name: (data as WindowsPilotSubmission).companyName,
+              offer: "AI receptionist for window & door companies",
+            })
+          : buildConfirmation({
             ownerName: data.ownerName,
             name: (data as PilotSubmission).practiceName,
             offer: "AI receptionist for dental practices",
