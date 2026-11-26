@@ -15,7 +15,7 @@ const ROWS: { topic: string; ai: string; service: string }[] = [
     ai: "Flat monthly plans with minutes included",
     service: "Per-minute billing that spikes in summer",
   },
-  { topic: "What you get", ai: "The full job details, by email", service: "A message to call back" },
+  { topic: "What you get", ai: "The full job details, by email and text message", service: "A message to call back" },
 ]
 
 export function LandingComparison() {

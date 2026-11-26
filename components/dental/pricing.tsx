@@ -60,7 +60,7 @@ function PlanCard({ plan, crossPage, copy, vertical }: { plan: Plan; crossPage: 
                     <span className="rounded-full border border-border px-2 py-0.5 text-xs font-semibold text-foreground">
                       Coming soon
                     </span>
-                    <InfoTip label={`About ${f.text}`} text={copy.comingSoonTooltip} />
+                    {copy.comingSoonTooltip ? <InfoTip label={`About ${f.text}`} text={copy.comingSoonTooltip} /> : null}
                   </>
                 ) : null}
               </span>

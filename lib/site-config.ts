@@ -61,9 +61,7 @@ export const siteConfig = {
     spanish: "Answers in English and Spanish.",
     goLive: "Live within 24 hours of your onboarding call.",
     security:
-      "We're built to minimize patient data. We don't store call recordings, summaries go only to your practice's designated email, the AI never asks for Social Security numbers or medical history, and all data is encrypted in transit. Full HIPAA compliance with signed BAAs is in progress. Ask us about our data handling on your onboarding call.",
-    smsComingSoonTooltip:
-      "Instant SMS summaries to your front desk, being added to paid plans. Email summaries are included today.",
+      "We're built to minimize patient data. We don't store call recordings, summaries go only to your practice's designated email (and, on paid plans, its designated phone number), the AI never asks for Social Security numbers or medical history, and all data is encrypted in transit. Full HIPAA compliance with signed BAAs is in progress. Ask us about our data handling on your onboarding call.",
     pilotResponseTime: "within 1 business day",
     phoneSystems: ["Weave", "RingCentral", "Mango Voice", "Vonage"],
     practiceSoftware: ["Dentrix", "Eaglesoft", "Open Dental"],
@@ -118,7 +116,7 @@ export const siteConfig = {
         ctaKind: "pilot",
         features: [
           { text: "Evenings, weekends and holidays" },
-          { text: "Email call summaries" },
+          { text: "Call summaries by email and text message" },
           { text: "Emergency handling per your practice rules" },
           { text: "Insurance FAQ from your practice's list" },
           { text: "Weekly recap" },
@@ -138,7 +136,7 @@ export const siteConfig = {
           { text: "Everything in After-Hours" },
           { text: "Daytime overflow / no-answer coverage" },
           { text: "Lunch-break coverage" },
-          { text: "SMS summaries to the front desk", comingSoon: true },
+          { text: "Text-message summaries to the front desk" },
           { text: "Priority support" },
         ],
       },
@@ -157,7 +155,7 @@ export const siteConfig = {
           { text: "Everything in Full Coverage" },
           { text: "Per-location setup and routing" },
           { text: "Monthly review call" },
-          { text: "SMS summaries to the front desk", comingSoon: true },
+          { text: "Text-message summaries to the front desk" },
         ],
       },
     ],

@@ -93,7 +93,8 @@ export type VerticalContent = {
     features: Record<PlanId, readonly { text: string; comingSoon?: boolean }[]>
     /** Word used in "up to 3 …" under the price. */
     locationsNoun: string
-    comingSoonTooltip: string
+    /** Tooltip for features marked comingSoon (none at the moment). */
+    comingSoonTooltip?: string
     foundingText: string
     allPlansTerms: readonly string[]
     footnote: string

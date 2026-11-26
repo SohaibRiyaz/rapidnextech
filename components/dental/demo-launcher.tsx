@@ -428,7 +428,7 @@ export function DemoLauncher({
             </p>
           ) : null}
           <div id={`${emailId}-note`} className="mt-2 space-y-1 text-xs text-muted-foreground">
-            <p>In a live setup, the business owner gets this summary by email after every call, and by text message too on paid plans.</p>
+            <p>In a live setup, the business owner gets this summary by email after every call, and by text message too on all paid plans.</p>
             <p>We&apos;ll email you the summary of this demo call. We won&apos;t add you to any list.</p>
           </div>
         </div>
